@@ -6,6 +6,7 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 
+var rng = RandomNumberGenerator.new()
 var time = 0
 var explode_delay = 1
 var explode_start = 2
@@ -50,8 +51,8 @@ func grow():
 		boom_size.x += .01
 		boom_size.y += .01
 		
+	flicker()
 	$Area2D/BoomContainer.scale = boom_size
-	print(\"scaling boom to \", boom_size.x)
 	pass
 	
 func shrink():
@@ -59,8 +60,16 @@ func shrink():
 		boom_size.x -= .01
 	if boom_size.y > 0:
 		boom_size.y -= .01
+	
+	flicker()
 	$Area2D/BoomContainer.scale = boom_size
 	
+func flicker():
+	var red = rng.randf_range(.8, 1)
+	var blue = rng.randf_range(.7, 1)
+	var green = blue
+	var new_color = Color(red, green, blue)
+	$Area2D/BoomContainer/Boom.self_modulate = new_color
 	
 func on_end():
 	print(\"Spent\")
