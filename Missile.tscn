@@ -1,25 +1,74 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/marker.png" type="Texture" id=1]
+[ext_resource path="res://assets/boom.png" type="Texture" id=2]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 
+var time = 0
+var explode_delay = 1
+var explode_start = 2
+var explode_decay = 3
+var explode_end = 4
+var phase = 0
+const max_size = 0.8
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = \"text\"
-
+var boom_size = Vector2(0, 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
-
+	$Area2D/BoomContainer.scale = boom_size
+	
+	print(\"Creating Missile\")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+# Use this to size the explosion... 
+func _process(delta):
+	time += delta
+	if phase == 0:
+		if time > explode_delay:
+			on_explode()
+	elif phase == 1:
+		if time < explode_decay:
+			grow()
+		else:
+			shrink()
+			
+	if time > explode_end:
+		on_end()
+
+
+func on_explode():
+	print(\"timer expired, showing the boom\")
+	$Marker.visible = false
+	$Area2D/BoomContainer/Boom.visible = true
+	phase = 1
+
+func grow():
+	if boom_size.x < max_size:
+		boom_size.x += .01
+		boom_size.y += .01
+		
+	$Area2D/BoomContainer.scale = boom_size
+	print(\"scaling boom to \", boom_size.x)
+	pass
+	
+func shrink():
+	if boom_size.x > 0:
+		boom_size.x -= .01
+	if boom_size.y > 0:
+		boom_size.y -= .01
+	$Area2D/BoomContainer.scale = boom_size
+	
+	
+func on_end():
+	print(\"Spent\")
+	get_parent().remove_child(self)
 "
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 11.0454
 
 [node name="Missile" type="Node2D"]
 script = SubResource( 1 )
@@ -27,3 +76,14 @@ script = SubResource( 1 )
 [node name="Marker" type="Sprite" parent="."]
 scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 1 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="BoomContainer" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( -2, 1 )
+shape = SubResource( 2 )
+
+[node name="Boom" type="Sprite" parent="Area2D/BoomContainer"]
+visible = false
+scale = Vector2( 2, 2 )
+texture = ExtResource( 2 )
