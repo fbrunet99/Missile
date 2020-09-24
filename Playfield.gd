@@ -2,8 +2,8 @@ extends Node2D
 
 var Missile = preload("res://Missile.tscn")
 
-var endLoc = Vector2(500, 100)
-var baseLoc = Vector2(500, 550)
+var end_loc = Vector2(500, 100)
+var base_loc = Vector2(500, 550)
 var defendColor = Color(100, 0, 0)
 var okDraw = true
 
@@ -17,6 +17,7 @@ const Marker = preload("Marker.gd")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$Base.position = base_loc
 	pass # Replace with function body.
 
 
@@ -26,8 +27,8 @@ func _process(_delta):
 	pass
 
 func _draw():
-	if okDraw:
-		draw_line(baseLoc, endLoc, defendColor)
+	#if okDraw:
+	#	draw_line(base_loc, end_loc, defendColor)
 		#okDraw = false
 	
 	pass
@@ -36,8 +37,8 @@ func _input(event):
 	if event is InputEventMouseButton and event.is_pressed():
 		var new_missile = Missile.instance()
 		new_missile.position = event.position
+		new_missile.start_loc = base_loc
 		add_child(new_missile)
-		print("Created a missile?")
 #		var marker = Marker.new()
 #		add_child(marker)
 #		marker.position = event.position
@@ -46,7 +47,5 @@ func _input(event):
 		okDraw = true
 	elif event is InputEventMouseMotion:
 		$Cursor.position = event.position
-		
-	pass
 
 
