@@ -11,16 +11,17 @@ var rng = RandomNumberGenerator.new()
 
 const explode_delay = 1
 const explode_start = 2
-const explode_decay = 3
-const explode_end = 4
-const max_size = 0.8
-const missile_speed = 15
+const explode_decay = 1.8
+const explode_end = 2.7
+const max_size = 0.5
 
 var defend_color = Color(100, 0, 0)
 var phase = 0
 var boom_size = Vector2(0, 0)
 var start_loc setget set_start
 var end_loc = Vector2(0, 0)
+var cur_loc = null
+var missile_speed setget set_speed
 
 var time = 0
 var missile_dir = Vector2(0,0)
@@ -28,6 +29,9 @@ var missile_dir = Vector2(0,0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if missile_speed == 0:
+		missile_speed = 15
+
 	$Area2D/BoomContainer.scale = boom_size
 	$Patriot.position = start_loc
 	var velocity = start_loc.direction_to(end_loc)
@@ -39,7 +43,6 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # Use this to size the explosion... 
 func _process(delta):
-
 	time += delta
 	if phase == 0:
 		move_missile()
@@ -54,6 +57,10 @@ func _process(delta):
 	if time > explode_end:
 		on_end()
 
+func _draw():
+	if cur_loc != null && phase == 0:
+		draw_line(start_loc, cur_loc, defend_color)
+
 
 func on_explode():
 	$Marker.visible = false
@@ -65,7 +72,7 @@ func grow():
 		boom_size.x += .01
 		boom_size.y += .01
 		
-	flicker()
+	flicker_boom()
 	$Area2D/BoomContainer.scale = boom_size
 	pass
 	
@@ -75,26 +82,40 @@ func shrink():
 	if boom_size.y > 0:
 		boom_size.y -= .01
 	
-	flicker()
+	flicker_boom()
 	$Area2D/BoomContainer.scale = boom_size
 	
 func move_missile():
 	var old_position = $Patriot.position
 	var velocity = start_loc.direction_to(end_loc) * missile_speed
-	var new_position = old_position + velocity
+	cur_loc = old_position + velocity
 	
-	$Patriot.position = new_position
-	if new_position.y < end_loc.y:
+	flicker_marker()
+	
+	$Patriot.position = cur_loc
+	update()
+	if cur_loc.y < end_loc.y:
 		phase = 1
 		$Patriot.visible = false
+		
+
 	
-	
-func flicker():
+func flicker_boom():
 	var red = rng.randf_range(.8, 1)
-	var blue = rng.randf_range(.7, 1)
+	var blue = rng.randf_range(.9, 1)
 	var green = blue
 	var new_color = Color(red, green, blue)
 	$Area2D/BoomContainer/Boom.self_modulate = new_color
+	
+	$Marker.self_modulate = new_color
+	
+func flicker_marker():
+	var red = rng.randf_range(.2, 1)
+	var green = rng.randf_range(.2, 1)
+	var blue = rng.randf_range(.8, 1)
+	var new_color = Color(red, green, blue)
+	
+	$Marker.self_modulate = Color(red, green, 200)
 	
 func on_end():
 	print(\"Spent\")
@@ -103,6 +124,9 @@ func on_end():
 	
 func set_start(new_value):
 	start_loc = new_value - position
+	
+func set_speed(new_value):
+	missile_speed = new_value
 "
 
 [sub_resource type="CircleShape2D" id=2]
@@ -116,7 +140,7 @@ scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 1 )
 
 [node name="Patriot" type="Sprite" parent="."]
-scale = Vector2( 0.5, 0.5 )
+scale = Vector2( 0.3, 0.3 )
 texture = ExtResource( 3 )
 
 [node name="Area2D" type="Area2D" parent="."]
