@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Playfield.gd" type="Script" id=1]
 [ext_resource path="res://assets/cursor.png" type="Texture" id=2]
-[ext_resource path="res://assets/patriot.png" type="Texture" id=3]
-[ext_resource path="res://Marker.gd" type="Script" id=5]
+[ext_resource path="res://assets/base.png" type="Texture" id=3]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Sprite
@@ -37,11 +36,17 @@ scale = Vector2( 0.68, 0.68 )
 texture = ExtResource( 2 )
 script = SubResource( 1 )
 
-[node name="Marker" type="Sprite" parent="."]
-scale = Vector2( 0.5, 0.5 )
-script = ExtResource( 5 )
+[node name="Alpha" type="Sprite" parent="."]
+position = Vector2( 133.963, 496.548 )
+scale = Vector2( 0.827949, 0.827949 )
+texture = ExtResource( 3 )
 
-[node name="Base" type="Sprite" parent="."]
-position = Vector2( 1.52267, 52.9763 )
-scale = Vector2( 0.5, 0.5 )
+[node name="Delta" type="Sprite" parent="."]
+position = Vector2( 506.48, 497.389 )
+scale = Vector2( 0.827949, 0.827949 )
+texture = ExtResource( 3 )
+
+[node name="Omega" type="Sprite" parent="."]
+position = Vector2( 878.155, 498.23 )
+scale = Vector2( 0.827949, 0.827949 )
 texture = ExtResource( 3 )

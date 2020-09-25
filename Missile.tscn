@@ -30,9 +30,11 @@ var missile_dir = Vector2(0,0)
 func _ready():
 	$Area2D/BoomContainer.scale = boom_size
 	$Patriot.position = start_loc
-	#end_loc = position
+	var velocity = start_loc.direction_to(end_loc)
+	var angle = rad2deg(velocity.angle()) + 90
+	$Patriot.set_rotation_degrees(angle)
+	print(\"angle=\", angle, \"radians=\", deg2rad(angle))
 	
-	print(\"Creating Missile\", start_loc, end_loc)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # Use this to size the explosion... 
@@ -101,7 +103,6 @@ func on_end():
 	
 func set_start(new_value):
 	start_loc = new_value - position
-	print(\"set start to \", new_value, \"corrected to\", start_loc)
 "
 
 [sub_resource type="CircleShape2D" id=2]
