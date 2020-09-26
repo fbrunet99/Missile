@@ -65,6 +65,8 @@ margin_left = -20.1815
 margin_top = 51.2947
 margin_right = 19.8185
 margin_bottom = 65.2947
+text = "LOW"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
