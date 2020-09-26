@@ -25,15 +25,16 @@ const Marker = preload("Marker.gd")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$Alpha.set_id(alpha_id)
+	$Delta.set_id(delta_id)
+	$Omega.set_id(omega_id)
+
 	$Delta.position = delta_loc + Vector2(0, 1)
 	$Alpha.position = alpha_loc + Vector2(-10, 1)
-	$Omega.position = omega_loc + Vector2(10, 1)
-	
-	$Delta.self_modulate = ground_color
-	$Alpha.self_modulate = ground_color
-	$Omega.self_modulate = ground_color
-	show_stockpiles()
+	$Omega.position = omega_loc + Vector2(0, 1)
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	
+	start_wave()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -51,11 +52,13 @@ func _process(_delta):
 func _draw():
 	var ground = Rect2(ground_left, ground_right)
 	draw_rect(ground, ground_color)
-	#if okDraw:
-	#	draw_line(base_loc, end_loc, defendColor)
-		#okDraw = false
-	
-	pass
+
+func start_wave():
+	$Delta.set_color(ground_color)
+	$Alpha.set_color(ground_color)
+	$Omega.set_color(ground_color)
+	show_stockpiles()
+
 	
 func launch_missile(id, location, speed):
 	var ammo_left = 0
@@ -75,40 +78,13 @@ func launch_missile(id, location, speed):
 		new_missile.start_loc = location
 		new_missile.missile_speed = speed
 		add_child(new_missile)
-		show_stockpiles()
+		
+	show_stockpiles()
 	
 func show_stockpiles():
-	return
-	show_stockpile(alpha_id)
-	show_stockpile(delta_id)
-	show_stockpile(omega_id)
-
-func show_stockpile(baseid):
-	var base_ammo = alpha_ammo
-	var base_loc = alpha_loc
-	
-	if baseid == 2:
-		base_ammo = delta_ammo
-		base_loc = delta_loc
-	elif baseid == 3:
-		base_ammo = omega_ammo
-		base_loc = omega_loc
- 
-	print("ammo -- alpha:", alpha_ammo, " delta:", delta_ammo, " omega:", omega_ammo, " current:", base_ammo)
-	var y = 10
-	var x = 0
-	for i in range(base_ammo):
-		print("looping i:", i, " total:", base_ammo)
-		var ammo = Sprite.new()
-		ammo.set_texture(ammo_sprite)
-		if i == 1 or i == 3 or i == 6:
-			x = 0 - (y-2)
-			y += 10
-		ammo.set_position(base_loc + Vector2(x, y))
-		x += 16
-		ammo.set_scale(Vector2(0.2, 0.15))
-		add_child(ammo)
-	
+	$Alpha.set_ammo(alpha_ammo)
+	$Delta.set_ammo(delta_ammo)
+	$Omega.set_ammo(omega_ammo)
 
 	
 func _input(event):

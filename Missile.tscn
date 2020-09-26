@@ -118,7 +118,6 @@ func flicker_marker():
 	$Marker.self_modulate = Color(red, green, 200)
 	
 func on_end():
-	print(\"Spent\")
 	get_parent().remove_child(self)
 	
 	
