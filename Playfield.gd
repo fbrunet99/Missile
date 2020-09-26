@@ -65,7 +65,7 @@ func start_wave():
 	bomber_reserve = 30
 
 func update_bomber():
-	$Bomber.visible = bomber_on
+#	$Bomber.visible = bomber_on
 	if bomber_on:
 		$Bomber.position = bomber_loc
 		bomber_loc += Vector2(-2, 0)
@@ -79,6 +79,7 @@ func update_bomber():
 			bomber_reserve -= 1
 			bomber_loc = Vector2(1000, height)
 			bomber_on = true
+			$Bomber.start()
 		
 
 func set_bomber_hit(object):

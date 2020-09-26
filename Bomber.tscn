@@ -12,10 +12,10 @@ script = ExtResource( 2 )
 [node name="BomberArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BomberArea"]
-position = Vector2( 0.943878, 4.71939 )
+position = Vector2( 1.12372, -0.749161 )
 shape = SubResource( 1 )
 
-[node name="Sprite" type="Sprite" parent="BomberArea/CollisionShape2D"]
-position = Vector2( -2.83163, 7.55101 )
+[node name="BomberSprite" type="Sprite" parent="BomberArea/CollisionShape2D"]
+position = Vector2( -5.61865, 6.3678 )
 scale = Vector2( 0.917411, 0.84898 )
 texture = ExtResource( 1 )

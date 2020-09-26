@@ -3,23 +3,19 @@
 [ext_resource path="res://assets/boom.png" type="Texture" id=2]
 
 [sub_resource type="GDScript" id=1]
-script/source = "extends Node2D
+script/source = "# Explode Scene
+extends Node2D
 
 var rng = RandomNumberGenerator.new()
 
-const explode_delay = 1
-const explode_start = 2
 const explode_decay = 1.8
-const explode_end = 2.7
-const max_size = 0.5
+const max_size = 0.8
 
 var phase = 0
 var boom_size = Vector2(0, 0)
 var start_loc setget set_start
 var end_loc = Vector2(0, 0)
 var cur_loc = null
-
-var time = 0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -32,17 +28,15 @@ func _ready():
 # Use this to size the explosion... 
 func _process(delta):
 	
-	time += delta
 	if phase == 0:
 		on_explode()
 	elif phase == 1:
-		if time < explode_decay:
-			grow()
-		else:
-			shrink()
-			
-	if time > explode_end:
-		on_end()
+		grow()
+	else:
+		shrink()
+
+	if boom_size.x < 0:
+		on_end()			
 
 func on_explode():
 	$Area2D/BoomCollision/Boom.visible = true
@@ -53,6 +47,8 @@ func grow():
 	if boom_size.x < max_size:
 		boom_size.x += .01
 		boom_size.y += .01
+	else:
+		phase = 2
 		
 	flicker_boom()
 	$Area2D/BoomCollision.scale = boom_size
@@ -73,7 +69,7 @@ func flicker_boom():
 	var green = blue
 	var new_color = Color(red, green, blue)
 	$Area2D/BoomCollision/Boom.self_modulate = new_color
-	$Marker.self_modulate = new_color
+	
 	
 func flicker_marker():
 	var red = rng.randf_range(.2, 1)
@@ -81,9 +77,9 @@ func flicker_marker():
 	var blue = rng.randf_range(.8, 1)
 	var new_color = Color(red, green, blue)
 	
-	$Marker.self_modulate = Color(red, green, 200)
 	
 func on_end():
+	print(\"Explode ending\")
 	get_parent().remove_child(self)
 	
 	
