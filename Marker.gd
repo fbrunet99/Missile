@@ -6,7 +6,7 @@ extends Sprite
 # var b = "text"
 
 func _init():
-	texture = load("res://marker.png")
+	texture = load("res://assets/marker.png")
 	scale = Vector2(0.5, 0.5)
 
 # Called when the node enters the scene tree for the first time.

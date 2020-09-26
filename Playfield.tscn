@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Playfield.gd" type="Script" id=1]
 [ext_resource path="res://assets/cursor.png" type="Texture" id=2]
-[ext_resource path="res://Marker.gd" type="Script" id=5]
+[ext_resource path="res://Base.tscn" type="PackedScene" id=4]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Sprite
@@ -36,6 +36,11 @@ scale = Vector2( 0.68, 0.68 )
 texture = ExtResource( 2 )
 script = SubResource( 1 )
 
-[node name="Marker" type="Sprite" parent="."]
-scale = Vector2( 0.5, 0.5 )
-script = ExtResource( 5 )
+[node name="Alpha" parent="." instance=ExtResource( 4 )]
+position = Vector2( 135.798, 487.297 )
+
+[node name="Delta" parent="." instance=ExtResource( 4 )]
+position = Vector2( 500.134, 486.353 )
+
+[node name="Omega" parent="." instance=ExtResource( 4 )]
+position = Vector2( 903.29, 484.209 )
