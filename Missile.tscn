@@ -29,10 +29,11 @@ var missile_dir = Vector2(0,0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
 	if missile_speed == 0:
 		missile_speed = 15
 
-	$Area2D/BoomContainer.scale = boom_size
+	$Area2D/BoomCollision.scale = boom_size
 	$Patriot.position = start_loc
 	var velocity = start_loc.direction_to(end_loc)
 	var angle = rad2deg(velocity.angle()) + 90
@@ -64,7 +65,7 @@ func _draw():
 
 func on_explode():
 	$Marker.visible = false
-	$Area2D/BoomContainer/Boom.visible = true
+	$Area2D/BoomCollision/Boom.visible = true
 	phase = 2
 
 func grow():
@@ -73,7 +74,7 @@ func grow():
 		boom_size.y += .01
 		
 	flicker_boom()
-	$Area2D/BoomContainer.scale = boom_size
+	$Area2D/BoomCollision.scale = boom_size
 	pass
 	
 func shrink():
@@ -83,7 +84,7 @@ func shrink():
 		boom_size.y -= .01
 	
 	flicker_boom()
-	$Area2D/BoomContainer.scale = boom_size
+	$Area2D/BoomCollision.scale = boom_size
 	
 func move_missile():
 	var old_position = $Patriot.position
@@ -105,7 +106,7 @@ func flicker_boom():
 	var blue = rng.randf_range(.9, 1)
 	var green = blue
 	var new_color = Color(red, green, blue)
-	$Area2D/BoomContainer/Boom.self_modulate = new_color
+	$Area2D/BoomCollision/Boom.self_modulate = new_color
 	
 	$Marker.self_modulate = new_color
 	
@@ -129,7 +130,7 @@ func set_speed(new_value):
 "
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 11.0454
+radius = 30.5256
 
 [node name="Missile" type="Node2D"]
 script = SubResource( 1 )
@@ -144,11 +145,11 @@ texture = ExtResource( 3 )
 
 [node name="Area2D" type="Area2D" parent="."]
 
-[node name="BoomContainer" type="CollisionShape2D" parent="Area2D"]
+[node name="BoomCollision" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( -2, 1 )
 shape = SubResource( 2 )
 
-[node name="Boom" type="Sprite" parent="Area2D/BoomContainer"]
+[node name="Boom" type="Sprite" parent="Area2D/BoomCollision"]
 visible = false
 scale = Vector2( 2, 2 )
 texture = ExtResource( 2 )

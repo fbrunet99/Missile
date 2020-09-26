@@ -1,8 +1,7 @@
 extends Node2D
 
 var Missile = preload("res://Missile.tscn")
-
-var ammo_sprite = preload("res://assets/patriot.png")
+var rng = RandomNumberGenerator.new()
 
 var ground_left = Vector2(0, 560)
 var ground_right = Vector2(1200, 560)
@@ -18,7 +17,11 @@ var delta_loc = Vector2(500, 535)
 var alpha_loc = Vector2(100, 535)
 var omega_loc = Vector2(900, 535)
 var defendColor = Color(100, 0, 0)
-var okDraw = true
+
+var bomber_loc = Vector2(0,0)
+var bomber_on = false
+var bomber_reserve = 0
+
 
 const Marker = preload("Marker.gd")
 
@@ -46,6 +49,7 @@ func _process(_delta):
 	if Input.is_action_just_pressed("ui_omega"):
 		launch_missile(omega_id, omega_loc, 10)
 	
+	update_bomber()
 	update()
 
 
@@ -58,8 +62,29 @@ func start_wave():
 	$Alpha.set_color(ground_color)
 	$Omega.set_color(ground_color)
 	show_stockpiles()
+	bomber_reserve = 30
 
-	
+func update_bomber():
+	$Bomber.visible = bomber_on
+	if bomber_on:
+		$Bomber.position = bomber_loc
+		bomber_loc += Vector2(-2, 0)
+		if bomber_loc.x < -30:
+			bomber_on = false
+	elif bomber_reserve > 0:
+		var chance = rng.randf_range(0, 10000)
+		if chance > 9800:
+			var height = rng.randf_range(100,300)
+			print("bomber chance = ", chance, " reserve=", bomber_reserve)
+			bomber_reserve -= 1
+			bomber_loc = Vector2(1000, height)
+			bomber_on = true
+		
+
+func set_bomber_hit(object):
+	print("playfield: I see that the bomber was hit")
+	bomber_on = false
+
 func launch_missile(id, location, speed):
 	var ammo_left = 0
 	if id == alpha_id:
@@ -88,14 +113,7 @@ func show_stockpiles():
 
 	
 func _input(event):
-	if event is InputEventMouseButton and event.is_pressed():
-#		var marker = Marker.new()
-#		add_child(marker)
-#		marker.position = event.position
-		#$Marker.position = event.position
-		#cursor = event.position
-		okDraw = true
-	elif event is InputEventMouseMotion:
+	if event is InputEventMouseMotion:
 		$Cursor.position = event.position
 
 
