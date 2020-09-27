@@ -31,7 +31,6 @@ var bomber_reserve = 10
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	initialize_bases()
 	start_wave()
 
 
@@ -46,6 +45,9 @@ func _process(_delta):
 	
 	update_bomber()
 	update_icbms()
+	
+	if Input.is_action_just_pressed("ui_start"):
+		get_tree().change_scene("res://Playfield.tscn")
 
 
 func _draw():
@@ -53,11 +55,9 @@ func _draw():
 	draw_rect(ground, ground_color)
 
 func start_wave():
-	$Delta.set_color(ground_color)
-	$Alpha.set_color(ground_color)
-	$Omega.set_color(ground_color)
-	set_stockpiles()
+	initialize_bases()
 	bomber_reserve = 30
+
 
 func update_bomber():
 	if bomber_on:
@@ -105,6 +105,10 @@ func initialize_bases():
 	$Delta.position = delta_loc + Vector2(0, 1)
 	$Alpha.position = alpha_loc + Vector2(-10, 1)
 	$Omega.position = omega_loc + Vector2(0, 1)
+
+	$Delta.set_color(ground_color)
+	$Alpha.set_color(ground_color)
+	$Omega.set_color(ground_color)
 	
 	set_stockpiles()
 	
@@ -117,5 +121,3 @@ func set_stockpiles():
 func _input(event):
 	if event is InputEventMouseMotion:
 		$Cursor.position = event.position
-
-
