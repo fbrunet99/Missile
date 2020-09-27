@@ -56,7 +56,7 @@ func start_wave():
 	$Delta.set_color(ground_color)
 	$Alpha.set_color(ground_color)
 	$Omega.set_color(ground_color)
-	show_stockpiles()
+	set_stockpiles()
 	bomber_reserve = 30
 
 func update_bomber():
@@ -89,43 +89,26 @@ func update_icbms():
 		add_child(new_icbm)
 
 func launch_missile(id, location, speed):
-	
-	var ammo_left = 0
 	if id == alpha_id:
-		ammo_left = alpha_ammo
-		launch_new_missile(ammo_left, location, speed)
-		if alpha_ammo > 0:
-			alpha_ammo -= 1
+		$Alpha.fire($Cursor.position, speed)
 	elif id == delta_id:
-		ammo_left = delta_ammo
-		launch_new_missile(ammo_left, location, speed)
-		if delta_ammo > 0:
-			delta_ammo -= 1
+		$Delta.fire($Cursor.position, speed)
 	elif id == omega_id:
-		ammo_left = omega_ammo
-		launch_new_missile(ammo_left, location, speed)
-		if omega_ammo > 0:
-			omega_ammo -= 1
-	show_stockpiles()
+		$Omega.fire($Cursor.position, speed)
 
-func launch_new_missile(ammo_left, location, speed):
-	if ammo_left > 0:
-		var new_missile = Missile.instance()
-		new_missile.position = $Cursor.position
-		new_missile.start_loc = location
-		new_missile.missile_speed = speed
-		add_child(new_missile)
-	
+
 func initialize_bases():
-	$Alpha.set_id(alpha_id)
-	$Delta.set_id(delta_id)
-	$Omega.set_id(omega_id)
+	$Alpha.init(alpha_id, alpha_loc)
+	$Delta.init(delta_id, delta_loc)
+	$Omega.init(omega_id, omega_loc)
 
 	$Delta.position = delta_loc + Vector2(0, 1)
 	$Alpha.position = alpha_loc + Vector2(-10, 1)
 	$Omega.position = omega_loc + Vector2(0, 1)
 	
-func show_stockpiles():
+	set_stockpiles()
+	
+func set_stockpiles():
 	$Alpha.set_ammo(alpha_ammo)
 	$Delta.set_ammo(delta_ammo)
 	$Omega.set_ammo(omega_ammo)
