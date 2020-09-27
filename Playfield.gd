@@ -89,25 +89,32 @@ func update_icbms():
 		add_child(new_icbm)
 
 func launch_missile(id, location, speed):
+	
 	var ammo_left = 0
 	if id == alpha_id:
-		alpha_ammo -= 1
 		ammo_left = alpha_ammo
+		launch_new_missile(ammo_left, location, speed)
+		if alpha_ammo > 0:
+			alpha_ammo -= 1
 	elif id == delta_id:
-		delta_ammo -= 1
 		ammo_left = delta_ammo
+		launch_new_missile(ammo_left, location, speed)
+		if delta_ammo > 0:
+			delta_ammo -= 1
 	elif id == omega_id:
-		omega_ammo -= 1
 		ammo_left = omega_ammo
-		
+		launch_new_missile(ammo_left, location, speed)
+		if omega_ammo > 0:
+			omega_ammo -= 1
+	show_stockpiles()
+
+func launch_new_missile(ammo_left, location, speed):
 	if ammo_left > 0:
 		var new_missile = Missile.instance()
 		new_missile.position = $Cursor.position
 		new_missile.start_loc = location
 		new_missile.missile_speed = speed
 		add_child(new_missile)
-		
-	show_stockpiles()
 	
 func initialize_bases():
 	$Alpha.set_id(alpha_id)
