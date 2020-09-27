@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Playfield.gd" type="Script" id=1]
 [ext_resource path="res://assets/cursor.png" type="Texture" id=2]
+[ext_resource path="res://assets/city.png" type="Texture" id=3]
 [ext_resource path="res://Base.tscn" type="PackedScene" id=4]
 
 [sub_resource type="GDScript" id=1]
@@ -27,6 +28,9 @@ func _input(event):
 	pass
 "
 
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 33.4568, 12.5704 )
+
 [node name="Playfield" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -44,3 +48,75 @@ position = Vector2( 500.134, 486.353 )
 
 [node name="Omega" parent="." instance=ExtResource( 4 )]
 position = Vector2( 903.29, 484.209 )
+
+[node name="City1Area" type="Area2D" parent="."]
+position = Vector2( 230, 535 )
+
+[node name="CityShape" type="CollisionShape2D" parent="City1Area"]
+position = Vector2( 0.178238, 13.9257 )
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="City1Area/CityShape"]
+position = Vector2( -0.95636, 0.745972 )
+scale = Vector2( 0.5, 0.219 )
+texture = ExtResource( 3 )
+
+[node name="City1Area2" type="Area2D" parent="."]
+position = Vector2( 311.829, 535 )
+
+[node name="CityShape" type="CollisionShape2D" parent="City1Area2"]
+position = Vector2( 0.178238, 13.9257 )
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="City1Area2/CityShape"]
+position = Vector2( -0.95636, 0.745972 )
+scale = Vector2( 0.5, 0.219 )
+texture = ExtResource( 3 )
+
+[node name="City1Area3" type="Area2D" parent="."]
+position = Vector2( 391.804, 535 )
+
+[node name="CityShape" type="CollisionShape2D" parent="City1Area3"]
+position = Vector2( 0.178238, 13.9257 )
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="City1Area3/CityShape"]
+position = Vector2( -0.95636, 0.745972 )
+scale = Vector2( 0.5, 0.219 )
+texture = ExtResource( 3 )
+
+[node name="City1Area4" type="Area2D" parent="."]
+position = Vector2( 603.304, 535 )
+
+[node name="CityShape" type="CollisionShape2D" parent="City1Area4"]
+position = Vector2( 0.178238, 13.9257 )
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="City1Area4/CityShape"]
+position = Vector2( -0.95636, 0.745972 )
+scale = Vector2( 0.5, 0.219 )
+texture = ExtResource( 3 )
+
+[node name="City1Area5" type="Area2D" parent="."]
+position = Vector2( 686.804, 535 )
+
+[node name="CityShape" type="CollisionShape2D" parent="City1Area5"]
+position = Vector2( 0.178238, 13.9257 )
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="City1Area5/CityShape"]
+position = Vector2( -0.95636, 0.745972 )
+scale = Vector2( 0.5, 0.219 )
+texture = ExtResource( 3 )
+
+[node name="City1Area6" type="Area2D" parent="."]
+position = Vector2( 778.304, 535 )
+
+[node name="CityShape" type="CollisionShape2D" parent="City1Area6"]
+position = Vector2( 0.178238, 13.9257 )
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="City1Area6/CityShape"]
+position = Vector2( -0.95636, 0.745972 )
+scale = Vector2( 0.5, 0.219 )
+texture = ExtResource( 3 )
