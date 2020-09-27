@@ -1,0 +1,88 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/patriot.png" type="Texture" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "# ICBM Scene
+extends Node2D
+
+var Explode = preload(\"res://Explode.tscn\")
+
+var rng = RandomNumberGenerator.new()
+
+const explode_start = 2
+const explode_decay = 1.8
+const explode_end = 2.7
+const max_size = 0.5
+
+var attack_color = Color(0, 0, 100)
+var phase = 0
+var start_loc = Vector2(0, 0)
+var end_loc = Vector2(0, 0)
+var cur_loc = null
+var missile_speed = 2
+
+var missile_dir = Vector2(0,0)
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	rng.randomize()
+	if missile_speed == 0:
+		missile_speed = 4
+		
+	var x = rng.randf_range(0, 1000)
+	
+	start_loc = Vector2(x, 0)
+	end_loc = Vector2(rng.randf_range(0, 1000), 500)
+
+	$Scud.position = start_loc
+	var velocity = start_loc.direction_to(end_loc)
+	var angle = rad2deg(velocity.angle()) + 90
+	$Scud.set_rotation_degrees(angle)
+	
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Use this to size the explosion... 
+func _process(delta):
+	
+	if phase == 0:
+		move_missile()
+	elif phase == 1:
+		on_explode()
+
+func _draw():
+	if cur_loc != null && phase == 0:
+		draw_line(start_loc, cur_loc, attack_color)
+
+
+func on_explode():
+	var new_explode = Explode.instance()
+	new_explode.position = $Scud.position
+	add_child(new_explode)
+	
+	phase = 2
+
+	
+func move_missile():
+	var old_position = $Scud.position
+	var velocity = start_loc.direction_to(end_loc) * missile_speed
+	cur_loc = old_position + velocity
+	
+	$Scud.position = cur_loc
+	update()
+	if cur_loc.y > end_loc.y:
+		phase = 1
+		$Scud.visible = false
+
+
+func on_end():
+	get_parent().remove_child(self)
+"
+
+[node name="ICBM" type="Node2D"]
+script = SubResource( 1 )
+
+[node name="Scud" type="Sprite" parent="."]
+scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 3 )

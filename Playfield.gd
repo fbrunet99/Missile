@@ -3,6 +3,7 @@ extends Node2D
 
 const Missile = preload("res://Missile.tscn")
 const Bomber = preload("res://Bomber.tscn")
+const ICBM = preload("res://ICBM.tscn")
 
 var rng = RandomNumberGenerator.new()
 
@@ -44,6 +45,7 @@ func _process(_delta):
 		launch_missile(omega_id, omega_loc, 10)
 	
 	update_bomber()
+	update_icbms()
 
 
 func _draw():
@@ -79,6 +81,12 @@ func set_bomber_hit(object):
 func set_bomber_over(object):
 	print("playfield: I see the bomber got away")
 	bomber_on = false
+
+func update_icbms():
+	var chance = rng.randf_range(0, 9000)
+	if chance > 8900:
+		var new_icbm = ICBM.instance()
+		add_child(new_icbm)
 
 func launch_missile(id, location, speed):
 	var ammo_left = 0
