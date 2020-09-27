@@ -1,6 +1,9 @@
+# Playfield Scene
 extends Node2D
 
-var Missile = preload("res://Missile.tscn")
+const Missile = preload("res://Missile.tscn")
+const Bomber = preload("res://Bomber.tscn")
+
 var rng = RandomNumberGenerator.new()
 
 var ground_left = Vector2(0, 560)
@@ -18,25 +21,16 @@ var alpha_loc = Vector2(100, 535)
 var omega_loc = Vector2(900, 535)
 var defendColor = Color(100, 0, 0)
 
+var bomber_instance = null
 var bomber_loc = Vector2(0,0)
 var bomber_on = false
-var bomber_reserve = 0
-
-
-const Marker = preload("Marker.gd")
+var bomber_reserve = 10
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$Alpha.set_id(alpha_id)
-	$Delta.set_id(delta_id)
-	$Omega.set_id(omega_id)
-
-	$Delta.position = delta_loc + Vector2(0, 1)
-	$Alpha.position = alpha_loc + Vector2(-10, 1)
-	$Omega.position = omega_loc + Vector2(0, 1)
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	
+	initialize_bases()
 	start_wave()
 
 
@@ -50,7 +44,6 @@ func _process(_delta):
 		launch_missile(omega_id, omega_loc, 10)
 	
 	update_bomber()
-	update()
 
 
 func _draw():
@@ -65,25 +58,26 @@ func start_wave():
 	bomber_reserve = 30
 
 func update_bomber():
-#	$Bomber.visible = bomber_on
 	if bomber_on:
-		$Bomber.position = bomber_loc
-		bomber_loc += Vector2(-2, 0)
-		if bomber_loc.x < -30:
-			bomber_on = false
-	elif bomber_reserve > 0:
+		return
+
+	if bomber_reserve > 0:
 		var chance = rng.randf_range(0, 10000)
 		if chance > 9800:
+			print("I'm starting a bomber, chance was ", chance)
+			bomber_instance = Bomber.instance()
 			var height = rng.randf_range(100,300)
-			print("bomber chance = ", chance, " reserve=", bomber_reserve)
+			add_child(bomber_instance)
 			bomber_reserve -= 1
-			bomber_loc = Vector2(1000, height)
 			bomber_on = true
-			$Bomber.start()
-		
+
 
 func set_bomber_hit(object):
 	print("playfield: I see that the bomber was hit")
+	bomber_on = false
+	
+func set_bomber_over(object):
+	print("playfield: I see the bomber got away")
 	bomber_on = false
 
 func launch_missile(id, location, speed):
@@ -106,6 +100,15 @@ func launch_missile(id, location, speed):
 		add_child(new_missile)
 		
 	show_stockpiles()
+	
+func initialize_bases():
+	$Alpha.set_id(alpha_id)
+	$Delta.set_id(delta_id)
+	$Omega.set_id(omega_id)
+
+	$Delta.position = delta_loc + Vector2(0, 1)
+	$Alpha.position = alpha_loc + Vector2(-10, 1)
+	$Omega.position = omega_loc + Vector2(0, 1)
 	
 func show_stockpiles():
 	$Alpha.set_ammo(alpha_ammo)

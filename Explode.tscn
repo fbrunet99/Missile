@@ -8,6 +8,8 @@ extends Node2D
 
 var rng = RandomNumberGenerator.new()
 
+signal explode_end
+
 const explode_decay = 1.8
 const max_size = 0.8
 
@@ -80,6 +82,7 @@ func flicker_marker():
 	
 func on_end():
 	print(\"Explode ending\")
+	emit_signal(\"explode_end\")
 	get_parent().remove_child(self)
 	
 	

@@ -4,7 +4,7 @@
 [ext_resource path="res://Bomber.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 42.0578, 14.7485 )
+extents = Vector2( 60.6068, 17.5211 )
 
 [node name="Bomber" type="Node2D"]
 script = ExtResource( 2 )
@@ -12,10 +12,10 @@ script = ExtResource( 2 )
 [node name="BomberArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BomberArea"]
-position = Vector2( 1.12372, -0.749161 )
+position = Vector2( 0.374573, -7.62939e-06 )
 shape = SubResource( 1 )
 
 [node name="BomberSprite" type="Sprite" parent="BomberArea/CollisionShape2D"]
-position = Vector2( -5.61865, 6.3678 )
+position = Vector2( 5.99323, 5.24405 )
 scale = Vector2( 0.917411, 0.84898 )
 texture = ExtResource( 1 )
