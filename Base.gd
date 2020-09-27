@@ -26,6 +26,7 @@ func set_color(new_color):
 func set_foreground(new_color):
 	fore_color = new_color
 	$Status.add_color_override("font_color", fore_color)
+	$Status.add_color_override("font_outline", Color(0, 0, 0))
 	
 func update_ammo_display():
 	$Ammo1.visible = ammo_count > 0

@@ -8,6 +8,7 @@
 script = ExtResource( 3 )
 
 [node name="Hill" type="Sprite" parent="."]
+position = Vector2( 0, 24.386 )
 texture = ExtResource( 2 )
 
 [node name="Ammo1" type="Sprite" parent="."]
@@ -61,10 +62,20 @@ scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 1 )
 
 [node name="Status" type="Label" parent="."]
-margin_left = -20.1815
-margin_top = 51.2947
-margin_right = 19.8185
-margin_bottom = 65.2947
+process_priority = 1
+margin_left = -19.9166
+margin_top = 50.5001
+margin_right = 20.0834
+margin_bottom = 64.5001
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+custom_colors/font_color = Color( 0.678431, 0.101961, 0.101961, 1 )
+custom_colors/font_outline_modulate = Color( 0.0156863, 0.0196078, 0.137255, 1 )
+custom_colors/font_color_shadow = Color( 0.0784314, 0.0235294, 0.0235294, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 13
 text = "LOW"
 align = 1
 __meta__ = {
