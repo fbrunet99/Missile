@@ -22,8 +22,6 @@ func fire(location, speed):
 		launch_new_missile(location, speed)
 
 func launch_new_missile(target_position, speed):
-	ammo_count -= 1
-	update_ammo_display()
 	target_position -= parent_position
 	
 	print("Base: launch from:", position, " to:", target_position, " speed:", speed)
@@ -34,6 +32,8 @@ func launch_new_missile(target_position, speed):
 		new_missile.start_loc = Vector2(0, 0)
 		new_missile.missile_speed = speed
 		add_child(new_missile)
+	ammo_count -= 1
+	update_ammo_display()
 
 func update_ammo_display():
 	$Ammo1.visible = ammo_count > 0
