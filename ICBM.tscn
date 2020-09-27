@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/patriot.png" type="Texture" id=3]
 
@@ -36,11 +36,12 @@ func _ready():
 	start_loc = Vector2(x, 0)
 	end_loc = Vector2(rng.randf_range(0, 1000), 500)
 
-	$Scud.position = start_loc
+	$ICBMArea.position = start_loc
 	var velocity = start_loc.direction_to(end_loc)
 	var angle = rad2deg(velocity.angle()) + 90
-	$Scud.set_rotation_degrees(angle)
-	
+	$ICBMArea.set_rotation_degrees(angle)
+	$ICBMArea.connect(\"area_entered\", self, \"icbm_hit\")
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # Use this to size the explosion... 
@@ -57,33 +58,54 @@ func _draw():
 
 
 func on_explode():
-	var new_explode = Explode.instance()
-	new_explode.position = $Scud.position
-	add_child(new_explode)
+	$ICBMArea/CollisionShape2D/Scud.visible = false
+	
+	var explode_instance = Explode.instance()
+	explode_instance.position = $ICBMArea.position
+	add_child(explode_instance)
 	
 	phase = 2
+	
+	explode_instance.connect(\"explode_end\", self, \"_on_icbm_explode\")
+	update()
 
 	
 func move_missile():
-	var old_position = $Scud.position
+	var old_position = $ICBMArea.position
 	var velocity = start_loc.direction_to(end_loc) * missile_speed
 	cur_loc = old_position + velocity
 	
-	$Scud.position = cur_loc
+	$ICBMArea.position = cur_loc
 	update()
 	if cur_loc.y > end_loc.y:
 		phase = 1
-		$Scud.visible = false
 
+func icbm_hit(object):
+	phase = 1
+	print(\"ICBM: I hit something\")
+	
+func _on_icbm_explode():
+	print(\"The ICBM is done exploding now\")
+	on_end()
 
 func on_end():
 	print(\"ICBM: Ending\")
 	get_parent().remove_child(self)
 "
 
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 2.73439, 12.8955 )
+
 [node name="ICBM" type="Node2D"]
 script = SubResource( 1 )
 
-[node name="Scud" type="Sprite" parent="."]
+[node name="ICBMArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ICBMArea"]
+position = Vector2( -0.118118, -0.833971 )
+shape = SubResource( 2 )
+
+[node name="Scud" type="Sprite" parent="ICBMArea/CollisionShape2D"]
+position = Vector2( 0.118118, 0.833971 )
 scale = Vector2( 0.3, 0.3 )
 texture = ExtResource( 3 )
