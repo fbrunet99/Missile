@@ -10,6 +10,8 @@ var Explode = preload(\"res://Explode.tscn\")
 
 var rng = RandomNumberGenerator.new()
 
+var targets setget set_targets
+
 const explode_start = 2
 const explode_decay = 1.8
 const explode_end = 2.7
@@ -92,6 +94,9 @@ func _on_icbm_explode():
 func on_end():
 	print(\"ICBM: Ending\")
 	get_parent().remove_child(self)
+	
+func set_targets(new_targets):
+	targets = new_targets
 "
 
 [sub_resource type="RectangleShape2D" id=2]

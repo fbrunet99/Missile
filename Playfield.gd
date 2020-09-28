@@ -27,10 +27,15 @@ var bomber_loc = Vector2(0,0)
 var bomber_on = false
 var bomber_reserve = 10
 
+var ground_targets
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	ground_targets = [ alpha_loc, delta_loc, omega_loc, 
+		$City1.position, $City2.position, $City3.position, 
+		$City4.position, $City5.position, $City6.position]
+		
 	start_wave()
 
 
@@ -86,7 +91,9 @@ func update_icbms():
 	var chance = rng.randf_range(0, 9000)
 	if chance > 8900:
 		var new_icbm = ICBM.instance()
+		new_icbm.set_targets(ground_targets)
 		add_child(new_icbm)
+		
 
 func launch_missile(id, location, speed):
 	if id == alpha_id:
