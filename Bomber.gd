@@ -7,14 +7,19 @@ var is_hit = false
 var explode_instance = null
 var velocity = Vector2(-1, 0)
 var max_x = 1100
+var max_y = 800
 var min_x = -100
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	var viewport = get_viewport_rect().size
+	max_x = viewport.x + 100
+	max_y = viewport.y / 2
+	
 	$BomberArea.scale = Vector2(.7, 1)
 	rng.randomize()
-	var height = rand_range(100, 400)
+	var height = rand_range(100, max_y)
 	var direction = rand_range(-1, 1)
 	velocity = Vector2(direction * 3, 0)
 	if direction > 0:

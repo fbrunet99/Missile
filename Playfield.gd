@@ -32,9 +32,6 @@ var ground_targets
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	ground_targets = [ alpha_loc, delta_loc, omega_loc, 
-		$City1.position, $City2.position, $City3.position, 
-		$City4.position, $City5.position, $City6.position]
 		
 	start_wave()
 
@@ -61,6 +58,11 @@ func _draw():
 
 func start_wave():
 	initialize_bases()
+	initialize_cities()
+	ground_targets = [ alpha_loc, delta_loc, omega_loc, 
+		$City1.position, $City2.position, $City3.position, 
+		$City4.position, $City5.position, $City6.position]
+	
 	bomber_reserve = 30
 
 
@@ -104,7 +106,29 @@ func launch_missile(id, location, speed):
 		$Omega.fire($Cursor.position, speed)
 
 
+func initialize_cities():
+	var viewport = get_viewport_rect().size
+
+	$City1.position = Vector2(viewport.x / 5, viewport.y - 75)
+	$City2.position = Vector2($City1.position.x + 100, $City1.position.y)
+	$City3.position = Vector2($City2.position.x + 100, $City1.position.y)
+
+	$City4.position = Vector2(viewport.x / 2 + 100, viewport.y - 75)
+	$City5.position = Vector2($City4.position.x + 100, $City1.position.y)
+	$City6.position = Vector2($City5.position.x + 100, $City1.position.y)
+	
+	
 func initialize_bases():
+	var viewport = get_viewport_rect().size
+	
+	alpha_loc.y = viewport.y - 75
+	delta_loc.y = viewport.y - 75
+	omega_loc.y = viewport.y - 75
+	
+	alpha_loc.x = viewport.x / 10
+	delta_loc.x = viewport.x / 2
+	omega_loc.x = viewport.x - viewport.x / 10
+	
 	$Alpha.init(alpha_id, alpha_loc)
 	$Delta.init(delta_id, delta_loc)
 	$Omega.init(omega_id, omega_loc)
@@ -116,6 +140,11 @@ func initialize_bases():
 	$Delta.set_color(ground_color)
 	$Alpha.set_color(ground_color)
 	$Omega.set_color(ground_color)
+	
+	ground_left = Vector2(0, viewport.y - 50)
+	ground_right = Vector2(viewport.x, viewport.y - 50)
+
+	update()
 	
 	set_stockpiles()
 	
