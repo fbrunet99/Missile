@@ -33,7 +33,6 @@ func _ready():
 	if missile_speed == 0:
 		missile_speed = 15
 
-	print(\"Missile started start:\", start_loc)
 	$Patriot.position = start_loc
 	var velocity = start_loc.direction_to(end_loc)
 	var angle = rad2deg(velocity.angle()) + 90
@@ -93,7 +92,8 @@ func flicker_marker():
 	$Marker.self_modulate = Color(red, green, 200)
 	
 func on_end():
-	get_parent().remove_child(self)
+	queue_free()
+#	get_parent().remove_child(self)
 	
 	
 func set_start(new_value):

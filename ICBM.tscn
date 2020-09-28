@@ -93,7 +93,8 @@ func _on_icbm_explode():
 
 func on_end():
 	print(\"ICBM: Ending\")
-	get_parent().remove_child(self)
+	queue_free()
+#	get_parent().remove_child(self)
 	
 func set_targets(new_targets):
 	targets = new_targets
