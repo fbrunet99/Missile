@@ -81,8 +81,9 @@ func move_missile():
 		phase = 1
 
 func icbm_hit(object):
-	phase = 1
-	print(\"ICBM: I hit something\")
+	if phase == 0:
+		phase = 1
+		print(\"ICBM: I hit something\")
 	
 func _on_icbm_explode():
 	print(\"The ICBM is done exploding now\")
