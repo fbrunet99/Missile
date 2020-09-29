@@ -210,7 +210,7 @@ func set_stockpiles():
 func _input(event):
 	if event is InputEventMouseMotion:
 		var cur_position = event.position
-		var min_height = ground_left.y - 10
+		var min_height = ground_left.y - 80
 		if cur_position.y > min_height:
 			cur_position.y = min_height
 		$Cursor.position = cur_position
