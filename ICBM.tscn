@@ -36,7 +36,8 @@ func _ready():
 	var x = rng.randf_range(0, 1000)
 	
 	start_loc = Vector2(x, 0)
-	end_loc = Vector2(rng.randf_range(0, 1000), 500)
+	end_loc = targets[randi() % targets.size()] # Random base or city location
+	# end_loc = Vector2(rng.randf_range(0, 1000), 500) # Any random x value and y = 500
 
 	$ICBMArea.position = start_loc
 	var velocity = start_loc.direction_to(end_loc)
