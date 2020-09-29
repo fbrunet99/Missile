@@ -10,21 +10,30 @@ var max_x = 1100
 var max_y = 800
 var min_x = -100
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if randi() % 2:
+		print("Bomber spawned as satellite")
+		$BomberArea/BomberCollision/BomberSprite.visible = false
+		$BomberArea/BomberCollision.disabled = true
+	else:
+		print("Bomber spawned as plane")
+		$BomberArea/SatelliteCollision/SatelliteSprite.visible = false
+		$BomberArea/SatelliteCollision.disabled = true
+		$BomberArea.scale = Vector2(.7, 1)
 	var viewport = get_viewport_rect().size
 	max_x = viewport.x + 100
 	max_y = viewport.y / 2
 	
-	$BomberArea.scale = Vector2(.7, 1)
+	
 	rng.randomize()
 	var height = rand_range(100, max_y)
 	var direction = rand_range(-1, 1)
 	velocity = Vector2(direction * 3, 0)
 	if direction > 0:
 		position = Vector2(0, height)
-		$BomberArea/CollisionShape2D/BomberSprite.flip_h = true
+		$BomberArea/BomberCollision/BomberSprite.flip_h = true
+		$BomberArea/SatelliteCollision/SatelliteSprite.flip_h = true
 	else:
 		position = Vector2(max_x - 50, height)
 		
@@ -54,9 +63,10 @@ func bomber_hit(object):
 	is_hit = true
 	
 	var explode_instance = Explode.instance()
-	explode_instance.position = $BomberArea/CollisionShape2D/BomberSprite.position
+	explode_instance.position = $BomberArea.position
 	add_child(explode_instance)
-	$BomberArea/CollisionShape2D/BomberSprite.visible = false
+	$BomberArea/BomberCollision/BomberSprite.visible = false
+	$BomberArea/SatelliteCollision/SatelliteSprite.visible = false
 	explode_instance.connect("explode_end", self, "_on_bomber_explode")
 	get_parent().set_bomber_hit(object) # raise signal instead
 

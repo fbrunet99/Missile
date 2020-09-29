@@ -1,21 +1,32 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/bomber.png" type="Texture" id=1]
 [ext_resource path="res://Bomber.gd" type="Script" id=2]
+[ext_resource path="res://assets/satellite.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 60.6068, 17.5211 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 44.055, 37.3619 )
 
 [node name="Bomber" type="Node2D"]
 script = ExtResource( 2 )
 
 [node name="BomberArea" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BomberArea"]
+[node name="BomberCollision" type="CollisionShape2D" parent="BomberArea"]
 position = Vector2( 0.374573, -7.62939e-06 )
 shape = SubResource( 1 )
 
-[node name="BomberSprite" type="Sprite" parent="BomberArea/CollisionShape2D"]
+[node name="BomberSprite" type="Sprite" parent="BomberArea/BomberCollision"]
 position = Vector2( 5.99323, 5.24405 )
 scale = Vector2( 0.917411, 0.84898 )
 texture = ExtResource( 1 )
+
+[node name="SatelliteCollision" type="CollisionShape2D" parent="BomberArea"]
+shape = SubResource( 2 )
+
+[node name="SatelliteSprite" type="Sprite" parent="BomberArea/SatelliteCollision"]
+position = Vector2( 4.23785, 0.529728 )
+texture = ExtResource( 3 )
