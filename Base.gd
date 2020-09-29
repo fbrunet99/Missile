@@ -24,7 +24,6 @@ func fire(location, speed):
 func launch_new_missile(target_position, speed):
 	target_position -= parent_position
 	
-	print("Base: launch from:", position, " to:", target_position, " speed:", speed)
 	if ammo_count > 0:
 		var new_missile = Missile.instance()
 		new_missile.visible = true
@@ -65,7 +64,7 @@ func set_ammo(ammo):
 	
 func set_color(new_color):
 	base_color = new_color
-	$Hill.self_modulate = base_color
+	$Area2D/CollisionShape2D/Hill.self_modulate = base_color
 	
 func set_foreground(new_color):
 	fore_color = new_color

@@ -27,6 +27,8 @@ var bomber_loc = Vector2(0,0)
 var bomber_on = false
 var bomber_reserve = 10
 
+var city_count = 6
+
 var ground_targets
 
 # Called when the node enters the scene tree for the first time.
@@ -107,6 +109,7 @@ func launch_missile(id, location, speed):
 
 
 func initialize_cities():
+	city_count = 6
 	var viewport = get_viewport_rect().size
 
 	$City1.position = Vector2(viewport.x / 5, viewport.y - 75)
@@ -117,6 +120,36 @@ func initialize_cities():
 	$City5.position = Vector2($City4.position.x + 100, $City1.position.y)
 	$City6.position = Vector2($City5.position.x + 100, $City1.position.y)
 	
+	
+	$City1.connect("area_entered", self, "city1_hit")
+	$City2.connect("area_entered", self, "city2_hit")
+	$City3.connect("area_entered", self, "city3_hit")
+	$City4.connect("area_entered", self, "city4_hit")
+	$City5.connect("area_entered", self, "city5_hit")
+	$City6.connect("area_entered", self, "city6_hit")
+	
+func city1_hit(_event):
+	remove_city($City1, 1)
+	
+func city2_hit(_event):
+	remove_city($City2, 2)
+	
+func city3_hit(_event):
+	remove_city($City3, 3)
+		
+func city4_hit(_event):
+	remove_city($City4, 4)
+			
+func city5_hit(_event):
+	remove_city($City5, 5)
+		
+func city6_hit(_event):
+	remove_city($City6, 6)
+		
+func remove_city(city, id):
+	print("City ", id, " hit")
+	city_count -= 1
+	city.position = Vector2(city.position.x, city.position.y + 100)
 	
 func initialize_bases():
 	var viewport = get_viewport_rect().size
@@ -144,9 +177,29 @@ func initialize_bases():
 	ground_left = Vector2(0, viewport.y - 50)
 	ground_right = Vector2(viewport.x, viewport.y - 50)
 
+	$Alpha/Area2D.connect("area_entered", self, "alpha_hit")
+	$Delta/Area2D.connect("area_entered", self, "delta_hit")
+	$Omega/Area2D.connect("area_entered", self, "omega_hit")
+
 	update()
 	
 	set_stockpiles()
+	
+func alpha_hit(_id):
+	$Alpha.set_ammo(0)
+	base_hit($Alpha, 1)
+
+func delta_hit(_id):
+	$Delta.set_ammo(0)
+	base_hit($Delta, 2)
+
+func omega_hit(_id):
+	$Omega.set_ammo(0)
+	base_hit($Omega, 3)
+
+func base_hit(base, id):
+	print("Base ", id, " hit")
+	pass
 	
 func set_stockpiles():
 	$Alpha.set_ammo(alpha_ammo)
@@ -156,4 +209,8 @@ func set_stockpiles():
 	
 func _input(event):
 	if event is InputEventMouseMotion:
-		$Cursor.position = event.position
+		var cur_position = event.position
+		var min_height = ground_left.y - 10
+		if cur_position.y > min_height:
+			cur_position.y = min_height
+		$Cursor.position = cur_position
