@@ -19,6 +19,12 @@ config/name="Missile"
 run/main_scene="res://Playfield.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/dpi/allow_hidpi=true
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+
 [input]
 
 ui_alpha={
