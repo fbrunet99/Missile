@@ -60,7 +60,9 @@ func _process(_delta):
 	update_icbms()
 	update_wave()
 
-	
+	if icbm_remain <= 0:
+		start_wave()
+
 	if Input.is_action_just_pressed("ui_start"):
 		get_tree().change_scene("res://Playfield.tscn")
 
@@ -76,13 +78,17 @@ func start_wave():
 	initialize_bases()
 	initialize_cities()
 	
+	print("starting wave ", wave_number)
+	
 
 func update_wave():
 	if icbm_remain <= 0:
 		end_wave()
 
 func end_wave():
-	pass
+	wave_number += 1
+	if wave_number > wave_data.size():
+		wave_number = 0
 	
 	
 func update_bomber():
@@ -113,6 +119,7 @@ func update_icbms():
 	if chance > 8900:
 		var new_icbm = ICBM.instance()
 		new_icbm.set_targets(ground_targets)
+		icbm_remain -= 1
 		add_child(new_icbm)
 		
 
