@@ -89,7 +89,6 @@ func icbm_hit(object):
 		print(\"ICBM: I hit something\")
 	
 func _on_icbm_explode():
-	print(\"The ICBM is done exploding now\")
 	on_end()
 
 func on_end():
@@ -99,6 +98,12 @@ func on_end():
 	
 func set_targets(new_targets):
 	targets = new_targets
+	
+func set_color(new_value):
+	attack_color = new_value
+
+func set_speed(new_value):
+	missile_speed = new_value
 "
 
 [sub_resource type="RectangleShape2D" id=2]

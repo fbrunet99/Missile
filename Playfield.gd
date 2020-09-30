@@ -20,7 +20,8 @@ var omega_ammo = 10
 var delta_loc = Vector2(500, 535)
 var alpha_loc = Vector2(100, 535)
 var omega_loc = Vector2(900, 535)
-var defend_color = Color(100, 0, 0)
+var defend_color
+var attack_color
 
 var bomber_instance = null
 var bomber_loc = Vector2(0,0)
@@ -33,6 +34,7 @@ var wave_data
 var wave_number = 0
 var icbm_remain
 var bomber_remain
+var icbm_speed
 
 
 # Called when the node enters the scene tree for the first time.
@@ -65,6 +67,13 @@ func _process(_delta):
 
 	if Input.is_action_just_pressed("ui_start"):
 		get_tree().change_scene("res://Playfield.tscn")
+		
+	if Input.is_action_just_pressed("ui_down"):
+		wave_number += 1
+		if wave_number >= wave_data.size():
+			wave_number = 0
+		start_wave()
+	
 
 
 func start_wave():
@@ -72,8 +81,11 @@ func start_wave():
 	icbm_remain = wave_data[wave_number].icbms
 	ground_color = wave_data[wave_number].baseColor
 	defend_color = wave_data[wave_number].defendColor
+	attack_color = wave_data[wave_number].attackColor
+	icbm_speed = wave_data[wave_number].attackSpeed
 	$Background.color = wave_data[wave_number].backgroundColor
 	$Ground.color = ground_color
+	$Cursor.self_modulate = defend_color
 	
 	initialize_bases()
 	initialize_cities()
@@ -87,7 +99,7 @@ func update_wave():
 
 func end_wave():
 	wave_number += 1
-	if wave_number > wave_data.size():
+	if wave_number >= wave_data.size():
 		wave_number = 0
 	
 	
@@ -119,6 +131,8 @@ func update_icbms():
 	if chance > 8900:
 		var new_icbm = ICBM.instance()
 		new_icbm.set_targets(ground_targets)
+		new_icbm.set_color(attack_color)
+		new_icbm.set_speed(icbm_speed)
 		icbm_remain -= 1
 		add_child(new_icbm)
 		
@@ -245,57 +259,181 @@ func build_wave_data():
 		{
 			"icbms": 10,
 			"bombers": 0,
+			"attackSpeed": 1,
+			"backgroundColor": Color(0, 0, 0), # black
+			"defendColor": Color(0, 0, 100),   # blue
+			"attackColor": Color(100, 0, 0),   # red
+			"baseColor": Color(100, 100, 0)    # yellow
+		},
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),
+			"attackColor": Color(100, 0, 0),
 			"baseColor": Color(100, 100, 0)
 		},
 		{
-			"icbms": 12,
+			"icbms": 11,
+			"bombers": 0,
+			"attackSpeed": 1,
+			"backgroundColor": Color(0, 0, 0), # black
+			"defendColor": Color(0, 0, 100),   # red
+			"attackColor": Color(0, 100, 0),   # green
+			"baseColor": Color(100, 100, 0)    # yellow
+		},
+		{
+			"icbms": 11,
 			"bombers": 1, 
+			"attackSpeed": 1,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),
+			"attackColor": Color(0, 100, 0),
 			"baseColor": Color(100, 100, 0)
 		},
 		{
-			"icbms": 16,
+			"icbms": 11,
 			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(0, 0, 0),  # black
+			"defendColor": Color(0, 100, 0),    # green
+			"attackColor": Color(100, 0, 0),    # red
+			"baseColor": Color(0, 0, 100)       # blue
+		},
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
 			"backgroundColor": Color(0, 0, 0),
-			"defendColor": Color(0, 0, 100),
+			"defendColor": Color(0, 100, 0),
+			"attackColor": Color(100, 0, 0),
 			"baseColor": Color(0, 0, 100)
 		},
 		{
-			"icbms": 16,
+			"icbms": 11,
 			"bombers": 1, 
+			"attackSpeed": 1,
 			"backgroundColor": Color(0, 0, 0),
-			"defendColor": Color(0, 0, 100),
-			"baseColor": Color(0, 0, 100)
+			"defendColor": Color(0, 0, 100),    # blue
+			"attackColor": Color(100, 100, 0),  # yellow
+			"baseColor": Color(100, 0, 0)       #red
 		},
 		{
-			"icbms": 16,
+			"icbms": 11,
 			"bombers": 1, 
+			"attackSpeed": 1,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),
-			"baseColor": Color(0, 0, 100)
+			"attackColor": Color(100, 100, 0),
+			"baseColor": Color(100, 0, 0)
 		},
 		{
-			"icbms": 16,
+			"icbms": 11,
 			"bombers": 1, 
-			"backgroundColor": Color(0, 0, 0),
-			"defendColor": Color(0, 0, 100),
-			"baseColor": Color(0, 0, 100)
-		},
-		{
-			"icbms": 18,
-			"bombers": 1, 
-			"backgroundColor": Color(0, 100, 200),
-			"defendColor": Color(0, 0, 100),
+			"attackSpeed": 1,
+			"backgroundColor": Color(0, 0, 80),  # blue
+			"defendColor": Color(0, 0, 0),
+			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0)
 		},
 		{
-			"icbms": 18,
+			"icbms": 11,
 			"bombers": 1, 
-			"backgroundColor": Color(0, 100, 200),
-			"defendColor": Color(0, 0, 100),
+			"attackSpeed": 1,
+			"backgroundColor": Color(0, 0, 80),
+			"defendColor": Color(0, 0, 0),
+			"attackColor": Color(100, 0, 0),
 			"baseColor": Color(0, 100, 0)
+		},
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(0, 80, 80), # cyan
+			"defendColor": Color(0, 0, 100),
+			"attackColor": Color(100, 0, 0),
+			"baseColor": Color(100, 100, 0)
+		},
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(0, 80, 80),
+			"defendColor": Color(0, 0, 0),
+			"attackColor": Color(0, 0, 0),
+			"baseColor": Color(100, 100, 0)
+		},
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(80, 0, 80), # purple
+			"defendColor": Color(80, 80, 0),
+			"attackColor": Color(0, 0, 0),
+			"baseColor": Color(0, 100, 0)
+		},
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(80, 0, 80),
+			"defendColor": Color(80, 80, 0),
+			"attackColor": Color(0, 0, 0),
+			"baseColor": Color(0, 100, 0)
+		},
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(80, 80, 0), # yellow
+			"defendColor": Color(100, 0, 0),
+			"attackColor": Color(0, 0, 0),
+			"baseColor": Color(0, 100, 0)
+		},
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(80, 80, 0),
+			"defendColor": Color(100, 0, 0),
+			"attackColor": Color(0, 0, 0),
+			"baseColor": Color(0, 100, 0)
+		},		
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(100, 100, 100), # white
+			"defendColor": Color(0, 40, 0),
+			"attackColor": Color(0, 0, 80),
+			"baseColor": Color(100, 0, 0)
+		},
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(100, 100, 100),
+			"defendColor": Color(0, 40, 0),
+			"attackColor": Color(80, 0, 80),
+			"baseColor": Color(100, 0, 0)
+		},		
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(80, 0, 0), # red
+			"defendColor": Color(80, 0, 80),
+			"attackColor": Color(0, 0, 0),
+			"baseColor": Color(100, 100, 0)
+		},
+		{
+			"icbms": 11,
+			"bombers": 1, 
+			"attackSpeed": 1,
+			"backgroundColor": Color(80, 0, 0),
+			"defendColor": Color(80, 0, 80),
+			"attackColor": Color(0, 0, 0),
+			"baseColor": Color(100, 100, 0)
 		}
 	]
