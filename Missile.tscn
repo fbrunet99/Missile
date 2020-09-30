@@ -16,7 +16,7 @@ const explode_decay = 1.8
 const explode_end = 2.7
 const max_size = 0.5
 
-var defend_color = Color(100, 0, 0)
+var defend_color setget set_color
 var phase = 0
 var boom_size = Vector2(0, 0)
 var start_loc setget set_start
@@ -101,6 +101,9 @@ func set_start(new_value):
 	
 func set_speed(new_value):
 	missile_speed = new_value
+	
+func set_color(new_value):
+	defend_color = new_value
 "
 
 [node name="Missile" type="Node2D"]

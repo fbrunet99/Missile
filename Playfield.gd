@@ -20,21 +20,30 @@ var omega_ammo = 10
 var delta_loc = Vector2(500, 535)
 var alpha_loc = Vector2(100, 535)
 var omega_loc = Vector2(900, 535)
-var defendColor = Color(100, 0, 0)
+var defend_color = Color(100, 0, 0)
 
 var bomber_instance = null
 var bomber_loc = Vector2(0,0)
 var bomber_on = false
-var bomber_reserve = 10
 
 var city_count = 6
-
 var ground_targets
+
+var wave_data
+var wave_number = 0
+var icbm_remain
+var bomber_remain
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-		
+	
+	ground_targets = [ alpha_loc, delta_loc, omega_loc, 
+		$City1.position, $City2.position, $City3.position, 
+		$City4.position, $City5.position, $City6.position]
+	
+	build_wave_data()
 	start_wave()
 
 
@@ -49,37 +58,45 @@ func _process(_delta):
 	
 	update_bomber()
 	update_icbms()
+	update_wave()
+
 	
 	if Input.is_action_just_pressed("ui_start"):
 		get_tree().change_scene("res://Playfield.tscn")
 
 
-func _draw():
-	var ground = Rect2(ground_left, ground_right)
-	draw_rect(ground, ground_color)
-
 func start_wave():
+	bomber_remain = wave_data[wave_number].bombers
+	icbm_remain = wave_data[wave_number].icbms
+	ground_color = wave_data[wave_number].baseColor
+	defend_color = wave_data[wave_number].defendColor
+	$Background.color = wave_data[wave_number].backgroundColor
+	$Ground.color = ground_color
+	
 	initialize_bases()
 	initialize_cities()
-	ground_targets = [ alpha_loc, delta_loc, omega_loc, 
-		$City1.position, $City2.position, $City3.position, 
-		$City4.position, $City5.position, $City6.position]
 	
-	bomber_reserve = 30
 
+func update_wave():
+	if icbm_remain <= 0:
+		end_wave()
 
+func end_wave():
+	pass
+	
+	
 func update_bomber():
 	if bomber_on:
 		return
 
-	if bomber_reserve > 0:
+	if bomber_remain  > 0:
 		var chance = rng.randf_range(0, 10000)
 		if chance > 9800:
 			print("I'm starting a bomber, chance was ", chance)
 			bomber_instance = Bomber.instance()
 			var height = rng.randf_range(100,300)
 			add_child(bomber_instance)
-			bomber_reserve -= 1
+			bomber_remain -= 1
 			bomber_on = true
 
 
@@ -173,10 +190,11 @@ func initialize_bases():
 	$Delta.set_color(ground_color)
 	$Alpha.set_color(ground_color)
 	$Omega.set_color(ground_color)
-	
-	ground_left = Vector2(0, viewport.y - 50)
-	ground_right = Vector2(viewport.x, viewport.y - 50)
 
+	$Delta.set_foreground(defend_color)
+	$Alpha.set_foreground(defend_color)
+	$Omega.set_foreground(defend_color)
+	
 	$Alpha/Area2D.connect("area_entered", self, "alpha_hit")
 	$Delta/Area2D.connect("area_entered", self, "delta_hit")
 	$Omega/Area2D.connect("area_entered", self, "omega_hit")
@@ -214,3 +232,63 @@ func _input(event):
 		if cur_position.y > min_height:
 			cur_position.y = min_height
 		$Cursor.position = cur_position
+
+func build_wave_data():
+	wave_data = [
+		{
+			"icbms": 10,
+			"bombers": 0,
+			"backgroundColor": Color(0, 0, 0),
+			"defendColor": Color(0, 0, 100),
+			"baseColor": Color(100, 100, 0)
+		},
+		{
+			"icbms": 12,
+			"bombers": 1, 
+			"backgroundColor": Color(0, 0, 0),
+			"defendColor": Color(0, 0, 100),
+			"baseColor": Color(100, 100, 0)
+		},
+		{
+			"icbms": 16,
+			"bombers": 1, 
+			"backgroundColor": Color(0, 0, 0),
+			"defendColor": Color(0, 0, 100),
+			"baseColor": Color(0, 0, 100)
+		},
+		{
+			"icbms": 16,
+			"bombers": 1, 
+			"backgroundColor": Color(0, 0, 0),
+			"defendColor": Color(0, 0, 100),
+			"baseColor": Color(0, 0, 100)
+		},
+		{
+			"icbms": 16,
+			"bombers": 1, 
+			"backgroundColor": Color(0, 0, 0),
+			"defendColor": Color(0, 0, 100),
+			"baseColor": Color(0, 0, 100)
+		},
+		{
+			"icbms": 16,
+			"bombers": 1, 
+			"backgroundColor": Color(0, 0, 0),
+			"defendColor": Color(0, 0, 100),
+			"baseColor": Color(0, 0, 100)
+		},
+		{
+			"icbms": 18,
+			"bombers": 1, 
+			"backgroundColor": Color(0, 100, 200),
+			"defendColor": Color(0, 0, 100),
+			"baseColor": Color(0, 100, 0)
+		},
+		{
+			"icbms": 18,
+			"bombers": 1, 
+			"backgroundColor": Color(0, 100, 200),
+			"defendColor": Color(0, 0, 100),
+			"baseColor": Color(0, 100, 0)
+		}
+	]

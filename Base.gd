@@ -30,6 +30,7 @@ func launch_new_missile(target_position, speed):
 		new_missile.position = target_position
 		new_missile.start_loc = Vector2(0, 0)
 		new_missile.missile_speed = speed
+		new_missile.set_color(fore_color)
 		add_child(new_missile)
 	ammo_count -= 1
 	update_ammo_display()
