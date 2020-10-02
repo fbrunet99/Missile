@@ -31,8 +31,11 @@ var city_count = 6
 var ground_targets
 
 var wave_data
+var wave_on = false
+var icbm_dir = {}
 var wave_number = 0
 var icbm_remain
+var icbm_exist
 var bomber_remain
 var icbm_speed
 
@@ -46,11 +49,22 @@ func _ready():
 		$City4.position, $City5.position, $City6.position]
 	
 	build_wave_data()
-	start_wave()
+	initialize_screen()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	if Input.is_action_just_pressed("ui_reset"):
+		get_tree().change_scene("res://Playfield.tscn")
+
+	if Input.is_action_just_pressed("ui_start"):
+		start_wave()
+
+	if !wave_on:
+		return
+
+	update_icbms()
+
 	if Input.is_action_just_pressed("ui_alpha"):
 		launch_missile(alpha_id, alpha_loc, 10)
 	if Input.is_action_just_pressed("ui_delta"):
@@ -59,15 +73,8 @@ func _process(_delta):
 		launch_missile(omega_id, omega_loc, 10)
 	
 	update_bomber()
-	update_icbms()
 	update_wave()
 
-	if icbm_remain <= 0:
-		start_wave()
-
-	if Input.is_action_just_pressed("ui_start"):
-		get_tree().change_scene("res://Playfield.tscn")
-		
 	if Input.is_action_just_pressed("ui_down"):
 		wave_number += 1
 		if wave_number >= wave_data.size():
@@ -75,10 +82,40 @@ func _process(_delta):
 		start_wave()
 	
 
+func _input(event):
+	if event is InputEventMouseMotion:
+		var cur_position = event.position
+		var min_height = ground_left.y - 80
+		if cur_position.y > min_height:
+			cur_position.y = min_height
+		$Cursor.position = cur_position
+		
 
 func start_wave():
+	wave_on = true
 	bomber_remain = wave_data[wave_number].bombers
-	icbm_remain = wave_data[wave_number].icbms
+	
+	initialize_screen()
+	
+	print("starting wave ", wave_number)
+	
+
+func update_wave():
+	if icbm_remain <= 0 and icbm_exist <= 0:
+		end_wave()
+
+func end_wave():
+	wave_on = false
+	count_cities()
+
+	wave_number += 1
+	if wave_number >= wave_data.size():
+		wave_number = 0
+	
+	
+func initialize_screen():
+	icbm_remain  = wave_data[wave_number].icbms
+	icbm_exist = icbm_remain
 	ground_color = wave_data[wave_number].baseColor
 	defend_color = wave_data[wave_number].defendColor
 	attack_color = wave_data[wave_number].attackColor
@@ -86,21 +123,8 @@ func start_wave():
 	$Background.color = wave_data[wave_number].backgroundColor
 	$Ground.color = ground_color
 	$Cursor.self_modulate = defend_color
-	
 	initialize_bases()
 	initialize_cities()
-	
-	print("starting wave ", wave_number)
-	
-
-func update_wave():
-	if icbm_remain <= 0:
-		end_wave()
-
-func end_wave():
-	wave_number += 1
-	if wave_number >= wave_data.size():
-		wave_number = 0
 	
 	
 func update_bomber():
@@ -128,14 +152,20 @@ func set_bomber_over(object):
 
 func update_icbms():
 	var chance = rng.randf_range(0, 9000)
-	if chance > 8900:
+	if wave_on and icbm_remain > 0 and chance > 8900:
 		var new_icbm = ICBM.instance()
 		new_icbm.set_targets(ground_targets)
 		new_icbm.set_color(attack_color)
 		new_icbm.set_speed(icbm_speed)
+		new_icbm.connect("icbm_hit", self, "icbm_end")
 		icbm_remain -= 1
 		add_child(new_icbm)
 		
+
+func icbm_end():
+	icbm_exist -= 1
+	print("An ICBM blew up. ", icbm_exist, " more expected")
+	
 
 func launch_missile(id, location, speed):
 	if id == alpha_id:
@@ -185,6 +215,8 @@ func city6_hit(_event):
 	remove_city($City6, 6)
 		
 func remove_city(city, id):
+	if !wave_on:
+		return
 	print("City ", id, " hit")
 	city_count -= 1
 	city.position = Vector2(city.position.x, city.position.y + 100)
@@ -245,19 +277,45 @@ func set_stockpiles():
 	$Delta.set_ammo(delta_ammo)
 	$Omega.set_ammo(omega_ammo)
 
+
+func count_cities():
+	var count_loc = Vector2(400, 200)
+	yield(get_tree().create_timer(1.0), "timeout")
 	
-func _input(event):
-	if event is InputEventMouseMotion:
-		var cur_position = event.position
-		var min_height = ground_left.y - 80
-		if cur_position.y > min_height:
-			cur_position.y = min_height
-		$Cursor.position = cur_position
+	if $City1.visible:
+		yield(get_tree().create_timer(0.4), "timeout")
+		$City1.position = count_loc
+		count_loc += Vector2(60, 0)
+
+	if $City2.visible:
+		yield(get_tree().create_timer(0.4), "timeout")
+		$City2.position = count_loc
+		count_loc += Vector2(60, 0)
+
+	if $City3.visible:
+		yield(get_tree().create_timer(0.4), "timeout")
+		$City3.position = count_loc
+		count_loc += Vector2(60, 0)
+
+	if $City4.visible:
+		yield(get_tree().create_timer(0.4), "timeout")
+		$City4.position = count_loc
+		count_loc += Vector2(60, 0)
+
+	if $City5.visible:
+		yield(get_tree().create_timer(0.4), "timeout")
+		$City5.position = count_loc
+		count_loc += Vector2(60, 0)
+
+	if $City6.visible:
+		yield(get_tree().create_timer(0.4), "timeout")
+		$City6.position = count_loc
+
 
 func build_wave_data():
 	wave_data = [
 		{
-			"icbms": 10,
+			"icbms": 5,
 			"bombers": 0,
 			"attackSpeed": 1,
 			"backgroundColor": Color(0, 0, 0), # black

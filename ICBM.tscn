@@ -12,6 +12,8 @@ var rng = RandomNumberGenerator.new()
 
 var targets setget set_targets
 
+signal icbm_hit
+
 const explode_start = 2
 const explode_decay = 1.8
 const explode_end = 2.7
@@ -86,6 +88,7 @@ func move_missile():
 func icbm_hit(object):
 	if phase == 0:
 		phase = 1
+		emit_signal(\"icbm_hit\")
 		print(\"ICBM: I hit something\")
 	
 func _on_icbm_explode():
