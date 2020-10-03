@@ -7,6 +7,9 @@ const ICBM = preload("res://ICBM.tscn")
 
 var rng = RandomNumberGenerator.new()
 
+const ICBM_POINTS = 25
+const BOMBER_POINTS = 100
+
 var ground_left = Vector2(0, 560)
 var ground_right = Vector2(1200, 560)
 var ground_color = Color(150, 150, 0)
@@ -38,6 +41,7 @@ var icbm_remain
 var icbm_exist
 var bomber_remain
 var icbm_speed
+var score = 0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -50,7 +54,7 @@ func _ready():
 	
 	build_wave_data()
 	initialize_screen()
-
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -92,6 +96,9 @@ func _input(event):
 		
 
 func start_wave():
+	$ScoreOverlay.show_wave_info(get_multiplier())
+	yield(get_tree().create_timer(3.0), "timeout")
+	
 	wave_on = true
 	bomber_remain = wave_data[wave_number].bombers
 	
@@ -101,6 +108,7 @@ func start_wave():
 	
 
 func update_wave():
+	
 	if icbm_remain <= 0 and icbm_exist <= 0:
 		end_wave()
 
@@ -144,6 +152,7 @@ func update_bomber():
 
 func set_bomber_hit(object):
 	print("playfield: I see that the bomber was hit")
+	update_score(100)
 	bomber_on = false
 	
 func set_bomber_over(object):
@@ -164,6 +173,7 @@ func update_icbms():
 
 func icbm_end():
 	icbm_exist -= 1
+	update_score(25)
 	print("An ICBM blew up. ", icbm_exist, " more expected")
 	
 
@@ -312,6 +322,32 @@ func count_cities():
 		$City6.position = count_loc
 
 
+func update_score(points):
+		
+	score = score + points * get_multiplier()
+	
+	$ScoreOverlay.update_score(score)
+	
+	return score
+
+func get_multiplier():
+	var multiplier
+	if wave_number < 2:
+		multiplier = 1
+	elif wave_number < 4:
+		multiplier = 2
+	elif wave_number < 6:
+		multiplier = 3
+	elif wave_number < 8:
+		multiplier = 4
+	elif wave_number < 10:
+		multiplier = 5
+	else:
+		multiplier = 6
+		
+	return multiplier
+	
+
 func build_wave_data():
 	wave_data = [
 		{
@@ -326,7 +362,7 @@ func build_wave_data():
 		{
 			"icbms": 11,
 			"bombers": 1, 
-			"attackSpeed": 1,
+			"attackSpeed": 3,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),
 			"attackColor": Color(100, 0, 0),
@@ -337,7 +373,7 @@ func build_wave_data():
 			"bombers": 0,
 			"attackSpeed": 1,
 			"backgroundColor": Color(0, 0, 0), # black
-			"defendColor": Color(0, 0, 100),   # red
+			"defendColor": Color(0, 0, 100),   # blue
 			"attackColor": Color(0, 100, 0),   # green
 			"baseColor": Color(100, 100, 0)    # yellow
 		},
