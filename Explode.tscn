@@ -81,7 +81,6 @@ func flicker_marker():
 	
 	
 func on_end():
-	print(\"Explode ending\")
 	emit_signal(\"explode_end\")
 	get_parent().remove_child(self)
 	

@@ -9,7 +9,7 @@ func update_score(score):
 	
 	
 func show_wave_info(multiplier):
-	
+	hide_start_message()
 	$HUD/Multiplier.text = str(multiplier)
 	
 	$HUD/PlayerLabel.visible = true
@@ -30,3 +30,9 @@ func hide_wave_info():
 	$HUD/PointLabel.visible = false
 	$HUD/DefendLabel.visible = false
 	$HUD/CitiesLabel.visible = false
+
+func show_start_message():
+	$HUD/PressStart.visible = true
+
+func hide_start_message():
+	$HUD/PressStart.visible = false

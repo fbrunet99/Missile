@@ -41,7 +41,7 @@ color = Color( 0, 0, 0, 1 )
 polygon = PoolVector2Array( 0, 0, 1020, 0, 1020, 600, 0, 600 )
 
 [node name="Ground" type="Polygon2D" parent="."]
-color = Color( 0.25098, 0.705882, 0.0431373, 1 )
+color = Color( 0.588235, 0.588235, 0, 1 )
 polygon = PoolVector2Array( 0, 550, 1020, 550, 1020, 600, 0, 600 )
 
 [node name="Cursor" type="Sprite" parent="."]

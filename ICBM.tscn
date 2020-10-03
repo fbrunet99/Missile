@@ -89,15 +89,12 @@ func icbm_hit(object):
 	if phase == 0:
 		phase = 1
 		emit_signal(\"icbm_hit\")
-		print(\"ICBM: I hit something\")
 	
 func _on_icbm_explode():
 	on_end()
 
 func on_end():
-	print(\"ICBM: Ending\")
 	queue_free()
-#	get_parent().remove_child(self)
 	
 func set_targets(new_targets):
 	targets = new_targets

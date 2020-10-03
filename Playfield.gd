@@ -42,6 +42,7 @@ var icbm_exist
 var bomber_remain
 var icbm_speed
 var score = 0
+var game_over = true
 
 
 # Called when the node enters the scene tree for the first time.
@@ -61,8 +62,8 @@ func _process(_delta):
 	if Input.is_action_just_pressed("ui_reset"):
 		get_tree().change_scene("res://Playfield.tscn")
 
-	if Input.is_action_just_pressed("ui_start"):
-		start_wave()
+	if Input.is_action_just_pressed("ui_start") and game_over:
+		start_game()
 
 	if !wave_on:
 		return
@@ -94,45 +95,47 @@ func _input(event):
 			cur_position.y = min_height
 		$Cursor.position = cur_position
 		
+func start_game():
+	game_over = false
+	start_wave();
+
+func end_game():
+	game_over = true
 
 func start_wave():
 	$ScoreOverlay.show_wave_info(get_multiplier())
-	yield(get_tree().create_timer(3.0), "timeout")
-	
+	ground_color = wave_data[wave_number].baseColor
+	defend_color = wave_data[wave_number].defendColor
+	attack_color = wave_data[wave_number].attackColor
+	icbm_speed = wave_data[wave_number].attackSpeed
+	restore_cities()
+	restore_bases()
+	yield(get_tree().create_timer(5.0), "timeout")
 	wave_on = true
 	bomber_remain = wave_data[wave_number].bombers
-	
-	initialize_screen()
+	icbm_remain  = wave_data[wave_number].icbms
+	icbm_exist = icbm_remain
 	
 	print("starting wave ", wave_number)
 	
 
 func update_wave():
-	
 	if icbm_remain <= 0 and icbm_exist <= 0:
 		end_wave()
 
 func end_wave():
+	if cities_remain() <= 0:
+		end_game()
+		
 	wave_on = false
 	count_cities()
-
+	yield(get_tree().create_timer(6.0), "timeout")
+	
 	wave_number += 1
 	if wave_number >= wave_data.size():
 		wave_number = 0
 	
-	
-func initialize_screen():
-	icbm_remain  = wave_data[wave_number].icbms
-	icbm_exist = icbm_remain
-	ground_color = wave_data[wave_number].baseColor
-	defend_color = wave_data[wave_number].defendColor
-	attack_color = wave_data[wave_number].attackColor
-	icbm_speed = wave_data[wave_number].attackSpeed
-	$Background.color = wave_data[wave_number].backgroundColor
-	$Ground.color = ground_color
-	$Cursor.self_modulate = defend_color
-	initialize_bases()
-	initialize_cities()
+	start_wave()
 	
 	
 func update_bomber():
@@ -185,11 +188,31 @@ func launch_missile(id, location, speed):
 	elif id == omega_id:
 		$Omega.fire($Cursor.position, speed)
 
+func initialize_screen():
+	ground_color = wave_data[wave_number].baseColor
+	defend_color = wave_data[wave_number].defendColor
+	attack_color = wave_data[wave_number].attackColor
+	
+	initialize_bases()
+	restore_bases()
+	initialize_cities()
+	restore_cities()
+	
 
 func initialize_cities():
 	city_count = 6
-	var viewport = get_viewport_rect().size
 
+	$City1.connect("area_entered", self, "city1_hit")
+	$City2.connect("area_entered", self, "city2_hit")
+	$City3.connect("area_entered", self, "city3_hit")
+	$City4.connect("area_entered", self, "city4_hit")
+	$City5.connect("area_entered", self, "city5_hit")
+	$City6.connect("area_entered", self, "city6_hit")
+	
+	
+func restore_cities():
+	var viewport = get_viewport_rect().size
+	
 	$City1.position = Vector2(viewport.x / 5, viewport.y - 75)
 	$City2.position = Vector2($City1.position.x + 100, $City1.position.y)
 	$City3.position = Vector2($City2.position.x + 100, $City1.position.y)
@@ -198,40 +221,15 @@ func initialize_cities():
 	$City5.position = Vector2($City4.position.x + 100, $City1.position.y)
 	$City6.position = Vector2($City5.position.x + 100, $City1.position.y)
 	
-	
-	$City1.connect("area_entered", self, "city1_hit")
-	$City2.connect("area_entered", self, "city2_hit")
-	$City3.connect("area_entered", self, "city3_hit")
-	$City4.connect("area_entered", self, "city4_hit")
-	$City5.connect("area_entered", self, "city5_hit")
-	$City6.connect("area_entered", self, "city6_hit")
-	
-func city1_hit(_event):
-	remove_city($City1, 1)
-	
-func city2_hit(_event):
-	remove_city($City2, 2)
-	
-func city3_hit(_event):
-	remove_city($City3, 3)
-		
-func city4_hit(_event):
-	remove_city($City4, 4)
-			
-func city5_hit(_event):
-	remove_city($City5, 5)
-		
-func city6_hit(_event):
-	remove_city($City6, 6)
-		
-func remove_city(city, id):
-	if !wave_on:
-		return
-	print("City ", id, " hit")
-	city_count -= 1
-	city.position = Vector2(city.position.x, city.position.y + 100)
-	
 func initialize_bases():
+	
+	$Alpha/Area2D.connect("area_entered", self, "alpha_hit")
+	$Delta/Area2D.connect("area_entered", self, "delta_hit")
+	$Omega/Area2D.connect("area_entered", self, "omega_hit")
+	
+	update()
+		
+func restore_bases():
 	var viewport = get_viewport_rect().size
 	
 	alpha_loc.y = viewport.y - 75
@@ -257,14 +255,41 @@ func initialize_bases():
 	$Delta.set_foreground(defend_color)
 	$Alpha.set_foreground(defend_color)
 	$Omega.set_foreground(defend_color)
-	
-	$Alpha/Area2D.connect("area_entered", self, "alpha_hit")
-	$Delta/Area2D.connect("area_entered", self, "delta_hit")
-	$Omega/Area2D.connect("area_entered", self, "omega_hit")
 
-	update()
-	
+	$Background.color = wave_data[wave_number].backgroundColor
+	$Ground.color = ground_color
+	$Cursor.self_modulate = defend_color
+
 	set_stockpiles()
+
+
+	
+func city1_hit(_event):
+	remove_city($City1, 1)
+	
+func city2_hit(_event):
+	remove_city($City2, 2)
+	
+func city3_hit(_event):
+	remove_city($City3, 3)
+		
+func city4_hit(_event):
+	remove_city($City4, 4)
+			
+func city5_hit(_event):
+	remove_city($City5, 5)
+		
+func city6_hit(_event):
+	remove_city($City6, 6)
+		
+func remove_city(city, id):
+	if !wave_on:
+		return
+	print("City ", id, " hit")
+	city_count -= 1
+	city.position = Vector2(city.position.x, city.position.y + 100)
+	city.visible = false
+	
 	
 func alpha_hit(_id):
 	$Alpha.set_ammo(0)
@@ -321,6 +346,26 @@ func count_cities():
 		yield(get_tree().create_timer(0.4), "timeout")
 		$City6.position = count_loc
 
+	yield(get_tree().create_timer(2.0), "timeout")
+	restore_cities()
+
+func cities_remain():
+	var count = 0
+	
+	if $City1.visible:
+		count += 1
+	if $City2.visible:
+		count += 1
+	if $City3.visible:
+		count += 1
+	if $City4.visible:
+		count += 1
+	if $City5.visible:
+		count += 1
+	if $City6.visible:
+		count += 1
+	
+	return count
 
 func update_score(points):
 		
@@ -351,7 +396,7 @@ func get_multiplier():
 func build_wave_data():
 	wave_data = [
 		{
-			"icbms": 5,
+			"icbms": 10,
 			"bombers": 0,
 			"attackSpeed": 1,
 			"backgroundColor": Color(0, 0, 0), # black
@@ -360,171 +405,171 @@ func build_wave_data():
 			"baseColor": Color(100, 100, 0)    # yellow
 		},
 		{
-			"icbms": 11,
+			"icbms": 12,
 			"bombers": 1, 
-			"attackSpeed": 3,
+			"attackSpeed": 1.2,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),
 			"attackColor": Color(100, 0, 0),
 			"baseColor": Color(100, 100, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 0,
-			"attackSpeed": 1,
+			"icbms": 14,
+			"bombers": 2,
+			"attackSpeed": 1.4,
 			"backgroundColor": Color(0, 0, 0), # black
 			"defendColor": Color(0, 0, 100),   # blue
 			"attackColor": Color(0, 100, 0),   # green
 			"baseColor": Color(100, 100, 0)    # yellow
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 16,
+			"bombers": 2, 
+			"attackSpeed": 1.6,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),
 			"attackColor": Color(0, 100, 0),
 			"baseColor": Color(100, 100, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 18,
+			"bombers": 3, 
+			"attackSpeed": 1.8,
 			"backgroundColor": Color(0, 0, 0),  # black
 			"defendColor": Color(0, 100, 0),    # green
 			"attackColor": Color(100, 0, 0),    # red
 			"baseColor": Color(0, 0, 100)       # blue
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 20,
+			"bombers": 3, 
+			"attackSpeed": 2,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 100, 0),
 			"attackColor": Color(100, 0, 0),
 			"baseColor": Color(0, 0, 100)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 22,
+			"bombers": 3, 
+			"attackSpeed": 2.2,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),    # blue
 			"attackColor": Color(100, 100, 0),  # yellow
 			"baseColor": Color(100, 0, 0)       #red
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 24,
+			"bombers": 3, 
+			"attackSpeed": 2.4,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),
 			"attackColor": Color(100, 100, 0),
 			"baseColor": Color(100, 0, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 26,
+			"bombers": 3,
+			"attackSpeed": 3.5,
 			"backgroundColor": Color(0, 0, 80),  # blue
 			"defendColor": Color(0, 0, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 28,
+			"bombers": 3, 
+			"attackSpeed": 3.6,
 			"backgroundColor": Color(0, 0, 80),
 			"defendColor": Color(0, 0, 0),
 			"attackColor": Color(100, 0, 0),
 			"baseColor": Color(0, 100, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 30,
+			"bombers": 3, 
+			"attackSpeed": 3.7,
 			"backgroundColor": Color(0, 80, 80), # cyan
 			"defendColor": Color(0, 0, 100),
 			"attackColor": Color(100, 0, 0),
 			"baseColor": Color(100, 100, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 30,
+			"bombers": 3, 
+			"attackSpeed": 3.8,
 			"backgroundColor": Color(0, 80, 80),
 			"defendColor": Color(0, 0, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(100, 100, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 30,
+			"bombers": 4, 
+			"attackSpeed": 3.9,
 			"backgroundColor": Color(80, 0, 80), # purple
 			"defendColor": Color(80, 80, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 30,
+			"bombers": 4, 
+			"attackSpeed": 3.9,
 			"backgroundColor": Color(80, 0, 80),
 			"defendColor": Color(80, 80, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 30,
+			"bombers": 4, 
+			"attackSpeed": 4,
 			"backgroundColor": Color(80, 80, 0), # yellow
 			"defendColor": Color(100, 0, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 30,
+			"bombers": 3, 
+			"attackSpeed": 4,
 			"backgroundColor": Color(80, 80, 0),
 			"defendColor": Color(100, 0, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0)
 		},		
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 30,
+			"bombers": 3, 
+			"attackSpeed": 4,
 			"backgroundColor": Color(100, 100, 100), # white
 			"defendColor": Color(0, 40, 0),
 			"attackColor": Color(0, 0, 80),
 			"baseColor": Color(100, 0, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 30,
+			"bombers": 3, 
+			"attackSpeed": 4,
 			"backgroundColor": Color(100, 100, 100),
 			"defendColor": Color(0, 40, 0),
 			"attackColor": Color(80, 0, 80),
 			"baseColor": Color(100, 0, 0)
 		},		
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 30,
+			"bombers": 3, 
+			"attackSpeed": 4,
 			"backgroundColor": Color(80, 0, 0), # red
 			"defendColor": Color(80, 0, 80),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(100, 100, 0)
 		},
 		{
-			"icbms": 11,
-			"bombers": 1, 
-			"attackSpeed": 1,
+			"icbms": 30,
+			"bombers": 3, 
+			"attackSpeed": 4,
 			"backgroundColor": Color(80, 0, 0),
 			"defendColor": Color(80, 0, 80),
 			"attackColor": Color(0, 0, 0),

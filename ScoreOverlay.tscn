@@ -82,12 +82,23 @@ __meta__ = {
 }
 
 [node name="CitiesLabel" type="Label" parent="HUD"]
-margin_left = 635.338
-margin_top = 440.0
-margin_right = 745.338
-margin_bottom = 473.0
+margin_left = 671.338
+margin_top = 441.498
+margin_right = 781.338
+margin_bottom = 474.498
 custom_fonts/font = SubResource( 1 )
 text = "CITIES"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PressStart" type="Label" parent="HUD"]
+margin_left = 412.839
+margin_top = 311.895
+margin_right = 620.839
+margin_bottom = 344.895
+custom_fonts/font = SubResource( 1 )
+text = "PRESS START"
 __meta__ = {
 "_edit_use_anchors_": false
 }
