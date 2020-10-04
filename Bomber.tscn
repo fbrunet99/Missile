@@ -14,6 +14,7 @@ extents = Vector2( 44.055, 37.3619 )
 script = ExtResource( 2 )
 
 [node name="BomberArea" type="Area2D" parent="."]
+collision_mask = 4
 
 [node name="BomberCollision" type="CollisionShape2D" parent="BomberArea"]
 position = Vector2( 0.374573, -7.62939e-06 )

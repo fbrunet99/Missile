@@ -36,7 +36,7 @@ var ground_targets
 var wave_info = preload("res://WaveInfo.gd").new()
 var wave_on = false
 var icbm_dir = {}
-var wave_number = 10
+var wave_number = 0
 var icbm_remain
 var icbm_exist
 var bomber_remain
@@ -58,6 +58,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	if Input.is_action_just_pressed("ui_pause"):
+		_on_pause_button_pressed()
+
 	if Input.is_action_just_pressed("ui_reset"):
 		get_tree().change_scene("res://Playfield.tscn")
 
@@ -91,7 +94,14 @@ func _input(event):
 		if cur_position.y > min_height:
 			cur_position.y = min_height
 		$Cursor.position = cur_position
+		if get_tree().paused:
+			get_tree().paused = false
 		
+func _on_pause_button_pressed():
+	var is_paused = get_tree().paused
+	print("Pause set, current value is ", is_paused)
+	#get_tree().paused = !is_paused
+	
 func start_game():
 	game_over = false
 	start_wave();
@@ -177,7 +187,7 @@ func update_icbms():
 func icbm_end():
 	icbm_exist -= 1
 	update_score(25)
-	print("An ICBM blew up. ", icbm_exist, " more expected")
+	print("ICBM ended ", icbm_exist, " remain. wave_on=", wave_on)
 	
 
 func launch_missile(id, location, speed):

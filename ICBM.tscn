@@ -88,9 +88,9 @@ func move_missile():
 func icbm_hit(object):
 	if phase == 0:
 		phase = 1
-		emit_signal(\"icbm_hit\")
 	
 func _on_icbm_explode():
+	emit_signal(\"icbm_hit\")
 	on_end()
 
 func on_end():
@@ -113,6 +113,7 @@ extents = Vector2( 2.73439, 12.8955 )
 script = SubResource( 1 )
 
 [node name="ICBMArea" type="Area2D" parent="."]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ICBMArea"]
 position = Vector2( -0.118118, -0.833971 )
