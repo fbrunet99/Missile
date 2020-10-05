@@ -50,8 +50,12 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	
 	ground_targets = [ alpha_loc, delta_loc, omega_loc, 
-		$City1.position, $City2.position, $City3.position, 
-		$City4.position, $City5.position, $City6.position]
+		Vector2($City1.position.x - 20, $City1.position.y), 
+		$City2.position, 
+		$City3.position, 
+		$City4.position, 
+		Vector2($City5.position.x + 30, $City5.position.y), 
+		Vector2($City6.position.x + 50, $City6.position.y)]
 	
 	initialize_screen()
 	
@@ -223,11 +227,11 @@ func initialize_cities():
 func restore_cities():
 	var viewport = get_viewport_rect().size
 	
-	$City1.position = Vector2(viewport.x / 5, viewport.y - 75)
+	$City1.position = Vector2(200, 540)
 	$City2.position = Vector2($City1.position.x + 100, $City1.position.y)
 	$City3.position = Vector2($City2.position.x + 100, $City1.position.y)
 
-	$City4.position = Vector2(viewport.x / 2 + 100, viewport.y - 75)
+	$City4.position = Vector2(620, $City1.position.y)
 	$City5.position = Vector2($City4.position.x + 100, $City1.position.y)
 	$City6.position = Vector2($City5.position.x + 100, $City1.position.y)
 	

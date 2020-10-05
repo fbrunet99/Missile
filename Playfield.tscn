@@ -30,7 +30,7 @@ func _input(event):
 "
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 33.4568, 12.5704 )
+extents = Vector2( 26.0823, 11.86 )
 
 [node name="Playfield" type="Node2D"]
 script = ExtResource( 1 )
@@ -60,74 +60,62 @@ position = Vector2( 500.134, 486.353 )
 position = Vector2( 903.29, 484.209 )
 
 [node name="City1" type="Area2D" parent="."]
-position = Vector2( 230, 535 )
+position = Vector2( 230, 540 )
 
 [node name="CityShape" type="CollisionShape2D" parent="City1"]
-position = Vector2( 0.178238, 13.9257 )
 shape = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="City1/CityShape"]
-position = Vector2( -0.95636, 0.745972 )
 scale = Vector2( 0.5, 0.219 )
 texture = ExtResource( 3 )
 
 [node name="City2" type="Area2D" parent="."]
-position = Vector2( 311.829, 535 )
+position = Vector2( 311.829, 540 )
 
 [node name="CityShape" type="CollisionShape2D" parent="City2"]
-position = Vector2( 0.178238, 13.9257 )
 shape = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="City2/CityShape"]
-position = Vector2( -0.95636, 0.745972 )
 scale = Vector2( 0.5, 0.219 )
 texture = ExtResource( 3 )
 
 [node name="City3" type="Area2D" parent="."]
-position = Vector2( 391.804, 535 )
+position = Vector2( 391.804, 540 )
 
 [node name="CityShape" type="CollisionShape2D" parent="City3"]
-position = Vector2( 0.178238, 13.9257 )
 shape = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="City3/CityShape"]
-position = Vector2( -0.95636, 0.745972 )
 scale = Vector2( 0.5, 0.219 )
 texture = ExtResource( 3 )
 
 [node name="City4" type="Area2D" parent="."]
-position = Vector2( 603.304, 535 )
+position = Vector2( 603.304, 540 )
 
 [node name="CityShape" type="CollisionShape2D" parent="City4"]
-position = Vector2( 0.178238, 13.9257 )
 shape = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="City4/CityShape"]
-position = Vector2( -0.95636, 0.745972 )
 scale = Vector2( 0.5, 0.219 )
 texture = ExtResource( 3 )
 
 [node name="City5" type="Area2D" parent="."]
-position = Vector2( 686.804, 535 )
+position = Vector2( 686.804, 540 )
 
 [node name="CityShape" type="CollisionShape2D" parent="City5"]
-position = Vector2( 0.178238, 13.9257 )
 shape = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="City5/CityShape"]
-position = Vector2( -0.95636, 0.745972 )
 scale = Vector2( 0.5, 0.219 )
 texture = ExtResource( 3 )
 
 [node name="City6" type="Area2D" parent="."]
-position = Vector2( 778.304, 535 )
+position = Vector2( 778.304, 540 )
 
 [node name="CityShape" type="CollisionShape2D" parent="City6"]
-position = Vector2( 0.178238, 13.9257 )
 shape = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="City6/CityShape"]
-position = Vector2( -0.95636, 0.745972 )
 scale = Vector2( 0.5, 0.219 )
 texture = ExtResource( 3 )
 

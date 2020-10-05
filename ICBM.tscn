@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://assets/patriot.png" type="Texture" id=3]
+[ext_resource path="res://assets/icbm.png" type="Texture" id=1]
 
 [sub_resource type="GDScript" id=1]
 script/source = "# ICBM Scene
@@ -107,7 +107,7 @@ func set_speed(new_value):
 "
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 2.73439, 12.8955 )
+extents = Vector2( 1.94781, 6.59768 )
 
 [node name="ICBM" type="Node2D"]
 script = SubResource( 1 )
@@ -116,10 +116,9 @@ script = SubResource( 1 )
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ICBMArea"]
-position = Vector2( -0.118118, -0.833971 )
 shape = SubResource( 2 )
 
 [node name="Scud" type="Sprite" parent="ICBMArea/CollisionShape2D"]
 position = Vector2( 0.118118, 0.833971 )
 scale = Vector2( 0.3, 0.3 )
-texture = ExtResource( 3 )
+texture = ExtResource( 1 )
