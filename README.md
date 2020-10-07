@@ -3,6 +3,10 @@ Missile Clone in Godot 3.2
 
 This is a classic style arcade game where you defend cities from a missile attack.
 
+## Running the game
+The game needs Godot Desktop 3.2. 
+TODO: Create an executable for Windows
+
 ## Controls
 The plus-shaped cursor indicates the target location of a defensive missile. When you press the fire button, a missile will fly to that location and explode.
 You have three different bases. There is a separate fire button for each.
@@ -52,7 +56,7 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 
 
 ## TODO
-- Add sounds
+- Add sounds (they have to be public or open source)
 - Add smart missiles
 - Add UFO
 - Add MIRV missiles
@@ -61,3 +65,10 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 - Connect bonus screen to main screen so that ammo and cities are removed from playfield as they are tallied on the bonus board
 - Improve wave structure so each has 3 distinct phases. This is primarily to make sure that many missiles appear at once so that you can have more attackers than defensive ammo
 - Consider adding particle effects to the missiles or explosions
+- Consider adding external json file that keeps high scores and allows user to customize difficulty etc
+- Add option to let the user choose between classic mode and "super missile attack" which is more difficult
+- Consider mutliple graphics styles such as
+  - 1st gen console
+  - 8 bit computer
+  - Arcade
+  - Modern (Indy) graphics
