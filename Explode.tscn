@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
+[ext_resource path="res://assets/sounds/Bomb.wav" type="AudioStream" id=1]
 [ext_resource path="res://assets/boom.png" type="Texture" id=2]
 
 [sub_resource type="GDScript" id=1]
@@ -42,6 +43,7 @@ func _process(delta):
 
 func on_explode():
 	$Area2D/BoomCollision/Boom.visible = true
+	$ExplodeSound.play()
 	$Area2D/BoomCollision.disabled = false
 	phase = 1
 
@@ -102,3 +104,7 @@ shape = SubResource( 2 )
 
 [node name="Boom" type="Sprite" parent="Area2D/BoomCollision"]
 texture = ExtResource( 2 )
+
+[node name="ExplodeSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 1 )
+volume_db = 6.0

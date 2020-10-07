@@ -104,13 +104,12 @@ __meta__ = {
 [node name="StartGame" type="CanvasLayer" parent="."]
 
 [node name="PressStart" type="Label" parent="StartGame"]
-visible = false
-margin_left = 412.839
-margin_top = 311.895
-margin_right = 620.839
-margin_bottom = 344.895
+margin_left = 402.75
+margin_top = 307.0
+margin_right = 700.75
+margin_bottom = 340.0
 custom_fonts/font = SubResource( 1 )
-text = "PRESS START"
+text = "PRESS '1' TO START"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -118,6 +117,7 @@ __meta__ = {
 [node name="Bonus" type="CanvasLayer" parent="."]
 
 [node name="BonusPoints" type="Label" parent="Bonus"]
+visible = false
 margin_left = 410.316
 margin_top = 160.397
 margin_right = 636.316
@@ -129,6 +129,7 @@ __meta__ = {
 }
 
 [node name="Ammo" type="Label" parent="Bonus"]
+visible = false
 margin_left = 305.0
 margin_top = 212.0
 margin_right = 395.0
@@ -141,6 +142,7 @@ __meta__ = {
 }
 
 [node name="Cities" type="Label" parent="Bonus"]
+visible = false
 margin_left = 306.0
 margin_top = 276.0
 margin_right = 395.0
@@ -151,5 +153,3 @@ align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Node2D" type="Node2D" parent="."]

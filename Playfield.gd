@@ -151,8 +151,8 @@ func update_bomber():
 		return
 
 	if bomber_remain  > 0:
-		var chance = rng.randf_range(0, 10000)
-		if chance > 9800:
+		var chance = rng.randf_range(0, 100)
+		if chance > 98:
 			print("I'm starting a bomber, chance was ", chance)
 			bomber_instance = Bomber.instance()
 			var height = rng.randf_range(100,300)
@@ -171,9 +171,9 @@ func set_bomber_over(object):
 	bomber_on = false
 
 func update_icbms():
-	var chance = rng.randf_range(0, 9000)
-	if wave_on and icbm_remain > 0 and chance > 8900:
-		var mult = 1 + rng.randf_range(0, 5)
+	var chance = rng.randf_range(0, 900)
+	if wave_on and icbm_remain > 0 and chance > 890:
+		var mult = 1 + rng.randf_range(0, 4)
 		
 		for i in range(mult):
 			if icbm_remain > 0:
