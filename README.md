@@ -72,3 +72,11 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
   - 8 bit computer
   - Arcade
   - Modern (Indy) graphics
+
+## Attributions
+Sound files taken from soundbible.com.
+#### Bomb Exploding
+Title: Bomb Exploding
+License: Attribution 3.0
+Recorded by: Sound Explorer
+Obtained from: http://soundbible.com/1986-Bomb-Exploding.html
