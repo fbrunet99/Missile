@@ -56,7 +56,6 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 
 
 ## TODO
-- Add sounds (they have to be public or open source)
 - Add smart missiles
 - Add UFO
 - Add MIRV missiles
@@ -75,7 +74,16 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 ## Attributions
 Sound files taken from soundbible.com.
 #### Bomb Exploding
-Title: Bomb Exploding
 License: Attribution 3.0
 Recorded by: Sound Explorer
 Obtained from: http://soundbible.com/1986-Bomb-Exploding.html
+
+#### Whoosh
+License: Attribution 3.0
+Recorded by Mark DiAngelo 
+Obtained from: http://soundbible.com/2068-Woosh.html
+
+#### Missile Launch
+License: Public Domain
+Recorded by Kibblesbob 
+Obtained from: http://soundbible.com/1794-Missle-Launch.html
