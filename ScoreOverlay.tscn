@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ScoreOverlay.gd" type="Script" id=2]
+[ext_resource path="res://assets/sounds/Woosh-Mark_DiAngelo-4778593.wav" type="AudioStream" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 26
@@ -153,3 +154,6 @@ align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Whoosh" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )

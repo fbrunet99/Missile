@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://assets/sounds/Bomb.wav" type="AudioStream" id=1]
+[ext_resource path="res://assets/sounds/Bomb_Exploding-Sound_Explorer-68256487.wav" type="AudioStream" id=1]
 [ext_resource path="res://assets/boom.png" type="Texture" id=2]
 
 [sub_resource type="GDScript" id=1]
@@ -107,4 +107,4 @@ texture = ExtResource( 2 )
 
 [node name="ExplodeSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 1 )
-volume_db = 6.0
+volume_db = -23.282

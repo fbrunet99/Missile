@@ -98,6 +98,7 @@ func show_bonus(new_wave, ammo, cities):
 	var ammo_total = 0
 	for i in range(1, ammo):
 		ammo_total += 5 * wave_info.get_multiplier(new_wave)
+		$Whoosh.play()
 		$Bonus/Ammo.text = str(ammo_total)
 		ammo_sprites[i].visible = true
 		
@@ -107,6 +108,7 @@ func show_bonus(new_wave, ammo, cities):
 	for i in range(0, cities):
 		city_sprites[i].visible = true
 		city_total += 100 * wave_info.get_multiplier(new_wave)
+		$Whoosh.play()
 		$Bonus/Cities.text = str(city_total)
 		yield(get_tree().create_timer(0.4), "timeout")
 
