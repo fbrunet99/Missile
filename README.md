@@ -61,7 +61,6 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 - Add UFO
 - Add MIRV missiles
 - Add missile launches to bombers
-- Make the satellite a little smaller
 - Connect bonus screen to main screen so that ammo and cities are removed from playfield as they are tallied on the bonus board
 - Improve wave structure so each has 3 distinct phases. This is primarily to make sure that many missiles appear at once so that you can have more attackers than defensive ammo
 - Consider adding particle effects to the missiles or explosions
