@@ -16,6 +16,7 @@ func _ready():
 		print("Bomber spawned as satellite")
 		$BomberArea/BomberCollision/BomberSprite.visible = false
 		$BomberArea/BomberCollision.disabled = true
+		$BomberArea.scale = Vector2(.7, .7)
 	else:
 		print("Bomber spawned as plane")
 		$BomberArea/SatelliteCollision/SatelliteSprite.visible = false
