@@ -8,6 +8,8 @@ var base_color setget set_color
 var fore_color setget set_foreground
 var parent_position
 
+signal missile_launch
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	fore_color = Color(100, 0, 0)
@@ -25,6 +27,8 @@ func launch_new_missile(target_position, speed):
 	target_position -= parent_position
 	
 	if ammo_count > 0:
+		emit_signal("missile_launch", base_id)
+
 		var new_missile = Missile.instance()
 		new_missile.visible = true
 		new_missile.position = target_position

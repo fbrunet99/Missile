@@ -10,13 +10,14 @@ font_data = ExtResource( 1 )
 [node name="ScoreOverlay" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="Score" type="CanvasLayer" parent="."]
 
-[node name="Score" type="Label" parent="HUD"]
+[node name="Player1" type="Label" parent="Score"]
+visible = false
 margin_left = 17.0
 margin_top = 1.0
 margin_right = 132.0
-margin_bottom = 28.0
+margin_bottom = 34.0
 custom_fonts/font = SubResource( 1 )
 text = "0"
 align = 2
@@ -24,7 +25,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PlayerLabel" type="Label" parent="HUD"]
+[node name="StartWave" type="CanvasLayer" parent="."]
+
+[node name="PlayerLabel" type="Label" parent="StartWave"]
+visible = false
 margin_left = 415.8
 margin_top = 153.244
 margin_right = 557.8
@@ -36,7 +40,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PlayerNumber" type="Label" parent="HUD"]
+[node name="PlayerNumber" type="Label" parent="StartWave"]
+visible = false
 margin_left = 577.8
 margin_top = 153.244
 margin_right = 687.8
@@ -47,7 +52,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Multiplier" type="Label" parent="HUD"]
+[node name="Multiplier" type="Label" parent="StartWave"]
+visible = false
 margin_left = 435.468
 margin_top = 212.0
 margin_right = 473.468
@@ -58,7 +64,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PointLabel" type="Label" parent="HUD"]
+[node name="PointLabel" type="Label" parent="StartWave"]
+visible = false
 margin_left = 485.646
 margin_top = 212.0
 margin_right = 654.646
@@ -70,10 +77,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DefendLabel" type="Label" parent="HUD"]
-margin_left = 215.063
+[node name="DefendLabel" type="Label" parent="StartWave"]
+visible = false
+margin_left = 231.063
 margin_top = 440.749
-margin_right = 338.063
+margin_right = 354.063
 margin_bottom = 473.749
 custom_fonts/font = SubResource( 1 )
 text = "DEFEND"
@@ -81,7 +89,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CitiesLabel" type="Label" parent="HUD"]
+[node name="CitiesLabel" type="Label" parent="StartWave"]
+visible = false
 margin_left = 671.338
 margin_top = 441.498
 margin_right = 781.338
@@ -92,7 +101,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PressStart" type="Label" parent="HUD"]
+[node name="StartGame" type="CanvasLayer" parent="."]
+
+[node name="PressStart" type="Label" parent="StartGame"]
+visible = false
 margin_left = 412.839
 margin_top = 311.895
 margin_right = 620.839
@@ -102,3 +114,42 @@ text = "PRESS START"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Bonus" type="CanvasLayer" parent="."]
+
+[node name="BonusPoints" type="Label" parent="Bonus"]
+margin_left = 410.316
+margin_top = 160.397
+margin_right = 636.316
+margin_bottom = 193.397
+custom_fonts/font = SubResource( 1 )
+text = "BONUS POINTS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ammo" type="Label" parent="Bonus"]
+margin_left = 305.0
+margin_top = 212.0
+margin_right = 395.0
+margin_bottom = 247.0
+custom_fonts/font = SubResource( 1 )
+text = "0"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cities" type="Label" parent="Bonus"]
+margin_left = 306.0
+margin_top = 276.0
+margin_right = 395.0
+margin_bottom = 311.0
+custom_fonts/font = SubResource( 1 )
+text = "1"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Node2D" type="Node2D" parent="."]

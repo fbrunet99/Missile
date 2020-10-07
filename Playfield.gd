@@ -9,17 +9,15 @@ var rng = RandomNumberGenerator.new()
 
 const ICBM_POINTS = 25
 const BOMBER_POINTS = 100
+const BASE_AMMO = 10
+const DELTA_ID = 2
+const ALPHA_ID = 1
+const OMEGA_ID = 3
+const GROUND_LEFT = Vector2(0, 560)
+const GROUND_RIGHT = Vector2(1200, 560)
 
-var ground_left = Vector2(0, 560)
-var ground_right = Vector2(1200, 560)
 var ground_color = Color(150, 150, 0)
 var end_loc = Vector2(500, 100)
-const delta_id = 2
-const alpha_id = 1
-const omega_id = 3
-var delta_ammo = 10
-var alpha_ammo = 10
-var omega_ammo = 10
 var delta_loc = Vector2(500, 535)
 var alpha_loc = Vector2(100, 535)
 var omega_loc = Vector2(900, 535)
@@ -40,6 +38,7 @@ var wave_number = 0
 var icbm_remain
 var icbm_exist
 var bomber_remain
+var ammo_remain
 var icbm_speed
 var score = 0
 var game_over = true
@@ -77,11 +76,11 @@ func _process(_delta):
 	update_icbms()
 
 	if Input.is_action_just_pressed("ui_alpha"):
-		launch_missile(alpha_id, alpha_loc, 10)
+		launch_missile(ALPHA_ID, alpha_loc, 10)
 	if Input.is_action_just_pressed("ui_delta"):
-		launch_missile(delta_id, delta_loc, 15)
+		launch_missile(DELTA_ID, delta_loc, 15)
 	if Input.is_action_just_pressed("ui_omega"):
-		launch_missile(omega_id, omega_loc, 10)
+		launch_missile(OMEGA_ID, omega_loc, 10)
 	
 	update_bomber()
 	update_wave()
@@ -94,7 +93,7 @@ func _process(_delta):
 func _input(event):
 	if event is InputEventMouseMotion:
 		var cur_position = event.position
-		var min_height = ground_left.y - 80
+		var min_height = GROUND_LEFT.y - 80
 		if cur_position.y > min_height:
 			cur_position.y = min_height
 		$Cursor.position = cur_position
@@ -114,7 +113,7 @@ func end_game():
 	game_over = true
 
 func start_wave():
-	$ScoreOverlay.show_wave_info(wave_number, get_multiplier())
+	$ScoreOverlay.show_wave_info(wave_number, wave_info.get_multiplier(wave_number))
 	ground_color = wave_info.get_basecolor(wave_number)
 	defend_color = wave_info.get_defendcolor(wave_number)
 	attack_color = wave_info.get_attackcolor(wave_number)
@@ -195,11 +194,11 @@ func icbm_end():
 	
 
 func launch_missile(id, location, speed):
-	if id == alpha_id:
+	if id == ALPHA_ID:
 		$Alpha.fire($Cursor.position, speed)
-	elif id == delta_id:
+	elif id == DELTA_ID:
 		$Delta.fire($Cursor.position, speed)
-	elif id == omega_id:
+	elif id == OMEGA_ID:
 		$Omega.fire($Cursor.position, speed)
 
 func initialize_screen():
@@ -238,8 +237,13 @@ func restore_cities():
 func initialize_bases():
 	
 	$Alpha/Area2D.connect("area_entered", self, "alpha_hit")
+	$Alpha.connect("missile_launch", self, "missile_fired")
+
 	$Delta/Area2D.connect("area_entered", self, "delta_hit")
+	$Delta.connect("missile_launch", self, "missile_fired")
+
 	$Omega/Area2D.connect("area_entered", self, "omega_hit")
+	$Omega.connect("missile_launch", self, "missile_fired")
 	
 	update()
 		
@@ -254,9 +258,9 @@ func restore_bases():
 	delta_loc.x = viewport.x / 2
 	omega_loc.x = viewport.x - viewport.x / 10
 	
-	$Alpha.init(alpha_id, alpha_loc)
-	$Delta.init(delta_id, delta_loc)
-	$Omega.init(omega_id, omega_loc)
+	$Alpha.init(ALPHA_ID, alpha_loc)
+	$Delta.init(DELTA_ID, delta_loc)
+	$Omega.init(OMEGA_ID, omega_loc)
 
 	$Delta.position = delta_loc + Vector2(0, 1)
 	$Alpha.position = alpha_loc + Vector2(-10, 1)
@@ -304,6 +308,8 @@ func remove_city(city, id):
 	city.position = Vector2(city.position.x, city.position.y + 100)
 	city.visible = false
 	
+func missile_fired(_id):
+	ammo_remain -= 1
 	
 func alpha_hit(_id):
 	$Alpha.set_ammo(0)
@@ -319,59 +325,20 @@ func omega_hit(_id):
 
 func base_hit(base, id):
 	print("Base ", id, " hit")
-	pass
 	
 func set_stockpiles():
-	$Alpha.set_ammo(alpha_ammo)
-	$Delta.set_ammo(delta_ammo)
-	$Omega.set_ammo(omega_ammo)
+	ammo_remain = BASE_AMMO * 3
+	$Alpha.set_ammo(BASE_AMMO)
+	$Delta.set_ammo(BASE_AMMO)
+	$Omega.set_ammo(BASE_AMMO)
 
 
 func count_cities():
-	count_ammo()
+	var city_count = cities_remain()
 	
-	var count_loc = Vector2(400, 200)
-	yield(get_tree().create_timer(1.0), "timeout")
-	
-	if $City1.visible:
-		$City1.position = count_loc
-		update_score(100)
-		count_loc += Vector2(60, 0)
-		yield(get_tree().create_timer(0.4), "timeout")
-
-	if $City2.visible:
-		$City2.position = count_loc
-		update_score(100)
-		count_loc += Vector2(60, 0)
-		yield(get_tree().create_timer(0.4), "timeout")
-
-	if $City3.visible:
-		$City3.position = count_loc
-		update_score(100)
-		count_loc += Vector2(60, 0)
-		yield(get_tree().create_timer(0.4), "timeout")
-
-	if $City4.visible:
-		$City4.position = count_loc
-		update_score(100)
-		count_loc += Vector2(60, 0)
-		yield(get_tree().create_timer(0.4), "timeout")
-
-	if $City5.visible:
-		$City5.position = count_loc
-		update_score(100)
-		count_loc += Vector2(60, 0)
-		yield(get_tree().create_timer(0.4), "timeout")
-
-	if $City6.visible:
-		update_score(100)
-		$City6.position = count_loc
-
-	yield(get_tree().create_timer(2.0), "timeout")
+	$ScoreOverlay.show_bonus(wave_number, ammo_remain, city_count)
+		
 	restore_cities()
-
-func count_ammo():
-	pass
 
 func cities_remain():
 	var count = 0
@@ -393,27 +360,11 @@ func cities_remain():
 
 func update_score(points):
 		
-	score = score + points * get_multiplier()
+	score = score + points * wave_info.get_multiplier(wave_number)
 	
 	$ScoreOverlay.update_score(score)
 	
 	return score
 
-func get_multiplier():
-	var multiplier
-	if wave_number < 2:
-		multiplier = 1
-	elif wave_number < 4:
-		multiplier = 2
-	elif wave_number < 6:
-		multiplier = 3
-	elif wave_number < 8:
-		multiplier = 4
-	elif wave_number < 10:
-		multiplier = 5
-	else:
-		multiplier = 6
-		
-	return multiplier
 	
 

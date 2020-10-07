@@ -27,6 +27,23 @@ func adjust_wavenum(wave_number):
 
 	return wave_number % wave_data.size()
 	
+func get_multiplier(wave_number):
+	var multiplier
+	if wave_number < 2:
+		multiplier = 1
+	elif wave_number < 4:
+		multiplier = 2
+	elif wave_number < 6:
+		multiplier = 3
+	elif wave_number < 8:
+		multiplier = 4
+	elif wave_number < 10:
+		multiplier = 5
+	else:
+		multiplier = 6
+		
+	return multiplier
+
 const wave_data = [
 		{
 			"icbms": 10,
