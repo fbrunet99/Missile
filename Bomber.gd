@@ -10,6 +10,12 @@ var max_x = 1100
 var max_y = 800
 var min_x = -100
 
+var targets
+var can_bomb = false
+var drop_target_x
+
+signal bomber_dropping(start_loc, end_loc)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if randi() % 2:
@@ -22,10 +28,15 @@ func _ready():
 		$BomberArea/SatelliteCollision/SatelliteSprite.visible = false
 		$BomberArea/SatelliteCollision.disabled = true
 		$BomberArea.scale = Vector2(.7, 1)
+	
 	var viewport = get_viewport_rect().size
 	max_x = viewport.x + 100
 	max_y = viewport.y / 2
 	
+	if randi() % 2:
+		print("This bomber can drop bombs")
+		can_bomb = true
+		drop_target_x = rng.randf_range(30, viewport.x - 30)
 	
 	rng.randomize()
 	var height = rand_range(100, max_y)
@@ -54,6 +65,18 @@ func _process(delta):
 		
 		end_bomber()
 	
+	if can_bomb and position.x < drop_target_x + 10 and position.x > drop_target_x - 10:
+		print("Bomber trying to drop bombs")
+		can_bomb = false
+		var target
+		var bomb_targets = targets.duplicate(true) # Create clone to not mess with original array
+		var bombs = (randi() % 4) + 1
+		print("Bomber trying to drop ", bombs, " bombs")
+		for i in range(bombs):
+			print("Bomber sent signal to drop a bomb")
+			target = randi() % bomb_targets.size()
+			emit_signal("bomber_dropping", position, targets[target])
+			bomb_targets.remove(target)
 
 
 func bomber_hit(object):
@@ -78,4 +101,7 @@ func _on_bomber_explode():
 	
 func end_bomber():
 	get_parent().remove_child(self)
+	
+func set_targets(new_targets):
+	targets = new_targets
 	

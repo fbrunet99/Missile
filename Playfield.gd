@@ -192,7 +192,9 @@ func update_bomber():
 		if chance > 98:
 			print("I'm starting a bomber, chance was ", chance)
 			bomber_instance = Bomber.instance()
+			bomber_instance.set_targets(ground_targets)
 			var height = rng.randf_range(100,300)
+			bomber_instance.connect("bomber_dropping", self, "spawn_bomber_child")
 			add_child(bomber_instance)
 			bomber_remain -= 1
 			bomber_on = true
@@ -258,6 +260,19 @@ func spawn_mirv_child(start_loc, end_loc, parent_start_loc, parent_split_loc):
 	new_icbm.set_parent_start_loc(parent_start_loc)
 	new_icbm.set_parent_split_loc(parent_split_loc)
 	new_icbm.connect("icbm_hit", self, "icbm_end")
+	add_child(new_icbm)
+	
+func spawn_bomber_child(start_loc, end_loc):
+	print("Bomber child spawned")
+	var new_icbm = ICBM.instance()
+	new_icbm.set_targets(ground_targets)
+	new_icbm.set_color(attack_color)
+	new_icbm.set_speed(icbm_speed)
+	new_icbm.set_bomber_child(true)
+	new_icbm.set_mirv(false)
+	new_icbm.set_start_loc(start_loc)
+	new_icbm.set_end_loc(end_loc)
+	# new_icbm.connect("icbm_hit", self, "icbm_end") 
 	add_child(new_icbm)
 	
 

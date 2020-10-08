@@ -31,6 +31,7 @@ var mirv_target_y
 var mirv_splits
 var parent_start_loc
 var parent_split_loc
+var bomber_child = false
 
 signal mirv_splitting(start_loc, end_loc, parent_start_loc, parent_split_loc)
 
@@ -45,7 +46,7 @@ func _ready():
 	if missile_speed == 0:
 		missile_speed = 4
 
-	if not mirv_child:
+	if not mirv_child and not bomber_child:
 		var x = rng.randf_range(0, 1000)
 		start_loc = Vector2(x, 0)
 		end_loc = targets[randi() % targets.size()] # Random base or city location
@@ -153,6 +154,9 @@ func set_parent_start_loc(new_value):
 	
 func set_parent_split_loc(new_value):
 	parent_split_loc = new_value
+	
+func set_bomber_child(new_boolean):
+	bomber_child = new_boolean
 	
 
 "
