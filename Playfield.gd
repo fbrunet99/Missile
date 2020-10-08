@@ -16,6 +16,14 @@ const OMEGA_ID = 3
 const GROUND_LEFT = Vector2(0, 560)
 const GROUND_RIGHT = Vector2(1200, 560)
 
+const min_cursor_height = GROUND_LEFT.y - 80
+const max_cursor_height = 0
+const min_cursor_width = 0
+
+var max_cursor_width
+var joystick_deadzone = 0.2
+var joystick_sensitivity = 5
+
 var ground_color = Color(150, 150, 0)
 var end_loc = Vector2(500, 100)
 var delta_loc = Vector2(500, 535)
@@ -34,7 +42,7 @@ var ground_targets
 var wave_info = preload("res://WaveInfo.gd").new()
 var wave_on = false
 var icbm_dir = {}
-var wave_number = 3
+var wave_number = 0
 var icbm_remain
 var icbm_exist
 var mirv_remain
@@ -59,6 +67,8 @@ func _ready():
 	
 	initialize_screen()
 	
+	max_cursor_width = get_viewport_rect().size.x # Sets horizontal boundary for joypad cursor
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -70,6 +80,30 @@ func _process(_delta):
 
 	if Input.is_action_just_pressed("ui_start") and game_over:
 		start_game()
+		
+	if Input.get_connected_joypads().size() > 0:
+		var xAxis = Input.get_joy_axis(0,JOY_AXIS_0)
+		var cur_position = $Cursor.position
+		if abs(xAxis) > joystick_deadzone:
+			if xAxis < 0:
+				cur_position.x-= 100 * _delta * (joystick_sensitivity * abs(xAxis))
+			if xAxis > 0:
+				cur_position.x+= 100 * _delta * (joystick_sensitivity * abs(xAxis))
+		var yAxis = Input.get_joy_axis(0,JOY_AXIS_1)
+		if abs(xAxis) > joystick_deadzone:
+			if yAxis < 0:
+				cur_position.y-= 100 * _delta * (joystick_sensitivity * abs(yAxis))
+			if yAxis > 0:
+				cur_position.y+= 100 * _delta * (joystick_sensitivity * abs(yAxis))
+		if cur_position.y > min_cursor_height:
+			cur_position.y = min_cursor_height
+		elif cur_position.y < max_cursor_height:
+			cur_position.y = max_cursor_height
+		if cur_position.x < min_cursor_width:
+			cur_position.x = min_cursor_width
+		elif cur_position.x > max_cursor_width:
+			cur_position.x = max_cursor_width
+		$Cursor.position = cur_position
 
 	if !wave_on:
 		return
@@ -100,7 +134,8 @@ func _input(event):
 		$Cursor.position = cur_position
 		if get_tree().paused:
 			get_tree().paused = false
-		
+
+
 func _on_pause_button_pressed():
 	var is_paused = get_tree().paused
 	print("Pause set, current value is ", is_paused)
