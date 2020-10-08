@@ -9,14 +9,16 @@ TODO: Create an executable for Windows
 
 ## Controls
 The plus-shaped cursor indicates the target location of a defensive missile. When you press the fire button, a missile will fly to that location and explode.
-You have three different bases. There is a separate fire button for each.
+The cursor can be moved with the mouse or with the left stick on a controller.
+You have three different bases. There is a separate fire button for each:
 
-- Left base: Left mouse button or key 'A'
-- Middle base: middle mouse button or key 'S'
-- Right base: Right mouse button or key 'D'
+- Left base: Left mouse button, 'A' key on keyboard, or left button on controller
+- Middle base: middle mouse button, 'S' key on keyboard, or bottom or top button on controller
+- Right base: Right mouse button, 'D' key on keyboard, or right button on controller
 
-Start the game by pressing the '1' Key
+Start the game by pressing the '1' key on the keyboard, or the start/options/plus button on the controller
 TODO: Add a start button to the screen so the player can start by clicking the mouse
+Reset the game by pressing the '9' key on the keyboard, or the select/share/minus button on the controller
 
 ## Gameplay
 ### Waves
