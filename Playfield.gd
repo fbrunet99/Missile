@@ -34,9 +34,10 @@ var ground_targets
 var wave_info = preload("res://WaveInfo.gd").new()
 var wave_on = false
 var icbm_dir = {}
-var wave_number = 0
+var wave_number = 3
 var icbm_remain
 var icbm_exist
+var mirv_remain
 var bomber_remain
 var ammo_remain
 var icbm_speed
@@ -125,6 +126,7 @@ func start_wave():
 	bomber_remain = wave_info.get_bombercount(wave_number)
 	icbm_remain  = wave_info.get_icbmcount(wave_number)
 	icbm_exist = icbm_remain
+	mirv_remain = wave_info.get_mirvcount(wave_number)
 	
 	print("starting wave ", wave_number)
 	
@@ -178,6 +180,17 @@ func update_icbms():
 		for i in range(mult):
 			if icbm_remain > 0:
 				var new_icbm = ICBM.instance()
+				if((icbm_remain > 1) and (randi() % (icbm_remain) < mirv_remain)):
+					print("MIRV created")
+					new_icbm.set_mirv(true)
+					mirv_remain -= 1
+					var splits = (randi() % 3) + 2
+					if splits > icbm_remain:
+						splits = icbm_remain
+					new_icbm.set_mirv_splits(splits)
+					icbm_remain -= (splits - 1)
+					new_icbm.connect("mirv_hit", self, "mirv_end")
+					new_icbm.connect("mirv_splitting", self, "spawn_mirv_child")
 				new_icbm.set_targets(ground_targets)
 				new_icbm.set_color(attack_color)
 				new_icbm.set_speed(icbm_speed)
@@ -191,6 +204,26 @@ func icbm_end():
 	icbm_exist -= 1
 	update_score(25)
 	print("ICBM ended ", icbm_exist, " remain. wave_on=", wave_on)
+	
+func mirv_end(splits):
+	icbm_exist -= splits
+	update_score(25)
+	print("MIRV with ", splits, " splits ended early ", icbm_exist, " ICBMs remain. wave_on=", wave_on)
+	
+func spawn_mirv_child(start_loc, end_loc, parent_start_loc, parent_split_loc):
+	print("MIRV child spawned")
+	var new_icbm = ICBM.instance()
+	new_icbm.set_targets(ground_targets)
+	new_icbm.set_color(attack_color)
+	new_icbm.set_speed(icbm_speed)
+	new_icbm.set_mirv_child(true)
+	new_icbm.set_mirv(false)
+	new_icbm.set_start_loc(start_loc)
+	new_icbm.set_end_loc(end_loc)
+	new_icbm.set_parent_start_loc(parent_start_loc)
+	new_icbm.set_parent_split_loc(parent_split_loc)
+	new_icbm.connect("icbm_hit", self, "icbm_end")
+	add_child(new_icbm)
 	
 
 func launch_missile(id, location, speed):

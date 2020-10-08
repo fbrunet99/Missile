@@ -40,7 +40,6 @@ TODO: Detect end of game
 ICBM Missiles come down from the top of the screen. They leave a smoke trail behind them. You have to target the missile at the bottom of the smoke trail.
 
 TODO: 
-- MIRV Missiles (some missiles can split into multiple)
 - Better waves: In the arcade, each wave has 3 distinct phases. Usually there is a lot of missiles at once, then a pause, then another large attack, then a smaller random attack.
 In this version, the wave is mostly random the whole time but a specific number of missiles occur in each wave.
 
@@ -58,7 +57,6 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 ## TODO
 - Add smart missiles
 - Add UFO
-- Add MIRV missiles
 - Add missile launches to bombers
 - Connect bonus screen to main screen so that ammo and cities are removed from playfield as they are tallied on the bonus board
 - Improve wave structure so each has 3 distinct phases. This is primarily to make sure that many missiles appear at once so that you can have more attackers than defensive ammo

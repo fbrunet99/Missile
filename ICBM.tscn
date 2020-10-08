@@ -25,6 +25,16 @@ var start_loc = Vector2(0, 0)
 var end_loc = Vector2(0, 0)
 var cur_loc = null
 var missile_speed = 2
+var mirv = false
+var mirv_child = false
+var mirv_target_y
+var mirv_splits
+var parent_start_loc
+var parent_split_loc
+
+signal mirv_splitting(start_loc, end_loc, parent_start_loc, parent_split_loc)
+
+signal mirv_hit(splits)
 
 var missile_dir = Vector2(0,0)
 
@@ -34,12 +44,16 @@ func _ready():
 	rng.randomize()
 	if missile_speed == 0:
 		missile_speed = 4
-		
-	var x = rng.randf_range(0, 1000)
+
+	if not mirv_child:
+		var x = rng.randf_range(0, 1000)
+		start_loc = Vector2(x, 0)
+		end_loc = targets[randi() % targets.size()] # Random base or city location
 	
-	start_loc = Vector2(x, 0)
-	end_loc = targets[randi() % targets.size()] # Random base or city location
-	# end_loc = Vector2(rng.randf_range(0, 1000), 500) # Any random x value and y = 500
+	if mirv:
+		var viewport = get_viewport_rect().size
+		mirv_target_y = rng.randf_range(viewport.y / 4, 3 * viewport.y / 4)
+		
 
 	$ICBMArea.position = start_loc
 	var velocity = start_loc.direction_to(end_loc)
@@ -60,6 +74,8 @@ func _process(delta):
 func _draw():
 	if cur_loc != null && phase == 0:
 		draw_line(start_loc, cur_loc, attack_color)
+		if mirv_child:
+			draw_line(parent_start_loc, parent_split_loc, attack_color)
 
 
 func on_explode():
@@ -82,7 +98,16 @@ func move_missile():
 	
 	$ICBMArea.position = cur_loc
 	update()
-	if cur_loc.y > end_loc.y:
+	if mirv and cur_loc.y > mirv_target_y:
+		print(\"MIRV splitting\")
+		var target
+		var mirv_targets = targets.duplicate(true) # Create clone to not mess with original array
+		for i in range(mirv_splits):
+			target = randi() % mirv_targets.size()
+			emit_signal(\"mirv_splitting\", cur_loc, mirv_targets[target], start_loc, cur_loc)
+			mirv_targets.remove(target)
+		on_end()
+	elif cur_loc.y > end_loc.y:
 		phase = 1
 
 func icbm_hit(object):
@@ -90,7 +115,10 @@ func icbm_hit(object):
 		phase = 1
 	
 func _on_icbm_explode():
-	emit_signal(\"icbm_hit\")
+	if not mirv:
+		emit_signal(\"icbm_hit\")
+	else:
+		emit_signal(\"mirv_hit\", mirv_splits)
 	on_end()
 
 func on_end():
@@ -104,6 +132,29 @@ func set_color(new_value):
 
 func set_speed(new_value):
 	missile_speed = new_value
+
+func set_mirv(new_boolean):
+	mirv = new_boolean
+	
+func set_mirv_child(new_boolean):
+	mirv_child = new_boolean
+	
+func set_mirv_splits(new_value):
+	mirv_splits = new_value
+	
+func set_start_loc(new_value):
+	start_loc = new_value
+	
+func set_end_loc(new_value):
+	end_loc = new_value
+	
+func set_parent_start_loc(new_value):
+	parent_start_loc = new_value
+	
+func set_parent_split_loc(new_value):
+	parent_split_loc = new_value
+	
+
 "
 
 [sub_resource type="RectangleShape2D" id=2]
