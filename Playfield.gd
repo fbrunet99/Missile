@@ -39,6 +39,8 @@ var bomber_on = false
 var city_count = 6
 var ground_targets
 
+var siren: AudioStreamPlayback = null
+
 var wave_info = preload("res://WaveInfo.gd").new()
 var wave_on = false
 var icbm_dir = {}
@@ -51,6 +53,9 @@ var ammo_remain
 var icbm_speed
 var score = 0
 var game_over = true
+
+var sample_hz = 22050.0 # Keep the number of samples to mix low, GDScript is not super fast.
+var pulse_hz = 440.0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -72,9 +77,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if Input.is_action_just_pressed("ui_pause"):
-		_on_pause_button_pressed()
-
 	if Input.is_action_just_pressed("ui_reset"):
 		get_tree().change_scene("res://Playfield.tscn")
 
@@ -147,9 +149,14 @@ func start_game():
 
 func end_game():
 	game_over = true
+	$ScoreOverlay.show_start_message(0)
 
 func start_wave():
+	if game_over:
+		return
+
 	$ScoreOverlay.show_wave_info(wave_number, wave_info.get_multiplier(wave_number))
+	$StartWave.play()
 	ground_color = wave_info.get_basecolor(wave_number)
 	defend_color = wave_info.get_defendcolor(wave_number)
 	attack_color = wave_info.get_attackcolor(wave_number)
@@ -457,4 +464,19 @@ func update_score(points):
 	return score
 
 	
+#func _fill_buffer():
+#	var phase = 0.0
+	
+#	var increment = pulse_hz / sample_hz
 
+#	var to_fill = siren.get_frames_available()
+#	while to_fill > 0:
+#		siren.push_frame(Vector2.ONE * sin(phase * TAU)) # Audio frames are stereo.
+#		phase = fmod(phase + increment, 1.0)
+#		to_fill -= 1
+
+#func play_siren():
+#	$SoundPlayer.stream.mix_rate = sample_hz # Setting mix rate is only possible before play().
+#	siren = $SoundPlayer.get_stream_playback()
+#	_fill_buffer() # Prefill, do before play() to avoid delay.
+#	$SoundPlayer.play()

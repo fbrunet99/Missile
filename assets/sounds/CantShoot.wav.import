@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/CantShoot.wav-0997615c5e2434d310b3f31fcc7c85c4.sample"
+
+[deps]
+
+source_file="res://assets/sounds/CantShoot.wav"
+dest_files=[ "res://.import/CantShoot.wav-0997615c5e2434d310b3f31fcc7c85c4.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

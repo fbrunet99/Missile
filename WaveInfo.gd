@@ -13,20 +13,28 @@ func get_backgroundcolor(wave_number):
 	return wave_data[adjust_wavenum(wave_number)].backgroundColor
 
 func get_attachspeed(wave_number):
-	return wave_data[adjust_wavenum(wave_number)].attackSpeed
+	return get_waveData(wave_number).attackSpeed
 	
 func get_icbmcount(wave_number):
-	return wave_data[adjust_wavenum(wave_number)].icbms
+	return get_waveData(wave_number).icbms
 	
 func get_bombercount(wave_number):
-	return wave_data[adjust_wavenum(wave_number)].bombers
-	
+	return get_waveData(wave_number).bombers
+
+func get_waveData(wave_number):
+	if wave_number < wave_data.size():
+		return wave_data[adjust_wavenum(wave_number)]
+	else:
+		return wave_data[wave_data.size()-1]
+		
+
 func get_mirvcount(wave_number):
-	return wave_data[adjust_wavenum(wave_number)].mirvs
+	return get_waveData(wave_number).mirvs
 	
 func adjust_wavenum(wave_number):
 	if wave_number == null or wave_number < 0:
 		wave_number = 0
+		
 
 	return wave_number % wave_data.size()
 	
@@ -212,7 +220,7 @@ const wave_data = [
 			"icbms": 30,
 			"bombers": 3, 
 			"attackSpeed": 3.6,
-			"backgroundColor": Color(100, 100, 100), # white
+			"backgroundColor": Color(60, 60, 60), # white
 			"defendColor": Color(0, 40, 0),
 			"attackColor": Color(0, 0, 80),
 			"baseColor": Color(100, 0, 0),
@@ -222,7 +230,7 @@ const wave_data = [
 			"icbms": 30,
 			"bombers": 3, 
 			"attackSpeed": 3.8,
-			"backgroundColor": Color(100, 100, 100),
+			"backgroundColor": Color(60, 60, 60),
 			"defendColor": Color(0, 40, 0),
 			"attackColor": Color(80, 0, 80),
 			"baseColor": Color(100, 0, 0),

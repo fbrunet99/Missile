@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Playfield.gd" type="Script" id=1]
 [ext_resource path="res://assets/cursor.png" type="Texture" id=2]
 [ext_resource path="res://assets/city.png" type="Texture" id=3]
 [ext_resource path="res://Base.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ScoreOverlay.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/sounds/Missile Command 04 - Round Begin.wav" type="AudioStream" id=6]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Sprite
@@ -120,3 +121,8 @@ scale = Vector2( 0.5, 0.219 )
 texture = ExtResource( 3 )
 
 [node name="ScoreOverlay" parent="." instance=ExtResource( 5 )]
+
+[node name="StartWave" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+volume_db = -14.136
+pitch_scale = 1.03

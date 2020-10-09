@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Missile Command 02 - Player Shoot.wav-75bd5045a799545c495fed5a218db55b.sample"
+
+[deps]
+
+source_file="res://assets/sounds/Missile Command 02 - Player Shoot.wav"
+dest_files=[ "res://.import/Missile Command 02 - Player Shoot.wav-75bd5045a799545c495fed5a218db55b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

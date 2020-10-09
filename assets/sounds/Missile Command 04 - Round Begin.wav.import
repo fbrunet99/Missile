@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Missile Command 04 - Round Begin.wav-2090816ddd333631b032c52ed5bed426.sample"
+
+[deps]
+
+source_file="res://assets/sounds/Missile Command 04 - Round Begin.wav"
+dest_files=[ "res://.import/Missile Command 04 - Round Begin.wav-2090816ddd333631b032c52ed5bed426.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

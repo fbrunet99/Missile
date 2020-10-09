@@ -22,20 +22,22 @@ func _process(delta):
 func fire(location, speed):
 	if ammo_count > 0:
 		launch_new_missile(location, speed)
+	else:
+		$AmmoOut.play()
+	
+
 
 func launch_new_missile(target_position, speed):
 	target_position -= parent_position
 	
-	if ammo_count > 0:
-		emit_signal("missile_launch", base_id)
-
-		var new_missile = Missile.instance()
-		new_missile.visible = true
-		new_missile.position = target_position
-		new_missile.start_loc = Vector2(0, 0)
-		new_missile.missile_speed = speed
-		new_missile.set_color(fore_color)
-		add_child(new_missile)
+	emit_signal("missile_launch", base_id)
+	var new_missile = Missile.instance()
+	new_missile.visible = true
+	new_missile.position = target_position
+	new_missile.start_loc = Vector2(0, 0)
+	new_missile.missile_speed = speed
+	new_missile.set_color(fore_color)
+	add_child(new_missile)
 	ammo_count -= 1
 	update_ammo_display()
 
@@ -64,9 +66,13 @@ func init(id, location):
 	
 
 func set_ammo(ammo):
+	print("Base: set_ammo ", ammo)
 	ammo_count = ammo
 	update_ammo_display()
 	
+func get_ammo():
+	return ammo_count
+
 func set_color(new_color):
 	base_color = new_color
 	$Area2D/CollisionShape2D/Hill.self_modulate = base_color

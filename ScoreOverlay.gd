@@ -1,5 +1,7 @@
 extends Node2D
 
+var is_paused = false
+
 var wave_info = preload("res://WaveInfo.gd").new()
 var ammo_texture = preload("res://assets/ammo.png")
 var city_texture = preload("res://assets/city.png")
@@ -11,10 +13,17 @@ var ammo_sprites = []
 var city_sprites = []
 
 func _ready():
+	$Pause/PauseLabel.visible = false
 	init_sprites()
 	show_score()
 	show_start_message(1)
 	hide_wave_info()
+
+func _process(delta):
+	if Input.is_action_just_pressed("ui_pause"):
+		_on_pause_button_pressed()
+
+
 
 func update_score(score):
 	$Score/Player1.text = str(score)
@@ -96,7 +105,7 @@ func show_bonus(new_wave, ammo, cities):
 	$Bonus/Cities.add_color_override("font_color", high_color)
 	
 	var ammo_total = 0
-	for i in range(1, ammo):
+	for i in range(0, ammo):
 		ammo_total += 5 * wave_info.get_multiplier(new_wave)
 		$Whoosh.play()
 		$Bonus/Ammo.text = str(ammo_total)
@@ -140,3 +149,7 @@ func hide_bonus():
 	for i in range(0,6):
 		city_sprites[i].visible = false
 	
+func _on_pause_button_pressed():
+	is_paused = !is_paused
+	get_tree().paused = is_paused
+	$Pause/PauseLabel.visible = is_paused
