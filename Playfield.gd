@@ -42,7 +42,7 @@ var ground_targets
 var wave_info = preload("res://WaveInfo.gd").new()
 var wave_on = false
 var icbm_dir = {}
-var wave_number = 3
+var wave_number = 0
 var icbm_remain
 var icbm_exist
 var mirv_remain

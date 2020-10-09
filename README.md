@@ -16,9 +16,9 @@ You have three different bases. There is a separate fire button for each:
 - Middle base: middle mouse button, 'S' key on keyboard, or bottom or top button on controller
 - Right base: Right mouse button, 'D' key on keyboard, or right button on controller
 
-Start the game by pressing the '1' key on the keyboard, or the start/options/plus button on the controller
+Start the game by pressing the '1' key on keyboard, or the start/options/plus button on controller
 TODO: Add a start button to the screen so the player can start by clicking the mouse
-Reset the game by pressing the '9' key on the keyboard, or the select/share/minus button on the controller
+Reset the game by pressing the '9' key on keyboard, or the select/share/minus button on controller
 
 ## Gameplay
 ### Waves
@@ -47,7 +47,7 @@ In this version, the wave is mostly random the whole time but a specific number 
 
 #### Bombers
 Bombers and satellites cross the screen and make fairly easy 
-TODO: Launch missiles from bombers
+TODO: Make bombers tied to waves
 
 #### Smart Missiles
 TODO: Add missiles that are able to dodge defensive fire if you don't hit very closely to them. These missiles are larger and don't leave smoke trails.
@@ -59,7 +59,7 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 ## TODO
 - Add smart missiles
 - Add UFO
-- Add missile launches to bombers
+- Make bombers tied to waves
 - Connect bonus screen to main screen so that ammo and cities are removed from playfield as they are tallied on the bonus board
 - Improve wave structure so each has 3 distinct phases. This is primarily to make sure that many missiles appear at once so that you can have more attackers than defensive ammo
 - Consider adding particle effects to the missiles or explosions
