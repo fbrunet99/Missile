@@ -32,8 +32,9 @@ var mirv_splits
 var parent_start_loc
 var parent_split_loc
 var bomber_child = false
+var mirv_can_split = true
 
-signal mirv_splitting(start_loc, end_loc, parent_start_loc, parent_split_loc)
+signal mirv_splitting(start_loc, end_loc, can_sub_split)
 
 signal mirv_hit(splits)
 
@@ -53,8 +54,8 @@ func _ready():
 	
 	if mirv:
 		var viewport = get_viewport_rect().size
-		mirv_target_y = rng.randf_range(viewport.y / 4, 3 * viewport.y / 4)
-		
+		mirv_target_y = rng.randf_range(max(start_loc.y + 10, viewport.y / 4), 3 * viewport.y / 4)
+			
 
 	$ICBMArea.position = start_loc
 	var velocity = start_loc.direction_to(end_loc)
@@ -75,8 +76,6 @@ func _process(delta):
 func _draw():
 	if cur_loc != null && phase == 0:
 		draw_line(start_loc, cur_loc, attack_color)
-		if mirv_child:
-			draw_line(parent_start_loc, parent_split_loc, attack_color)
 
 
 func on_explode():
@@ -99,15 +98,17 @@ func move_missile():
 	
 	$ICBMArea.position = cur_loc
 	update()
-	if mirv and cur_loc.y > mirv_target_y:
+	if mirv and mirv_can_split and cur_loc.y > mirv_target_y:
 		print(\"MIRV splitting\")
+		mirv_can_split = false
 		var target
 		var mirv_targets = targets.duplicate(true) # Create clone to not mess with original array
+		var viewport = get_viewport_rect().size
 		for i in range(mirv_splits):
 			target = randi() % mirv_targets.size()
-			emit_signal(\"mirv_splitting\", cur_loc, mirv_targets[target], start_loc, cur_loc)
+			emit_signal(\"mirv_splitting\", cur_loc, mirv_targets[target], cur_loc.y < (3 * viewport.y / 4))
 			mirv_targets.remove(target)
-		on_end()
+		# on_end()
 	elif cur_loc.y > end_loc.y:
 		phase = 1
 
@@ -116,10 +117,10 @@ func icbm_hit(object):
 		phase = 1
 	
 func _on_icbm_explode():
-	if not mirv:
-		emit_signal(\"icbm_hit\")
-	else:
+	if mirv and mirv_can_split:
 		emit_signal(\"mirv_hit\", mirv_splits)
+	else:
+		emit_signal(\"icbm_hit\")
 	on_end()
 
 func on_end():

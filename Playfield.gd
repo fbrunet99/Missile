@@ -42,7 +42,7 @@ var ground_targets
 var wave_info = preload("res://WaveInfo.gd").new()
 var wave_on = false
 var icbm_dir = {}
-var wave_number = 0
+var wave_number = 3
 var icbm_remain
 var icbm_exist
 var mirv_remain
@@ -221,11 +221,11 @@ func update_icbms():
 					print("MIRV created")
 					new_icbm.set_mirv(true)
 					mirv_remain -= 1
-					var splits = (randi() % 3) + 2
+					var splits = (randi() % 3) + 1
 					if splits > icbm_remain:
 						splits = icbm_remain
 					new_icbm.set_mirv_splits(splits)
-					icbm_remain -= (splits - 1)
+					icbm_remain -= (splits)
 					new_icbm.connect("mirv_hit", self, "mirv_end")
 					new_icbm.connect("mirv_splitting", self, "spawn_mirv_child")
 				new_icbm.set_targets(ground_targets)
@@ -243,23 +243,30 @@ func icbm_end():
 	print("ICBM ended ", icbm_exist, " remain. wave_on=", wave_on)
 	
 func mirv_end(splits):
-	icbm_exist -= splits
+	icbm_exist -= splits + 1
 	update_score(25)
 	print("MIRV with ", splits, " splits ended early ", icbm_exist, " ICBMs remain. wave_on=", wave_on)
 	
-func spawn_mirv_child(start_loc, end_loc, parent_start_loc, parent_split_loc):
+func spawn_mirv_child(start_loc, end_loc, can_sub_split):
 	print("MIRV child spawned")
 	var new_icbm = ICBM.instance()
 	new_icbm.set_targets(ground_targets)
 	new_icbm.set_color(attack_color)
 	new_icbm.set_speed(icbm_speed)
 	new_icbm.set_mirv_child(true)
-	new_icbm.set_mirv(false)
+	var splits = randi() % 2 + 1
+	if can_sub_split and icbm_remain >= splits and mirv_remain >= 1 and (randi() % 4):
+		icbm_remain -= splits
+		mirv_remain -= 1
+		new_icbm.set_mirv(true)
+		new_icbm.set_mirv_splits(splits)
+	else:
+		new_icbm.set_mirv(false)
 	new_icbm.set_start_loc(start_loc)
 	new_icbm.set_end_loc(end_loc)
-	new_icbm.set_parent_start_loc(parent_start_loc)
-	new_icbm.set_parent_split_loc(parent_split_loc)
 	new_icbm.connect("icbm_hit", self, "icbm_end")
+	new_icbm.connect("mirv_hit", self, "mirv_end")
+	new_icbm.connect("mirv_splitting", self, "spawn_mirv_child")
 	add_child(new_icbm)
 	
 func spawn_bomber_child(start_loc, end_loc):
