@@ -50,7 +50,9 @@ func _ready():
 	if not mirv_child and not bomber_child:
 		var x = rng.randf_range(0, 1000)
 		start_loc = Vector2(x, 0)
-		end_loc = targets[randi() % targets.size()] # Random base or city location
+		var offset = randi() % targets.size()
+		print(\"ICBM target offset=\", offset)
+		end_loc = targets[offset] # Random base or city location
 	
 	if mirv:
 		var viewport = get_viewport_rect().size

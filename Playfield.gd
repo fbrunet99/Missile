@@ -25,10 +25,9 @@ var joystick_deadzone = 0.2
 var joystick_sensitivity = 5
 
 var ground_color = Color(150, 150, 0)
-var end_loc = Vector2(500, 100)
-var delta_loc = Vector2(500, 535)
-var alpha_loc = Vector2(100, 535)
-var omega_loc = Vector2(900, 535)
+var alpha_loc = Vector2(100, 550)
+var delta_loc = Vector2(500, 550)
+var omega_loc = Vector2(900, 550)
 var defend_color
 var attack_color
 
@@ -62,23 +61,25 @@ var pulse_hz = 440.0
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	
-	ground_targets = [ alpha_loc, delta_loc, omega_loc, 
-		Vector2($City1.position.x - 20, $City1.position.y), 
+	ground_targets = [ alpha_loc, 
+		Vector2($City1.position.x - 0, $City1.position.y), 
 		$City2.position, 
 		$City3.position, 
+		delta_loc, 
 		$City4.position, 
 		Vector2($City5.position.x + 30, $City5.position.y), 
-		Vector2($City6.position.x + 50, $City6.position.y)]
+		Vector2($City6.position.x + 50, $City6.position.y),
+		omega_loc,
+	]
 	
 	initialize_screen()
 	
 	max_cursor_width = get_viewport_rect().size.x # Sets horizontal boundary for joypad cursor
-	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+
 func _process(_delta):
 	if Input.is_action_just_pressed("ui_reset"):
-		get_tree().change_scene("res://Playfield.tscn")
+		var _ret = get_tree().change_scene("res://Playfield.tscn")
 
 	if Input.is_action_just_pressed("ui_start") and game_over:
 		start_game()
@@ -144,12 +145,17 @@ func _on_pause_button_pressed():
 	#get_tree().paused = !is_paused
 	
 func start_game():
+	rng.randomize()
+	score = 0
+	wave_number = 0
 	game_over = false
+	restore_bases()
+	restore_cities(true)
+
 	start_wave();
 
 func end_game():
 	game_over = true
-	$ScoreOverlay.show_start_message(0)
 
 func start_wave():
 	if game_over:
@@ -161,7 +167,7 @@ func start_wave():
 	defend_color = wave_info.get_defendcolor(wave_number)
 	attack_color = wave_info.get_attackcolor(wave_number)
 	icbm_speed = wave_info.get_attachspeed(wave_number)
-	restore_cities()
+	restore_cities(false)
 	restore_bases()
 	yield(get_tree().create_timer(5.0), "timeout")
 	wave_on = true
@@ -200,19 +206,18 @@ func update_bomber():
 			print("I'm starting a bomber, chance was ", chance)
 			bomber_instance = Bomber.instance()
 			bomber_instance.set_targets(ground_targets)
-			var height = rng.randf_range(100,300)
 			bomber_instance.connect("bomber_dropping", self, "spawn_bomber_child")
 			add_child(bomber_instance)
 			bomber_remain -= 1
 			bomber_on = true
 
 
-func set_bomber_hit(object):
+func set_bomber_hit(_object):
 	print("playfield: I see that the bomber was hit")
 	update_score(100)
 	bomber_on = false
 	
-func set_bomber_over(object):
+func set_bomber_over(_object):
 	print("playfield: I see the bomber got away")
 	bomber_on = false
 
@@ -221,7 +226,7 @@ func update_icbms():
 	if wave_on and icbm_remain > 0 and chance > 890:
 		var mult = 1 + rng.randf_range(0, 4)
 		
-		for i in range(mult):
+		for _i in range(mult):
 			if icbm_remain > 0:
 				var new_icbm = ICBM.instance()
 				if((icbm_remain > 1) and (randi() % (icbm_remain) < mirv_remain)):
@@ -241,8 +246,8 @@ func update_icbms():
 				new_icbm.connect("icbm_hit", self, "icbm_end")
 				icbm_remain -= 1
 				add_child(new_icbm)
-			
-		
+
+
 
 func icbm_end():
 	icbm_exist -= 1
@@ -286,11 +291,10 @@ func spawn_bomber_child(start_loc, end_loc):
 	new_icbm.set_mirv(false)
 	new_icbm.set_start_loc(start_loc)
 	new_icbm.set_end_loc(end_loc)
-	# new_icbm.connect("icbm_hit", self, "icbm_end") 
 	add_child(new_icbm)
 	
 
-func launch_missile(id, location, speed):
+func launch_missile(id, _location, speed):
 	if id == ALPHA_ID:
 		$Alpha.fire($Cursor.position, speed)
 	elif id == DELTA_ID:
@@ -304,25 +308,24 @@ func initialize_screen():
 	attack_color = wave_info.get_attackcolor(wave_number)
 	
 	initialize_bases()
-	restore_bases()
 	initialize_cities()
-	restore_cities()
+	restore_bases()
+	restore_cities(true)
 	
 
 func initialize_cities():
 	city_count = 6
+	var _err
 
-	$City1.connect("area_entered", self, "city1_hit")
-	$City2.connect("area_entered", self, "city2_hit")
-	$City3.connect("area_entered", self, "city3_hit")
-	$City4.connect("area_entered", self, "city4_hit")
-	$City5.connect("area_entered", self, "city5_hit")
-	$City6.connect("area_entered", self, "city6_hit")
+	_err = $City1.connect("area_entered", self, "city1_hit")
+	_err = $City2.connect("area_entered", self, "city2_hit")
+	_err = $City3.connect("area_entered", self, "city3_hit")
+	_err = $City4.connect("area_entered", self, "city4_hit")
+	_err = $City5.connect("area_entered", self, "city5_hit")
+	_err = $City6.connect("area_entered", self, "city6_hit")
 	
 	
-func restore_cities():
-	var viewport = get_viewport_rect().size
-	
+func restore_cities(var restart):
 	$City1.position = Vector2(200, 540)
 	$City2.position = Vector2($City1.position.x + 100, $City1.position.y)
 	$City3.position = Vector2($City2.position.x + 100, $City1.position.y)
@@ -330,30 +333,32 @@ func restore_cities():
 	$City4.position = Vector2(620, $City1.position.y)
 	$City5.position = Vector2($City4.position.x + 100, $City1.position.y)
 	$City6.position = Vector2($City5.position.x + 100, $City1.position.y)
+
+	if restart:
+		$City1.visible = true
+		$City2.visible = true
+		$City3.visible = true
+		$City4.visible = true
+		$City5.visible = true
+		$City6.visible = true
+
 	
 func initialize_bases():
+	var _err
 	
-	$Alpha/Area2D.connect("area_entered", self, "alpha_hit")
-	$Alpha.connect("missile_launch", self, "missile_fired")
+	_err = $Alpha/Area2D.connect("area_entered", self, "alpha_hit")
+	_err = $Alpha.connect("missile_launch", self, "missile_fired")
 
-	$Delta/Area2D.connect("area_entered", self, "delta_hit")
-	$Delta.connect("missile_launch", self, "missile_fired")
+	_err = $Delta/Area2D.connect("area_entered", self, "delta_hit")
+	_err = $Delta.connect("missile_launch", self, "missile_fired")
 
-	$Omega/Area2D.connect("area_entered", self, "omega_hit")
-	$Omega.connect("missile_launch", self, "missile_fired")
+	_err = $Omega/Area2D.connect("area_entered", self, "omega_hit")
+	_err = $Omega.connect("missile_launch", self, "missile_fired")
 	
 	update()
 		
 func restore_bases():
 	var viewport = get_viewport_rect().size
-	
-	alpha_loc.y = viewport.y - 75
-	delta_loc.y = viewport.y - 75
-	omega_loc.y = viewport.y - 75
-	
-	alpha_loc.x = viewport.x / 10
-	delta_loc.x = viewport.x / 2
-	omega_loc.x = viewport.x - viewport.x / 10
 	
 	$Alpha.init(ALPHA_ID, alpha_loc)
 	$Delta.init(DELTA_ID, delta_loc)
@@ -378,7 +383,6 @@ func restore_bases():
 	set_stockpiles()
 
 
-	
 func city1_hit(_event):
 	remove_city($City1, 1)
 	
@@ -420,7 +424,7 @@ func omega_hit(_id):
 	$Omega.set_ammo(0)
 	base_hit($Omega, 3)
 
-func base_hit(base, id):
+func base_hit(_base, id):
 	print("Base ", id, " hit")
 	
 func set_stockpiles():
@@ -431,11 +435,11 @@ func set_stockpiles():
 
 
 func count_cities():
-	var city_count = cities_remain()
-	
+	city_count = cities_remain()
+	ammo_remain = get_ammo()
 	$ScoreOverlay.show_bonus(wave_number, ammo_remain, city_count)
 		
-	restore_cities()
+	restore_cities(false)
 
 func cities_remain():
 	var count = 0
@@ -455,28 +459,16 @@ func cities_remain():
 	
 	return count
 
+func get_ammo():
+	var count = $Alpha.get_ammo() + $Delta.get_ammo() + $Omega.get_ammo()
+	return count
+
 func update_score(points):
-		
 	score = score + points * wave_info.get_multiplier(wave_number)
-	
 	$ScoreOverlay.update_score(score)
 	
 	return score
 
-	
-#func _fill_buffer():
-#	var phase = 0.0
-	
-#	var increment = pulse_hz / sample_hz
+func reset_score():
+	$ScoreOverlay.reset_score()
 
-#	var to_fill = siren.get_frames_available()
-#	while to_fill > 0:
-#		siren.push_frame(Vector2.ONE * sin(phase * TAU)) # Audio frames are stereo.
-#		phase = fmod(phase + increment, 1.0)
-#		to_fill -= 1
-
-#func play_siren():
-#	$SoundPlayer.stream.mix_rate = sample_hz # Setting mix rate is only possible before play().
-#	siren = $SoundPlayer.get_stream_playback()
-#	_fill_buffer() # Prefill, do before play() to avoid delay.
-#	$SoundPlayer.play()

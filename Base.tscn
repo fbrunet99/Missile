@@ -7,7 +7,7 @@
 [ext_resource path="res://assets/sounds/CantShoot.wav" type="AudioStream" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 48.3345, 7.86074 )
+extents = Vector2( 49.821, 27.78 )
 
 [sub_resource type="DynamicFont" id=2]
 font_data = ExtResource( 4 )
@@ -22,55 +22,54 @@ position = Vector2( 0, 1.4865 )
 shape = SubResource( 1 )
 
 [node name="Hill" type="Sprite" parent="Area2D/CollisionShape2D"]
-position = Vector2( 0, 24.386 )
 texture = ExtResource( 2 )
 
 [node name="Ammo1" type="Sprite" parent="."]
-position = Vector2( 0, 13 )
+position = Vector2( 0, -14 )
 texture = ExtResource( 1 )
 
 [node name="Ammo2" type="Sprite" parent="."]
-position = Vector2( -5, 20 )
+position = Vector2( -5, -4 )
 texture = ExtResource( 1 )
 
 [node name="Ammo3" type="Sprite" parent="."]
-position = Vector2( 5, 20 )
+position = Vector2( 5, -4 )
 texture = ExtResource( 1 )
 
 [node name="Ammo4" type="Sprite" parent="."]
-position = Vector2( -10, 30 )
+position = Vector2( -10, 6 )
 texture = ExtResource( 1 )
 
 [node name="Ammo5" type="Sprite" parent="."]
-position = Vector2( 0, 30 )
+position = Vector2( 0, 6 )
 texture = ExtResource( 1 )
 
 [node name="Ammo6" type="Sprite" parent="."]
-position = Vector2( 10, 30 )
+position = Vector2( 10, 6 )
 texture = ExtResource( 1 )
 
 [node name="Ammo7" type="Sprite" parent="."]
-position = Vector2( -15, 40 )
+position = Vector2( -15, 16 )
 texture = ExtResource( 1 )
 
 [node name="Ammo8" type="Sprite" parent="."]
-position = Vector2( -5, 40 )
+position = Vector2( -5, 16 )
 texture = ExtResource( 1 )
 
 [node name="Ammo9" type="Sprite" parent="."]
-position = Vector2( 5, 40 )
+position = Vector2( 5, 16 )
 texture = ExtResource( 1 )
 
 [node name="Ammo10" type="Sprite" parent="."]
-position = Vector2( 15, 40 )
+position = Vector2( 15, 16 )
 texture = ExtResource( 1 )
 
 [node name="Status" type="Label" parent="."]
 process_priority = 1
 margin_left = -19.9166
-margin_top = 50.2028
+margin_top = 28.2028
 margin_right = 21.0834
-margin_bottom = 70.2028
+margin_bottom = 48.2028
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 custom_fonts/font = SubResource( 2 )

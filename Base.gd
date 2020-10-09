@@ -10,11 +10,9 @@ var parent_position
 
 signal missile_launch
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	fore_color = Color(100, 0, 0)
 	set_foreground(fore_color)
-#	$Status.text = 'TEST'
 
 func _process(delta):
 	pass
@@ -24,7 +22,6 @@ func fire(location, speed):
 		launch_new_missile(location, speed)
 	else:
 		$AmmoOut.play()
-	
 
 
 func launch_new_missile(target_position, speed):
@@ -81,4 +78,3 @@ func set_foreground(new_color):
 	fore_color = new_color
 	$Status.add_color_override("font_color", fore_color)
 	$Status.add_color_override("font_outline", Color(0, 0, 0))
-	

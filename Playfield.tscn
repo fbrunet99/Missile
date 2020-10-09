@@ -52,13 +52,13 @@ texture = ExtResource( 2 )
 script = SubResource( 1 )
 
 [node name="Alpha" parent="." instance=ExtResource( 4 )]
-position = Vector2( 135.798, 487.297 )
+position = Vector2( 135.798, 550 )
 
 [node name="Delta" parent="." instance=ExtResource( 4 )]
-position = Vector2( 500.134, 486.353 )
+position = Vector2( 500.134, 550 )
 
 [node name="Omega" parent="." instance=ExtResource( 4 )]
-position = Vector2( 903.29, 484.209 )
+position = Vector2( 903.29, 550 )
 
 [node name="City1" type="Area2D" parent="."]
 position = Vector2( 230, 540 )

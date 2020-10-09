@@ -24,9 +24,11 @@ func _process(delta):
 		_on_pause_button_pressed()
 
 
-
 func update_score(score):
 	$Score/Player1.text = str(score)
+	
+func reset_score():
+	$Score/Player1.text = "0"
 	
 func show_score():
 	$Score/Player1.visible = true
@@ -57,10 +59,8 @@ func show_wave_info(new_wave, multiplier):
 	
 	$StartWave/CitiesLabel.visible = true
 	$StartWave/CitiesLabel.add_color_override("font_color", text_color)
-	
 
 	$Score/Player1.add_color_override("font_color", text_color)
-	
 	
 	yield(get_tree().create_timer(3.0), "timeout")
 	hide_wave_info()
@@ -120,6 +120,9 @@ func show_bonus(new_wave, ammo, cities):
 		$Whoosh.play()
 		$Bonus/Cities.text = str(city_total)
 		yield(get_tree().create_timer(0.4), "timeout")
+		
+	if cities <= 0:
+		show_start_message(0)
 
 func init_sprites():
 	ammo_sprites.resize(30)
