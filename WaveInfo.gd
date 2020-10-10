@@ -61,7 +61,7 @@ const wave_data = [
 		{
 			"icbms": 10,
 			"bombers": 0,
-			"smart": 0,
+			"smart": 1,
 			"attackSpeed": .5,
 			"backgroundColor": Color(0, 0, 0), # black
 			"defendColor": Color(0, 0, 100),   # blue
