@@ -37,8 +37,10 @@ var attack_color
 var bomber_instance = null
 var bomber_loc = Vector2(0,0)
 var bomber_on = false
+var bomber_remain
 
 var city_count = 6
+var city_hit = [ false, false, false, false, false, false]
 var ground_targets
 
 var siren: AudioStreamPlayback = null
@@ -49,8 +51,8 @@ var wave_number = 0
 var icbm_remain
 var icbm_exist
 var mirv_remain
-var bomber_remain
 var smart_remain
+var smart_exist
 var ammo_remain
 var icbm_speed
 var score = 0
@@ -72,8 +74,9 @@ func _ready():
 		omega_loc,
 	]
 	
-	$ScoreOverlay.connect("bonus_points_city", self, "bonus_points_city")
-	$ScoreOverlay.connect("bonus_points_ammo", self, "bonus_points_ammo")
+	var _err
+	_err = $ScoreOverlay.connect("bonus_points_city", self, "bonus_points_city")
+	_err = $ScoreOverlay.connect("bonus_points_ammo", self, "bonus_points_ammo")
 	initialize_screen()
 	
 	max_cursor_width = get_viewport_rect().size.x # Sets horizontal boundary for joypad cursor
@@ -92,11 +95,11 @@ func _process(delta):
 		return
 
 	if Input.is_action_just_pressed("ui_alpha"):
-		launch_missile(ALPHA_ID, alpha_loc, 10)
+		launch_missile(ALPHA_ID, $Cursor.position, 10)
 	if Input.is_action_just_pressed("ui_delta"):
-		launch_missile(DELTA_ID, delta_loc, 15)
+		launch_missile(DELTA_ID, $Cursor.position, 15)
 	if Input.is_action_just_pressed("ui_omega"):
-		launch_missile(OMEGA_ID, omega_loc, 10)
+		launch_missile(OMEGA_ID, $Cursor.position, 10)
 	
 	update_icbms()
 	update_smart()
@@ -155,6 +158,7 @@ func start_wave():
 	icbm_remain  = wave_info.get_icbmcount(wave_number)
 	icbm_exist = icbm_remain
 	smart_remain = wave_info.get_smartcount(wave_number)
+	smart_exist = smart_remain
 	mirv_remain = wave_info.get_mirvcount(wave_number)
 	
 	print("starting wave ", wave_number)
@@ -166,7 +170,9 @@ func update_wave():
 			$Bomber.set_wave_end()
 			bomber_remain = 0
 		
-	if icbm_remain <= 0 and icbm_exist <= 0:
+	if icbm_remain <= 0 and icbm_exist <= 0 \
+			and smart_remain <= 0 and smart_exist <= 0 \
+			and bomber_remain <= 0 and !bomber_on:
 		end_wave()
 
 func end_wave():
@@ -252,6 +258,11 @@ func icbm_end():
 	update_score(25)
 	print("ICBM ended ", icbm_exist, " remain. wave_on=", wave_on)
 	
+func smart_hit():
+	update_score(100)
+	smart_exist -= 1
+	print("Smart bomb ended", smart_exist, "remain")
+	
 func mirv_end(splits):
 	icbm_exist -= splits + 1
 	update_score(25)
@@ -292,13 +303,13 @@ func spawn_bomber_child(start_loc, end_loc):
 	add_child(new_icbm)
 	
 
-func launch_missile(id, _location, speed):
+func launch_missile(id, location, speed):
 	if id == ALPHA_ID:
-		$Alpha.fire($Cursor.position, speed)
+		$Alpha.fire(location, speed)
 	elif id == DELTA_ID:
-		$Delta.fire($Cursor.position, speed)
+		$Delta.fire(location, speed)
 	elif id == OMEGA_ID:
-		$Omega.fire($Cursor.position, speed)
+		$Omega.fire(location, speed)
 
 func initialize_screen():
 	ground_color = wave_info.get_basecolor(wave_number)
@@ -331,8 +342,24 @@ func restore_cities(var restart):
 	$City4.position = Vector2(620, $City1.position.y)
 	$City5.position = Vector2($City4.position.x + 100, $City1.position.y)
 	$City6.position = Vector2($City5.position.x + 100, $City1.position.y)
+	
+	if !city_hit[0]:
+		$City1.visible = true
+	if !city_hit[1]:
+		$City2.visible = true
+	if !city_hit[2]:
+		$City3.visible = true
+	if !city_hit[3]:
+		$City4.visible = true
+	if !city_hit[4]:
+		$City5.visible = true
+	if !city_hit[5]:
+		$City6.visible = true
 
 	if restart:
+		for i in range(0, 6):
+			city_hit[i] = false
+			
 		$City1.visible = true
 		$City2.visible = true
 		$City3.visible = true
@@ -361,9 +388,9 @@ func restore_bases():
 	$Delta.init(DELTA_ID, delta_loc)
 	$Omega.init(OMEGA_ID, omega_loc)
 
-	$Delta.position = delta_loc + Vector2(0, 1)
-	$Alpha.position = alpha_loc + Vector2(-10, 1)
-	$Omega.position = omega_loc + Vector2(0, 1)
+	$Delta.position = delta_loc
+	$Alpha.position = alpha_loc
+	$Omega.position = omega_loc
 
 	$Delta.set_color(ground_color)
 	$Alpha.set_color(ground_color)
@@ -403,22 +430,22 @@ func remove_city(city, id):
 		return
 	print("City ", id, " hit")
 	city_count -= 1
-	city.position = Vector2(city.position.x, city.position.y + 100)
+	city_hit[id-1] = true
 	city.visible = false
 	
 func missile_fired(_id):
 	ammo_remain -= 1
 	
 func alpha_hit(_id):
-	$Alpha.set_ammo(0)
+	$Alpha.set_ammo(0, true)
 	base_hit($Alpha, 1)
 
 func delta_hit(_id):
-	$Delta.set_ammo(0)
+	$Delta.set_ammo(0, true)
 	base_hit($Delta, 2)
 
 func omega_hit(_id):
-	$Omega.set_ammo(0)
+	$Omega.set_ammo(0, true)
 	base_hit($Omega, 3)
 
 func base_hit(_base, id):
@@ -426,9 +453,9 @@ func base_hit(_base, id):
 	
 func set_stockpiles():
 	ammo_remain = BASE_AMMO * 3
-	$Alpha.set_ammo(BASE_AMMO)
-	$Delta.set_ammo(BASE_AMMO)
-	$Omega.set_ammo(BASE_AMMO)
+	$Alpha.set_ammo(BASE_AMMO, true)
+	$Delta.set_ammo(BASE_AMMO, true)
+	$Omega.set_ammo(BASE_AMMO, true)
 
 
 func count_cities():
@@ -471,21 +498,25 @@ func reset_score():
 	
 func bonus_points_city(points):
 	update_score(points)
+	var city = null
 	
 	# Subtract 1 city from display each time this is called 
 	if $City1.visible:
-		$City1.visible = false
+		city = $City1
 	elif $City2.visible:
-		$City2.visible = false
+		city = $City2
 	elif $City3.visible:
-		$City3.visible = false
+		city = $City3
 	elif $City4.visible:
-		$City4.visible = false
+		city = $City4
 	elif $City5.visible:
-		$City5.visible = false
+		city = $City5
 	elif $City6.visible:
-		$City6.visible = false
+		city = $City6
 	
+	# This just moves the city off screen so we can continue to use visible to decide if
+	if city:
+		city.visible = false
 
 
 func bonus_points_ammo(points):
@@ -496,11 +527,11 @@ func bonus_points_ammo(points):
 	var delta_ammo = $Delta.get_ammo()
 	var omega_ammo = $Omega.get_ammo()
 	if alpha_ammo > 0:
-		$Alpha.set_ammo(alpha_ammo - 1)
+		$Alpha.set_ammo(alpha_ammo - 1, false)
 	elif delta_ammo > 0:
-		$Delta.set_ammo(delta_ammo - 1)
+		$Delta.set_ammo(delta_ammo - 1, false)
 	elif omega_ammo > 0:
-		$Omega.set_ammo(omega_ammo - 1)
+		$Omega.set_ammo(omega_ammo - 1, false)
 		
 	
 

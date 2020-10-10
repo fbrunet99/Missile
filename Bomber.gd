@@ -1,3 +1,4 @@
+# Bomber Scene
 extends Node2D
 
 var Explode = preload("res://Explode.tscn")
@@ -20,12 +21,10 @@ signal bomber_dropping(start_loc, end_loc)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if randi() % 2:
-		print("Bomber spawned as satellite")
 		$BomberArea/BomberCollision/BomberSprite.visible = false
 		$BomberArea/BomberCollision.disabled = true
 		$BomberArea.scale = Vector2(.7, .7)
 	else:
-		print("Bomber spawned as plane")
 		$BomberArea/SatelliteCollision/SatelliteSprite.visible = false
 		$BomberArea/SatelliteCollision.disabled = true
 		$BomberArea.scale = Vector2(.7, 1)
@@ -41,8 +40,10 @@ func _ready():
 	
 	rng.randomize()
 	var height = rand_range(100, max_y)
-	var direction = rand_range(-1, 1)
-	velocity = Vector2(direction * 3, 0)
+	var direction = rand_range(-1, 1) * 3
+	direction = ceil(direction) if direction > 0 else floor(direction) 
+	velocity = Vector2(direction, 0)
+
 	if direction > 0:
 		position = Vector2(0, height)
 		$BomberArea/BomberCollision/BomberSprite.flip_h = true
@@ -70,7 +71,6 @@ func _process(delta):
 		end_bomber()
 	
 	if can_bomb and position.x < drop_target_x + 10 and position.x > drop_target_x - 10:
-		print("Bomber trying to drop bombs")
 		can_bomb = false
 		var target
 		var bomb_targets = targets.duplicate(true) # Create clone to not mess with original array

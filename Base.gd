@@ -3,7 +3,7 @@ extends Node2D
 
 const Missile = preload("res://Missile.tscn")
 const BASE_TOP = Vector2(0, -30)
-var ammo_count setget set_ammo
+var ammo_count
 var base_id
 var base_color setget set_color
 var fore_color setget set_foreground
@@ -38,9 +38,9 @@ func launch_new_missile(target_position, speed):
 	new_missile.set_color(fore_color)
 	add_child(new_missile)
 	ammo_count -= 1
-	update_ammo_display()
+	update_ammo_display(true)
 
-func update_ammo_display():
+func update_ammo_display(show_status):
 	$Ammo1.visible = ammo_count > 0
 	$Ammo2.visible = ammo_count > 1
 	$Ammo3.visible = ammo_count > 2
@@ -52,10 +52,13 @@ func update_ammo_display():
 	$Ammo9.visible = ammo_count > 8
 	$Ammo10.visible = ammo_count > 9
 	
-	if ammo_count <= 3 and ammo_count > 0:
-		$Status.text = 'LOW'
-	elif ammo_count == 0:
-		$Status.text = 'OUT'
+	if show_status:
+		if ammo_count <= 3 and ammo_count > 0:
+			$Status.text = 'LOW'
+		elif ammo_count == 0:
+			$Status.text = 'OUT'
+		else:
+			$Status.text = ''
 	else:
 		$Status.text = ''
 
@@ -64,11 +67,12 @@ func init(id, location):
 	parent_position = location
 	
 
-func set_ammo(ammo):
+func set_ammo(ammo, show_status):
 	print("Base: set_ammo ", ammo)
 	ammo_count = ammo
-	update_ammo_display()
+	update_ammo_display(show_status)
 	
+
 func get_ammo():
 	return ammo_count
 
