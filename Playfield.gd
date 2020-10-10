@@ -1,6 +1,7 @@
 # Playfield Scene
 extends Node2D
 
+
 const Missile = preload("res://Missile.tscn")
 const Bomber = preload("res://Bomber.tscn")
 const ICBM = preload("res://ICBM.tscn")
@@ -71,6 +72,7 @@ func _ready():
 		omega_loc,
 	]
 	
+	$ScoreOverlay.connect("bonus_points", self, "update_score")
 	initialize_screen()
 	
 	max_cursor_width = get_viewport_rect().size.x # Sets horizontal boundary for joypad cursor
@@ -151,13 +153,18 @@ func start_wave():
 	bomber_remain = wave_info.get_bombercount(wave_number)
 	icbm_remain  = wave_info.get_icbmcount(wave_number)
 	icbm_exist = icbm_remain
-	smart_remain = 4# wave_info.get_smartcount(wave_number)
+	smart_remain = wave_info.get_smartcount(wave_number)
 	mirv_remain = wave_info.get_mirvcount(wave_number)
 	
 	print("starting wave ", wave_number)
 	
 
 func update_wave():
+	if ammo_remain <= 0:
+		if $Bomber:
+			$Bomber.set_wave_end()
+			bomber_remain = 0
+		
 	if icbm_remain <= 0 and icbm_exist <= 0:
 		end_wave()
 
@@ -201,7 +208,7 @@ func set_bomber_over(_object):
 
 func update_smart():
 	var chance = rng.randf_range(0, 900)
-	if wave_on and smart_remain > 0 and chance > 1:
+	if wave_on and smart_remain > 0 and chance > 890:
 		print("I'm starting a smart bomb, chance was ", chance)
 		var new_smart = Smart.instance()
 		new_smart.connect("smart_hit", self, "smart_hit")
@@ -348,7 +355,6 @@ func initialize_bases():
 	update()
 		
 func restore_bases():
-	var viewport = get_viewport_rect().size
 	
 	$Alpha.init(ALPHA_ID, alpha_loc)
 	$Delta.init(DELTA_ID, delta_loc)

@@ -13,6 +13,7 @@ var min_x = -100
 var targets
 var can_bomb = false
 var drop_target_x
+var wave_end
 
 signal bomber_dropping(start_loc, end_loc)
 
@@ -57,6 +58,9 @@ func _process(delta):
 	if is_hit:
 		return
 
+	if wave_end:
+		velocity = Vector2(10, 0) * velocity.normalized()
+		
 	position += velocity
 	
 	if position.x > max_x or position.x < min_x:
@@ -104,4 +108,8 @@ func end_bomber():
 	
 func set_targets(new_targets):
 	targets = new_targets
+	
+func set_wave_end():
+	wave_end = true
+
 	

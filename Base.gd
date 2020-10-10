@@ -1,12 +1,14 @@
+# Base Scene
 extends Node2D
 
 const Missile = preload("res://Missile.tscn")
-
+const BASE_TOP = Vector2(0, -30)
 var ammo_count setget set_ammo
 var base_id
 var base_color setget set_color
 var fore_color setget set_foreground
 var parent_position
+
 
 signal missile_launch
 
@@ -31,7 +33,7 @@ func launch_new_missile(target_position, speed):
 	var new_missile = Missile.instance()
 	new_missile.visible = true
 	new_missile.position = target_position
-	new_missile.start_loc = Vector2(0, 0)
+	new_missile.start_loc = BASE_TOP
 	new_missile.missile_speed = speed
 	new_missile.set_color(fore_color)
 	add_child(new_missile)

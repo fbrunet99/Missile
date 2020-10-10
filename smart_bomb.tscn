@@ -20,7 +20,6 @@ var phase = 0
 var start_loc = Vector2(0, 0)
 var end_loc = Vector2(0, 0)
 var cur_loc = null
-var dodge_start
 var dodge_end
 var missile_speed = 2
 var dodging = false
@@ -50,7 +49,7 @@ func _ready():
 func _process(delta):
 	
 	if phase == 0:
-		move_missile()
+		move_missile(delta)
 	elif phase == 1:
 		on_explode()
 
@@ -67,12 +66,12 @@ func on_explode():
 	update()
 
 	
-func move_missile():
+func move_missile(delta):
 	var old_position = $BombArea.position
 	var velocity
 	
 	if (dodging):
-		velocity = dodge_start.direction_to(dodge_end) * missile_speed
+		velocity = start_loc.direction_to(dodge_end) * missile_speed
 	else:
 		velocity = start_loc.direction_to(end_loc) * missile_speed
 	cur_loc = old_position + velocity
@@ -86,8 +85,9 @@ func move_missile():
 	$DodgeAreaRight.position = cur_loc
 	$DodgeAreaBelow.position = cur_loc
 	$DodgeAreaLeft.position = cur_loc
+	
 	var angle = int(cur_loc.x) % 360
-	$BombArea.set_rotation_degrees(angle)
+	$BombArea.rotate(angle)
 
 	update()
 	if cur_loc.y > end_loc.y:
@@ -100,24 +100,24 @@ func smart_hit(object):
 	
 func dodge_up(object):
 	dodging = true
-	dodge_start = cur_loc
-	dodge_end = dodge_start + Vector2(0, -80)
+	start_loc = cur_loc
+	dodge_end = start_loc + Vector2(0, -80)
 	start_dodge_timer()
 	
 	print(\"Smart missile dodge up\")
 
 func dodge_left(object):
 	dodging = true
-	dodge_start = cur_loc
-	dodge_end = dodge_start + Vector2(-80, 0)
+	start_loc = cur_loc
+	dodge_end = start_loc + Vector2(-80, 0)
 	start_dodge_timer()
 	
 	print(\"Smart missile dodge left\")
 
 func dodge_right(object):
 	dodging = true
-	dodge_start = cur_loc
-	dodge_end = dodge_start + Vector2(80, 0)
+	start_loc = cur_loc
+	dodge_end = start_loc + Vector2(80, 0)
 	start_dodge_timer()
 	print(\"Smart missile dodge right\")
 	

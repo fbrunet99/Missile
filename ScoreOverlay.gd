@@ -1,13 +1,15 @@
 extends Node2D
 
+signal bonus_points
+
+const AMMO_POS = Vector2(420, 230)
+const CITY_POS = Vector2(430, 290)
+
 var is_paused = false
 
 var wave_info = preload("res://WaveInfo.gd").new()
 var ammo_texture = preload("res://assets/ammo.png")
 var city_texture = preload("res://assets/city.png")
-
-const ammo_pos = Vector2(420, 230)
-const city_pos = Vector2(430, 290)
 
 var ammo_sprites = []
 var city_sprites = []
@@ -62,6 +64,8 @@ func show_wave_info(new_wave, multiplier):
 
 	$Score/Player1.add_color_override("font_color", text_color)
 	
+	$StartGame/PressStart.add_color_override("font_color", text_color)
+	
 	yield(get_tree().create_timer(3.0), "timeout")
 	hide_wave_info()
 
@@ -105,18 +109,22 @@ func show_bonus(new_wave, ammo, cities):
 	$Bonus/Cities.add_color_override("font_color", high_color)
 	
 	var ammo_total = 0
+	var ammo_points = 5 * wave_info.get_multiplier(new_wave)
 	for i in range(0, ammo):
-		ammo_total += 5 * wave_info.get_multiplier(new_wave)
+		ammo_total += ammo_points
 		$Whoosh.play()
 		$Bonus/Ammo.text = str(ammo_total)
+		emit_signal("bonus_points", 5)
 		ammo_sprites[i].visible = true
 		
 		yield(get_tree().create_timer(0.1), "timeout")
 		
 	var city_total = 0
+	var city_points = 100 * wave_info.get_multiplier(new_wave)
 	for i in range(0, cities):
 		city_sprites[i].visible = true
-		city_total += 100 * wave_info.get_multiplier(new_wave)
+		city_total += city_points
+		emit_signal("bonus_points", city_points)
 		$Whoosh.play()
 		$Bonus/Cities.text = str(city_total)
 		yield(get_tree().create_timer(0.4), "timeout")
@@ -130,7 +138,7 @@ func init_sprites():
 		var ammo: Sprite = Sprite.new()
 		ammo_sprites[i] = ammo
 		ammo_sprites[i].texture = ammo_texture
-		ammo_sprites[i].position = ammo_pos + Vector2(15*i, 0)
+		ammo_sprites[i].position = AMMO_POS + Vector2(15*i, 0)
 		add_child(ammo_sprites[i])
 		
 	city_sprites.resize(6)
@@ -139,7 +147,7 @@ func init_sprites():
 		city_sprites[i] = city
 		city_sprites[i].texture = city_texture
 		city_sprites[i].scale = Vector2(0.4, 0.2)
-		city_sprites[i].position = city_pos + Vector2(60*i, 0)
+		city_sprites[i].position = CITY_POS + Vector2(60*i, 0)
 		add_child(city_sprites[i])
 
 

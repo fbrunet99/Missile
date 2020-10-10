@@ -61,7 +61,7 @@ const wave_data = [
 		{
 			"icbms": 10,
 			"bombers": 0,
-			"smart": 4,
+			"smart": 0,
 			"attackSpeed": .5,
 			"backgroundColor": Color(0, 0, 0), # black
 			"defendColor": Color(0, 0, 100),   # blue
@@ -89,7 +89,7 @@ const wave_data = [
 			"defendColor": Color(0, 0, 100),   # blue
 			"attackColor": Color(0, 100, 0),   # green
 			"baseColor": Color(100, 100, 0),   # yellow
-			"mirvs": 2  
+			"mirvs": 1
 		},
 		{
 			"icbms": 16,
@@ -100,7 +100,7 @@ const wave_data = [
 			"defendColor": Color(0, 0, 100),
 			"attackColor": Color(0, 100, 0),
 			"baseColor": Color(100, 100, 0),
-			"mirvs": 3
+			"mirvs": 2
 		},
 		{
 			"icbms": 18,
@@ -111,7 +111,7 @@ const wave_data = [
 			"defendColor": Color(0, 100, 0),    # green
 			"attackColor": Color(100, 0, 0),    # red
 			"baseColor": Color(0, 0, 100),      # blue
-			"mirvs": 4
+			"mirvs": 2
 		},
 		{
 			"icbms": 20,
@@ -122,7 +122,7 @@ const wave_data = [
 			"defendColor": Color(0, 100, 0),
 			"attackColor": Color(100, 0, 0),
 			"baseColor": Color(0, 0, 100),
-			"mirvs": 5
+			"mirvs": 3
 		},
 		{
 			"icbms": 22,
@@ -133,7 +133,7 @@ const wave_data = [
 			"defendColor": Color(0, 0, 100),    # blue
 			"attackColor": Color(100, 100, 0),  # yellow
 			"baseColor": Color(100, 0, 0),      # red
-			"mirvs": 6
+			"mirvs": 4
 		},
 		{
 			"icbms": 24,
@@ -144,7 +144,7 @@ const wave_data = [
 			"defendColor": Color(0, 0, 100),
 			"attackColor": Color(100, 100, 0),
 			"baseColor": Color(100, 0, 0),
-			"mirvs": 7
+			"mirvs": 5
 		},
 		{
 			"icbms": 26,
@@ -155,7 +155,7 @@ const wave_data = [
 			"defendColor": Color(0, 0, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0),
-			"mirvs": 8
+			"mirvs": 5
 		},
 		{
 			"icbms": 28,
@@ -166,7 +166,7 @@ const wave_data = [
 			"defendColor": Color(0, 0, 0),
 			"attackColor": Color(100, 0, 0),
 			"baseColor": Color(0, 100, 0),
-			"mirvs": 9
+			"mirvs": 5
 		},
 		{
 			"icbms": 30,
@@ -177,7 +177,7 @@ const wave_data = [
 			"defendColor": Color(0, 0, 100),
 			"attackColor": Color(100, 0, 0),
 			"baseColor": Color(100, 100, 0),
-			"mirvs": 10
+			"mirvs": 5
 		},
 		{
 			"icbms": 30,
@@ -188,7 +188,7 @@ const wave_data = [
 			"defendColor": Color(0, 0, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(100, 100, 0),
-			"mirvs": 11
+			"mirvs": 6
 		},
 		{
 			"icbms": 30,
@@ -199,7 +199,7 @@ const wave_data = [
 			"defendColor": Color(80, 80, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0),
-			"mirvs": 12
+			"mirvs": 6
 		},
 		{
 			"icbms": 30,
@@ -210,7 +210,7 @@ const wave_data = [
 			"defendColor": Color(80, 80, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0),
-			"mirvs": 13
+			"mirvs": 6
 		},
 		{
 			"icbms": 30,
@@ -221,7 +221,7 @@ const wave_data = [
 			"defendColor": Color(100, 0, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0),
-			"mirvs": 14
+			"mirvs": 7
 		},
 		{
 			"icbms": 30,
@@ -232,7 +232,7 @@ const wave_data = [
 			"defendColor": Color(100, 0, 0),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(0, 100, 0),
-			"mirvs": 15
+			"mirvs": 7
 		},		
 		{
 			"icbms": 30,
@@ -243,7 +243,7 @@ const wave_data = [
 			"defendColor": Color(0, 40, 0),
 			"attackColor": Color(0, 0, 80),
 			"baseColor": Color(100, 0, 0),
-			"mirvs": 16
+			"mirvs": 7
 		},
 		{
 			"icbms": 30,
@@ -254,7 +254,7 @@ const wave_data = [
 			"defendColor": Color(0, 40, 0),
 			"attackColor": Color(80, 0, 80),
 			"baseColor": Color(100, 0, 0),
-			"mirvs": 17
+			"mirvs": 8
 		},		
 		{
 			"icbms": 30,
@@ -265,7 +265,7 @@ const wave_data = [
 			"defendColor": Color(80, 0, 80),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(100, 100, 0),
-			"mirvs": 18
+			"mirvs": 8
 		},
 		{
 			"icbms": 30,
@@ -276,6 +276,6 @@ const wave_data = [
 			"defendColor": Color(80, 0, 80),
 			"attackColor": Color(0, 0, 0),
 			"baseColor": Color(100, 100, 0),
-			"mirvs": 19
+			"mirvs": 8
 		}
 	]
