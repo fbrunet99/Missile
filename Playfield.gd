@@ -4,8 +4,8 @@ extends Node2D
 const Missile = preload("res://Missile.tscn")
 const Bomber = preload("res://Bomber.tscn")
 const ICBM = preload("res://ICBM.tscn")
+const Smart = preload("res://smart_bomb.tscn")
 
-var rng = RandomNumberGenerator.new()
 
 const ICBM_POINTS = 25
 const BOMBER_POINTS = 100
@@ -15,14 +15,16 @@ const ALPHA_ID = 1
 const OMEGA_ID = 3
 const GROUND_LEFT = Vector2(0, 560)
 const GROUND_RIGHT = Vector2(1200, 560)
+const JOYSTICK_DEADZONE = 0.2
+const JOYSTICK_SENSITIVITY = 5
 
-const min_cursor_height = GROUND_LEFT.y - 80
-const max_cursor_height = 0
-const min_cursor_width = 0
-
+const MIN_CURSOR_HEIGHT = GROUND_LEFT.y - 80
+const MAX_CURSOR_HEIGHT = 0
+const MIN_CURSOR_WIDTH = 0
 var max_cursor_width
-var joystick_deadzone = 0.2
-var joystick_sensitivity = 5
+
+var rng = RandomNumberGenerator.new()
+
 
 var ground_color = Color(150, 150, 0)
 var alpha_loc = Vector2(100, 550)
@@ -42,19 +44,16 @@ var siren: AudioStreamPlayback = null
 
 var wave_info = preload("res://WaveInfo.gd").new()
 var wave_on = false
-var icbm_dir = {}
 var wave_number = 0
 var icbm_remain
 var icbm_exist
 var mirv_remain
 var bomber_remain
+var smart_remain
 var ammo_remain
 var icbm_speed
 var score = 0
 var game_over = true
-
-var sample_hz = 22050.0 # Keep the number of samples to mix low, GDScript is not super fast.
-var pulse_hz = 440.0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -77,41 +76,17 @@ func _ready():
 	max_cursor_width = get_viewport_rect().size.x # Sets horizontal boundary for joypad cursor
 
 
-func _process(_delta):
+func _process(delta):
 	if Input.is_action_just_pressed("ui_reset"):
 		var _ret = get_tree().change_scene("res://Playfield.tscn")
 
 	if Input.is_action_just_pressed("ui_start") and game_over:
 		start_game()
 		
-	if Input.get_connected_joypads().size() > 0:
-		var xAxis = Input.get_joy_axis(0,JOY_AXIS_0)
-		var cur_position = $Cursor.position
-		if abs(xAxis) > joystick_deadzone:
-			if xAxis < 0:
-				cur_position.x-= 100 * _delta * (joystick_sensitivity * abs(xAxis))
-			if xAxis > 0:
-				cur_position.x+= 100 * _delta * (joystick_sensitivity * abs(xAxis))
-		var yAxis = Input.get_joy_axis(0,JOY_AXIS_1)
-		if abs(xAxis) > joystick_deadzone:
-			if yAxis < 0:
-				cur_position.y-= 100 * _delta * (joystick_sensitivity * abs(yAxis))
-			if yAxis > 0:
-				cur_position.y+= 100 * _delta * (joystick_sensitivity * abs(yAxis))
-		if cur_position.y > min_cursor_height:
-			cur_position.y = min_cursor_height
-		elif cur_position.y < max_cursor_height:
-			cur_position.y = max_cursor_height
-		if cur_position.x < min_cursor_width:
-			cur_position.x = min_cursor_width
-		elif cur_position.x > max_cursor_width:
-			cur_position.x = max_cursor_width
-		$Cursor.position = cur_position
-
+	update_joystick(delta)
+	
 	if !wave_on:
 		return
-
-	update_icbms()
 
 	if Input.is_action_just_pressed("ui_alpha"):
 		launch_missile(ALPHA_ID, alpha_loc, 10)
@@ -120,6 +95,8 @@ func _process(_delta):
 	if Input.is_action_just_pressed("ui_omega"):
 		launch_missile(OMEGA_ID, omega_loc, 10)
 	
+	update_icbms()
+	update_smart()
 	update_bomber()
 	update_wave()
 
@@ -174,6 +151,7 @@ func start_wave():
 	bomber_remain = wave_info.get_bombercount(wave_number)
 	icbm_remain  = wave_info.get_icbmcount(wave_number)
 	icbm_exist = icbm_remain
+	smart_remain = 4# wave_info.get_smartcount(wave_number)
 	mirv_remain = wave_info.get_mirvcount(wave_number)
 	
 	print("starting wave ", wave_number)
@@ -221,6 +199,18 @@ func set_bomber_over(_object):
 	print("playfield: I see the bomber got away")
 	bomber_on = false
 
+func update_smart():
+	var chance = rng.randf_range(0, 900)
+	if wave_on and smart_remain > 0 and chance > 1:
+		print("I'm starting a smart bomb, chance was ", chance)
+		var new_smart = Smart.instance()
+		new_smart.connect("smart_hit", self, "smart_hit")
+		new_smart.set_targets(ground_targets)
+		new_smart.set_speed(1)
+		smart_remain -= 1
+		add_child(new_smart)
+		
+	
 func update_icbms():
 	var chance = rng.randf_range(0, 900)
 	if wave_on and icbm_remain > 0 and chance > 890:
@@ -471,4 +461,30 @@ func update_score(points):
 
 func reset_score():
 	$ScoreOverlay.reset_score()
-
+	
+func update_joystick(delta):
+	if Input.get_connected_joypads().size() > 0:
+		var xAxis = Input.get_joy_axis(0,JOY_AXIS_0)
+		var cur_position = $Cursor.position
+		if abs(xAxis) > JOYSTICK_DEADZONE:
+			if xAxis < 0:
+				cur_position.x-= 100 * delta * (JOYSTICK_SENSITIVITY * abs(xAxis))
+			if xAxis > 0:
+				cur_position.x+= 100 * delta * (JOYSTICK_SENSITIVITY * abs(xAxis))
+		var yAxis = Input.get_joy_axis(0,JOY_AXIS_1)
+		if abs(xAxis) > JOYSTICK_DEADZONE:
+			if yAxis < 0:
+				cur_position.y-= 100 * delta * (JOYSTICK_SENSITIVITY * abs(yAxis))
+			if yAxis > 0:
+				cur_position.y+= 100 * delta * (JOYSTICK_SENSITIVITY * abs(yAxis))
+		if cur_position.y > MIN_CURSOR_HEIGHT:
+			cur_position.y = MIN_CURSOR_HEIGHT
+		elif cur_position.y < MAX_CURSOR_HEIGHT:
+			cur_position.y = MAX_CURSOR_HEIGHT
+		if cur_position.x < MIN_CURSOR_WIDTH:
+			cur_position.x = MIN_CURSOR_WIDTH
+		elif cur_position.x > max_cursor_width:
+			cur_position.x = max_cursor_width
+		$Cursor.position = cur_position
+	
+	

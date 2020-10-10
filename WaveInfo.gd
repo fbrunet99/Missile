@@ -27,9 +27,11 @@ func get_waveData(wave_number):
 	else:
 		return wave_data[wave_data.size()-1]
 		
-
 func get_mirvcount(wave_number):
 	return get_waveData(wave_number).mirvs
+	
+func get_smartcount(wave_number):
+	return get_waveData(wave_number).smart
 	
 func adjust_wavenum(wave_number):
 	if wave_number == null or wave_number < 0:
@@ -59,6 +61,7 @@ const wave_data = [
 		{
 			"icbms": 10,
 			"bombers": 0,
+			"smart": 4,
 			"attackSpeed": .5,
 			"backgroundColor": Color(0, 0, 0), # black
 			"defendColor": Color(0, 0, 100),   # blue
@@ -69,6 +72,7 @@ const wave_data = [
 		{
 			"icbms": 12,
 			"bombers": 1, 
+			"smart": 0,
 			"attackSpeed": .6,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),
@@ -79,6 +83,7 @@ const wave_data = [
 		{
 			"icbms": 14,
 			"bombers": 2,
+			"smart": 0,
 			"attackSpeed": .8,
 			"backgroundColor": Color(0, 0, 0), # black
 			"defendColor": Color(0, 0, 100),   # blue
@@ -89,6 +94,7 @@ const wave_data = [
 		{
 			"icbms": 16,
 			"bombers": 2, 
+			"smart": 1,
 			"attackSpeed": 1.0,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),
@@ -99,6 +105,7 @@ const wave_data = [
 		{
 			"icbms": 18,
 			"bombers": 3, 
+			"smart": 1,
 			"attackSpeed": 1.2,
 			"backgroundColor": Color(0, 0, 0),  # black
 			"defendColor": Color(0, 100, 0),    # green
@@ -109,6 +116,7 @@ const wave_data = [
 		{
 			"icbms": 20,
 			"bombers": 3, 
+			"smart": 1,
 			"attackSpeed": 1.4,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 100, 0),
@@ -119,6 +127,7 @@ const wave_data = [
 		{
 			"icbms": 22,
 			"bombers": 3, 
+			"smart": 1,
 			"attackSpeed": 1.6,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),    # blue
@@ -129,6 +138,7 @@ const wave_data = [
 		{
 			"icbms": 24,
 			"bombers": 3, 
+			"smart": 1,
 			"attackSpeed": 1.8,
 			"backgroundColor": Color(0, 0, 0),
 			"defendColor": Color(0, 0, 100),
@@ -139,6 +149,7 @@ const wave_data = [
 		{
 			"icbms": 26,
 			"bombers": 3,
+			"smart": 2,
 			"attackSpeed": 2.0,
 			"backgroundColor": Color(0, 0, 80),  # blue
 			"defendColor": Color(0, 0, 0),
@@ -149,6 +160,7 @@ const wave_data = [
 		{
 			"icbms": 28,
 			"bombers": 3, 
+			"smart": 2,
 			"attackSpeed": 2.2,
 			"backgroundColor": Color(0, 0, 80),
 			"defendColor": Color(0, 0, 0),
@@ -159,6 +171,7 @@ const wave_data = [
 		{
 			"icbms": 30,
 			"bombers": 3, 
+			"smart": 2,
 			"attackSpeed": 2.4,
 			"backgroundColor": Color(0, 80, 80), # cyan
 			"defendColor": Color(0, 0, 100),
@@ -169,6 +182,7 @@ const wave_data = [
 		{
 			"icbms": 30,
 			"bombers": 3, 
+			"smart": 3,
 			"attackSpeed": 2.8,
 			"backgroundColor": Color(0, 80, 80),
 			"defendColor": Color(0, 0, 0),
@@ -179,6 +193,7 @@ const wave_data = [
 		{
 			"icbms": 30,
 			"bombers": 4, 
+			"smart": 3,
 			"attackSpeed": 2.9,
 			"backgroundColor": Color(80, 0, 80), # purple
 			"defendColor": Color(80, 80, 0),
@@ -189,6 +204,7 @@ const wave_data = [
 		{
 			"icbms": 30,
 			"bombers": 4, 
+			"smart": 3,
 			"attackSpeed": 3.0,
 			"backgroundColor": Color(80, 0, 80),
 			"defendColor": Color(80, 80, 0),
@@ -199,6 +215,7 @@ const wave_data = [
 		{
 			"icbms": 30,
 			"bombers": 4, 
+			"smart": 4,
 			"attackSpeed": 3.2,
 			"backgroundColor": Color(80, 80, 0), # yellow
 			"defendColor": Color(100, 0, 0),
@@ -209,6 +226,7 @@ const wave_data = [
 		{
 			"icbms": 30,
 			"bombers": 3, 
+			"smart": 4,
 			"attackSpeed": 3.4,
 			"backgroundColor": Color(80, 80, 0),
 			"defendColor": Color(100, 0, 0),
@@ -219,6 +237,7 @@ const wave_data = [
 		{
 			"icbms": 30,
 			"bombers": 3, 
+			"smart": 4,
 			"attackSpeed": 3.6,
 			"backgroundColor": Color(60, 60, 60), # white
 			"defendColor": Color(0, 40, 0),
@@ -229,6 +248,7 @@ const wave_data = [
 		{
 			"icbms": 30,
 			"bombers": 3, 
+			"smart": 5,
 			"attackSpeed": 3.8,
 			"backgroundColor": Color(60, 60, 60),
 			"defendColor": Color(0, 40, 0),
@@ -239,6 +259,7 @@ const wave_data = [
 		{
 			"icbms": 30,
 			"bombers": 3, 
+			"smart": 5,
 			"attackSpeed": 4,
 			"backgroundColor": Color(80, 0, 0), # red
 			"defendColor": Color(80, 0, 80),
@@ -249,6 +270,7 @@ const wave_data = [
 		{
 			"icbms": 30,
 			"bombers": 3, 
+			"smart": 5,
 			"attackSpeed": 4,
 			"backgroundColor": Color(80, 0, 0),
 			"defendColor": Color(80, 0, 80),

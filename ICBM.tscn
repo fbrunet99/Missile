@@ -101,7 +101,6 @@ func move_missile():
 	$ICBMArea.position = cur_loc
 	update()
 	if mirv and mirv_can_split and cur_loc.y > mirv_target_y:
-		print(\"MIRV splitting\")
 		mirv_can_split = false
 		var target
 		var mirv_targets = targets.duplicate(true) # Create clone to not mess with original array

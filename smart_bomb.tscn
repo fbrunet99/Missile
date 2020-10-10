@@ -1,0 +1,219 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/smart-bomb.png" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "# Smart Bomb
+extends Node2D
+
+var Explode = preload(\"res://Explode.tscn\")
+
+var rng = RandomNumberGenerator.new()
+
+var targets setget set_targets
+
+signal smart_hit
+
+const DODGE_ALT = 490
+
+var phase = 0
+var start_loc = Vector2(0, 0)
+var end_loc = Vector2(0, 0)
+var cur_loc = null
+var dodge_start
+var dodge_end
+var missile_speed = 2
+var dodging = false
+var missile_dir = Vector2(0,0)
+
+
+func _ready():
+	rng.randomize()
+	if missile_speed == 0:
+		missile_speed = 4
+
+	var x = rng.randf_range(0, 1000)
+	start_loc = Vector2(x, 0)
+	var offset = randi() % targets.size()
+	end_loc = targets[offset] # Random base or city location
+	
+	$BombArea.position = start_loc
+	var velocity = start_loc.direction_to(end_loc)
+	$BombArea.connect(\"area_entered\", self, \"smart_hit\")
+	$DodgeAreaBelow.connect(\"area_entered\", self, \"dodge_up\")
+	$DodgeAreaRight.connect(\"area_entered\", self, \"dodge_left\")
+	$DodgeAreaLeft.connect(\"area_entered\", self, \"dodge_right\")
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Use this to size the explosion... 
+func _process(delta):
+	
+	if phase == 0:
+		move_missile()
+	elif phase == 1:
+		on_explode()
+
+func on_explode():
+	$BombArea/CollisionShape2D/Smart.visible = false
+	
+	var explode_instance = Explode.instance()
+	explode_instance.position = $BombArea.position
+	add_child(explode_instance)
+	
+	phase = 2
+	
+	explode_instance.connect(\"explode_end\", self, \"_on_icbm_explode\")
+	update()
+
+	
+func move_missile():
+	var old_position = $BombArea.position
+	var velocity
+	
+	if (dodging):
+		velocity = dodge_start.direction_to(dodge_end) * missile_speed
+	else:
+		velocity = start_loc.direction_to(end_loc) * missile_speed
+	cur_loc = old_position + velocity
+	
+	if (cur_loc.y > DODGE_ALT):
+		$DodgeAreaBelow/Near.disabled = true
+		$DodgeAreaLeft/Near.disabled = true
+		$DodgeAreaRight/Near.disabled = true
+	
+	$BombArea.position = cur_loc
+	$DodgeAreaRight.position = cur_loc
+	$DodgeAreaBelow.position = cur_loc
+	$DodgeAreaLeft.position = cur_loc
+	var angle = int(cur_loc.x) % 360
+	$BombArea.set_rotation_degrees(angle)
+
+	update()
+	if cur_loc.y > end_loc.y:
+		phase = 1
+
+
+func smart_hit(object):
+	if phase == 0:
+		phase = 1
+	
+func dodge_up(object):
+	dodging = true
+	dodge_start = cur_loc
+	dodge_end = dodge_start + Vector2(0, -80)
+	start_dodge_timer()
+	
+	print(\"Smart missile dodge up\")
+
+func dodge_left(object):
+	dodging = true
+	dodge_start = cur_loc
+	dodge_end = dodge_start + Vector2(-80, 0)
+	start_dodge_timer()
+	
+	print(\"Smart missile dodge left\")
+
+func dodge_right(object):
+	dodging = true
+	dodge_start = cur_loc
+	dodge_end = dodge_start + Vector2(80, 0)
+	start_dodge_timer()
+	print(\"Smart missile dodge right\")
+	
+func start_dodge_timer():
+	yield(get_tree().create_timer(0.3), \"timeout\")
+	end_dodge()
+
+func end_dodge():
+	print(\"smart: done dodging\")
+	dodging = false
+
+func _on_icbm_explode():
+	emit_signal(\"smart_hit\")
+	on_end()
+
+func on_end():
+	queue_free()
+
+	
+func set_targets(new_targets):
+	targets = new_targets
+
+	
+func set_speed(new_value):
+	missile_speed = new_value
+
+
+func set_start_loc(new_value):
+	start_loc = new_value
+
+
+func set_end_loc(new_value):
+	end_loc = new_value
+	
+
+
+"
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 7.67652
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 11.6182
+
+[node name="SmartBomb" type="Node2D"]
+script = SubResource( 1 )
+
+[node name="BombArea" type="Area2D" parent="."]
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BombArea"]
+shape = SubResource( 2 )
+
+[node name="Smart" type="Sprite" parent="BombArea/CollisionShape2D"]
+position = Vector2( 0.118118, 0.833971 )
+scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 1 )
+
+[node name="DodgeAreaRight" type="Area2D" parent="."]
+space_override = 1
+collision_mask = 4
+
+[node name="Near" type="CollisionShape2D" parent="DodgeAreaRight"]
+position = Vector2( 19.6441, 0.396843 )
+shape = SubResource( 3 )
+
+[node name="Smart2" type="Sprite" parent="DodgeAreaRight/Near"]
+visible = false
+position = Vector2( -0.477158, 0.238703 )
+scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 1 )
+
+[node name="DodgeAreaLeft" type="Area2D" parent="."]
+space_override = 1
+collision_mask = 4
+
+[node name="Near" type="CollisionShape2D" parent="DodgeAreaLeft"]
+position = Vector2( -19.8425, 0.396843 )
+shape = SubResource( 3 )
+
+[node name="Smart3" type="Sprite" parent="DodgeAreaLeft/Near"]
+visible = false
+position = Vector2( -0.0802994, 0.437128 )
+scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 1 )
+
+[node name="DodgeAreaBelow" type="Area2D" parent="."]
+space_override = 1
+collision_mask = 4
+
+[node name="Near" type="CollisionShape2D" parent="DodgeAreaBelow"]
+position = Vector2( 0.595268, 19.0488 )
+shape = SubResource( 3 )
+
+[node name="Smart4" type="Sprite" parent="DodgeAreaBelow/Near"]
+visible = false
+position = Vector2( -0.0802994, -0.15815 )
+scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 1 )

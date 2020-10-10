@@ -70,6 +70,7 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
   - 8 bit computer
   - Arcade
   - Modern (Indy) graphics
+- Remove placeholder sounds that are not public domain or self-created
 
 ## Attributions
 Sound files taken from soundbible.com.
