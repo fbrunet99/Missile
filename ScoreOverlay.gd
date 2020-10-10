@@ -1,6 +1,7 @@
 extends Node2D
 
-signal bonus_points
+signal bonus_points_city
+signal bonus_points_ammo
 
 const AMMO_POS = Vector2(420, 230)
 const CITY_POS = Vector2(430, 290)
@@ -114,7 +115,7 @@ func show_bonus(new_wave, ammo, cities):
 		ammo_total += ammo_points
 		$Whoosh.play()
 		$Bonus/Ammo.text = str(ammo_total)
-		emit_signal("bonus_points", 5)
+		emit_signal("bonus_points_ammo", 5)
 		ammo_sprites[i].visible = true
 		
 		yield(get_tree().create_timer(0.1), "timeout")
@@ -124,7 +125,7 @@ func show_bonus(new_wave, ammo, cities):
 	for i in range(0, cities):
 		city_sprites[i].visible = true
 		city_total += city_points
-		emit_signal("bonus_points", city_points)
+		emit_signal("bonus_points_city", city_points)
 		$Whoosh.play()
 		$Bonus/Cities.text = str(city_total)
 		yield(get_tree().create_timer(0.4), "timeout")

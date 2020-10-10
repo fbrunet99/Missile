@@ -72,7 +72,8 @@ func _ready():
 		omega_loc,
 	]
 	
-	$ScoreOverlay.connect("bonus_points", self, "update_score")
+	$ScoreOverlay.connect("bonus_points_city", self, "bonus_points_city")
+	$ScoreOverlay.connect("bonus_points_ammo", self, "bonus_points_ammo")
 	initialize_screen()
 	
 	max_cursor_width = get_viewport_rect().size.x # Sets horizontal boundary for joypad cursor
@@ -468,6 +469,42 @@ func update_score(points):
 func reset_score():
 	$ScoreOverlay.reset_score()
 	
+func bonus_points_city(points):
+	update_score(points)
+	
+	# Subtract 1 city from display each time this is called 
+	if $City1.visible:
+		$City1.visible = false
+	elif $City2.visible:
+		$City2.visible = false
+	elif $City3.visible:
+		$City3.visible = false
+	elif $City4.visible:
+		$City4.visible = false
+	elif $City5.visible:
+		$City5.visible = false
+	elif $City6.visible:
+		$City6.visible = false
+	
+
+
+func bonus_points_ammo(points):
+	update_score(points)
+
+	# Subtract one ammo from the cities each time this is called	
+	var alpha_ammo = $Alpha.get_ammo()
+	var delta_ammo = $Delta.get_ammo()
+	var omega_ammo = $Omega.get_ammo()
+	if alpha_ammo > 0:
+		$Alpha.set_ammo(alpha_ammo - 1)
+	elif delta_ammo > 0:
+		$Delta.set_ammo(delta_ammo - 1)
+	elif omega_ammo > 0:
+		$Omega.set_ammo(omega_ammo - 1)
+		
+	
+
+
 func update_joystick(delta):
 	if Input.get_connected_joypads().size() > 0:
 		var xAxis = Input.get_joy_axis(0,JOY_AXIS_0)
