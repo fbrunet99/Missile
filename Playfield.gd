@@ -77,6 +77,7 @@ func _ready():
 	_err = $ScoreOverlay.connect("bonus_points_city", self, "bonus_points_city")
 	_err = $ScoreOverlay.connect("bonus_points_ammo", self, "bonus_points_ammo")
 	_err = $ScoreOverlay.connect("award_bonus_city", self, "award_bonus_city")
+	_err = $ScoreOverlay.connect("game_over", self, "end_game")
 	initialize_screen()
 	
 	max_cursor_width = get_viewport_rect().size.x # Sets horizontal boundary for joypad cursor
@@ -122,16 +123,12 @@ func _input(event):
 			get_tree().paused = false
 
 
-func _on_pause_button_pressed():
-	var is_paused = get_tree().paused
-	print("Pause set, current value is ", is_paused)
-	#get_tree().paused = !is_paused
-	
 func start_game():
 	rng.randomize()
 	score = 0
 	wave_number = 0
 	game_over = false
+	reset_score()
 	restore_bases()
 	restore_cities(true)
 
@@ -177,7 +174,7 @@ func update_wave():
 
 func end_wave():
 	if cities_remain() <= 0:
-		end_game()
+		print("Playfield: I think the game should be over but maybe there are bonus cities")
 		
 	wave_on = false
 	count_cities()
@@ -195,7 +192,6 @@ func update_bomber():
 	if bomber_remain  > 0:
 		var chance = rng.randf_range(0, 100)
 		if chance > 98:
-			print("I'm starting a bomber, chance was ", chance)
 			bomber_instance = Bomber.instance()
 			bomber_instance.set_targets(ground_targets)
 			bomber_instance.connect("bomber_dropping", self, "spawn_bomber_child")
@@ -205,18 +201,15 @@ func update_bomber():
 
 
 func set_bomber_hit(_object):
-	print("playfield: I see that the bomber was hit")
 	update_score(100)
 	bomber_on = false
 	
 func set_bomber_over(_object):
-	print("playfield: I see the bomber got away")
 	bomber_on = false
 
 func update_smart():
 	var chance = rng.randf_range(0, 900)
 	if wave_on and smart_remain > 0 and chance > 890:
-		print("I'm starting a smart bomb, chance was ", chance)
 		var new_smart = Smart.instance()
 		new_smart.connect("smart_hit", self, "smart_hit")
 		new_smart.set_targets(ground_targets)
@@ -234,7 +227,6 @@ func update_icbms():
 			if icbm_remain > 0:
 				var new_icbm = ICBM.instance()
 				if((icbm_remain > 1) and (randi() % (icbm_remain) < mirv_remain)):
-					print("MIRV created")
 					new_icbm.set_mirv(true)
 					mirv_remain -= 1
 					var splits = (randi() % 3) + 1
@@ -256,20 +248,19 @@ func update_icbms():
 func icbm_end():
 	icbm_exist -= 1
 	update_score(25)
-	print("ICBM ended ", icbm_exist, " remain. wave_on=", wave_on)
-	
+
+
 func smart_hit():
 	update_score(100)
 	smart_exist -= 1
-	print("Smart bomb ended", smart_exist, "remain")
+
 	
 func mirv_end(splits):
 	icbm_exist -= splits + 1
 	update_score(25)
-	print("MIRV with ", splits, " splits ended early ", icbm_exist, " ICBMs remain. wave_on=", wave_on)
+
 	
 func spawn_mirv_child(start_loc, end_loc, can_sub_split):
-	print("MIRV child spawned")
 	var new_icbm = ICBM.instance()
 	new_icbm.set_targets(ground_targets)
 	new_icbm.set_color(attack_color)
@@ -291,7 +282,6 @@ func spawn_mirv_child(start_loc, end_loc, can_sub_split):
 	add_child(new_icbm)
 	
 func spawn_bomber_child(start_loc, end_loc):
-	print("Bomber child spawned")
 	var new_icbm = ICBM.instance()
 	new_icbm.set_targets(ground_targets)
 	new_icbm.set_color(attack_color)

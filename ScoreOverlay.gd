@@ -3,6 +3,7 @@ extends Node2D
 signal bonus_points_city
 signal bonus_points_ammo
 signal award_bonus_city
+signal game_over
 
 const AMMO_POS = Vector2(420, 230)
 const CITY_POS = Vector2(430, 290)
@@ -27,7 +28,7 @@ func _ready():
 	show_start_message(1)
 	hide_wave_info()
 
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("ui_pause"):
 		_on_pause_button_pressed()
 
@@ -144,7 +145,7 @@ func show_bonus(new_wave, ammo, cities, score):
 	var total_cities_earned = int(score / BONUS_CITY_LEVEL)
 	
 	var new_cities = 0
-	for i in range(cities, 6):
+	for _i in range(cities, 6):
 		if total_cities_earned > cities_awarded:
 			cities_awarded += 1
 			new_cities += 1
@@ -154,6 +155,7 @@ func show_bonus(new_wave, ammo, cities, score):
 		show_bonus_city_message()
 		
 	if cities + new_cities <= 0:
+		emit_signal("game_over")
 		show_start_message(0)
 
 func show_bonus_city_message():

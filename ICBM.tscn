@@ -14,11 +14,6 @@ var targets setget set_targets
 
 signal icbm_hit
 
-const explode_start = 2
-const explode_decay = 1.8
-const explode_end = 2.7
-const max_size = 0.5
-
 var attack_color = Color(0, 0, 100)
 var phase = 0
 var start_loc = Vector2(0, 0)
@@ -51,7 +46,6 @@ func _ready():
 		var x = rng.randf_range(0, 1000)
 		start_loc = Vector2(x, 0)
 		var offset = randi() % targets.size()
-		print(\"ICBM target offset=\", offset)
 		end_loc = targets[offset] # Random base or city location
 	
 	if mirv:
@@ -113,9 +107,11 @@ func move_missile():
 	elif cur_loc.y > end_loc.y:
 		phase = 1
 
+
 func icbm_hit(object):
 	if phase == 0:
 		phase = 1
+
 	
 func _on_icbm_explode():
 	if mirv and mirv_can_split:
@@ -124,43 +120,53 @@ func _on_icbm_explode():
 		emit_signal(\"icbm_hit\")
 	on_end()
 
+
 func on_end():
 	queue_free()
-	
+
+
 func set_targets(new_targets):
 	targets = new_targets
-	
+
+
 func set_color(new_value):
 	attack_color = new_value
+
 
 func set_speed(new_value):
 	missile_speed = new_value
 
+
 func set_mirv(new_boolean):
 	mirv = new_boolean
-	
+
+
 func set_mirv_child(new_boolean):
 	mirv_child = new_boolean
-	
+
+
 func set_mirv_splits(new_value):
 	mirv_splits = new_value
-	
+
+
 func set_start_loc(new_value):
 	start_loc = new_value
-	
+
+
 func set_end_loc(new_value):
 	end_loc = new_value
-	
+
+
 func set_parent_start_loc(new_value):
 	parent_start_loc = new_value
-	
+
+
 func set_parent_split_loc(new_value):
 	parent_split_loc = new_value
-	
+
+
 func set_bomber_child(new_boolean):
 	bomber_child = new_boolean
-	
-
 "
 
 [sub_resource type="RectangleShape2D" id=2]

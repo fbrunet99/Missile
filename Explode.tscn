@@ -11,8 +11,8 @@ var rng = RandomNumberGenerator.new()
 
 signal explode_end
 
-const explode_decay = 1.8
-const max_size = 0.8
+const EXPLODE_DECAY = 1.8
+const MAX_SIZE = 0.8
 
 var phase = 0
 var boom_size = Vector2(0, 0)
@@ -48,7 +48,7 @@ func on_explode():
 	phase = 1
 
 func grow():
-	if boom_size.x < max_size:
+	if boom_size.x < MAX_SIZE:
 		boom_size.x += .01
 		boom_size.y += .01
 	else:
