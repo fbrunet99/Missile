@@ -62,15 +62,16 @@ var game_over = true
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	
-	ground_targets = [ alpha_loc, 
-		Vector2($City1.position.x - 0, $City1.position.y), 
-		$City2.position, 
-		$City3.position, 
-		delta_loc, 
-		$City4.position, 
+	ground_targets = [ 
+		Vector2(alpha_loc.x, alpha_loc.y - 30), 
+		Vector2($City1.position.x + 30, $City1.position.y), 
+		Vector2($City2.position.x + 30, $City2.position.y), 
+		Vector2($City3.position.x + 0, $City3.position.y), 
+		Vector2(delta_loc.x, alpha_loc.y - 30),
+		Vector2($City4.position.x + 30, $City4.position.y), 
 		Vector2($City5.position.x + 30, $City5.position.y), 
-		Vector2($City6.position.x + 50, $City6.position.y),
-		omega_loc,
+		Vector2($City6.position.x + 30, $City6.position.y),
+		Vector2(omega_loc.x, alpha_loc.y - 30),
 	]
 	
 	var _err

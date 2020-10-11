@@ -71,6 +71,7 @@ func _process(delta):
 
 func _draw():
 	if cur_loc != null && phase == 0:
+#		draw_line(start_loc, end_loc, Color(30,30,30)) # debug
 		draw_line(start_loc, cur_loc, attack_color)
 
 
