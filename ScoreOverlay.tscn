@@ -119,13 +119,24 @@ __meta__ = {
 [node name="Bonus" type="CanvasLayer" parent="."]
 
 [node name="BonusPoints" type="Label" parent="Bonus"]
-visible = false
 margin_left = 410.316
 margin_top = 160.397
 margin_right = 636.316
 margin_bottom = 193.397
 custom_fonts/font = SubResource( 1 )
 text = "BONUS POINTS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BonusCity" type="Label" parent="Bonus"]
+visible = false
+margin_left = 426.352
+margin_top = 421.431
+margin_right = 652.352
+margin_bottom = 454.431
+custom_fonts/font = SubResource( 1 )
+text = "BONUS CITY"
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -2,9 +2,11 @@ extends Node2D
 
 signal bonus_points_city
 signal bonus_points_ammo
+signal award_bonus_city
 
 const AMMO_POS = Vector2(420, 230)
 const CITY_POS = Vector2(430, 290)
+const BONUS_CITY_LEVEL = 10000
 
 var is_paused = false
 
@@ -14,6 +16,9 @@ var city_texture = preload("res://assets/city.png")
 
 var ammo_sprites = []
 var city_sprites = []
+
+var cities_awarded = 0
+
 
 func _ready():
 	$Pause/PauseLabel.visible = false
@@ -32,6 +37,7 @@ func update_score(score):
 	
 func reset_score():
 	$Score/Player1.text = "0"
+	cities_awarded = 0
 	
 func show_score():
 	$Score/Player1.visible = true
@@ -78,6 +84,7 @@ func hide_wave_info():
 	$StartWave/PointLabel.visible = false
 	$StartWave/DefendLabel.visible = false
 	$StartWave/CitiesLabel.visible = false
+	$Bonus/BonusCity.visible = false
 
 func show_start_message(new_wave):
 	hide_wave_info()
@@ -92,11 +99,14 @@ func show_start_message(new_wave):
 func hide_start_message():
 	$StartGame/PressStart.visible = false
 
-func show_bonus(new_wave, ammo, cities):
+func show_bonus(new_wave, ammo, cities, score):
 	hide_start_message()
 	hide_wave_info()
 	var text_color = wave_info.get_defendcolor(new_wave)
 	var high_color = wave_info.get_attackcolor(new_wave)
+
+	$Bonus/BonusCity.visible = false
+	$Bonus/BonusCity.add_color_override("font_color", text_color)
 
 	$Bonus/BonusPoints.visible = true
 	$Bonus/BonusPoints.add_color_override("font_color", text_color)
@@ -117,7 +127,6 @@ func show_bonus(new_wave, ammo, cities):
 		$Bonus/Ammo.text = str(ammo_total)
 		emit_signal("bonus_points_ammo", 5)
 		ammo_sprites[i].visible = true
-		
 		yield(get_tree().create_timer(0.1), "timeout")
 		
 	var city_total = 0
@@ -125,14 +134,35 @@ func show_bonus(new_wave, ammo, cities):
 	for i in range(0, cities):
 		city_sprites[i].visible = true
 		city_total += city_points
+		score += city_total
 		emit_signal("bonus_points_city", city_points)
 		$Whoosh.play()
 		$Bonus/Cities.text = str(city_total)
 		yield(get_tree().create_timer(0.4), "timeout")
 		
-	if cities <= 0:
+	score = score + city_total + ammo_total
+	var total_cities_earned = int(score / BONUS_CITY_LEVEL)
+	
+	var new_cities = 0
+	for i in range(cities, 6):
+		if total_cities_earned > cities_awarded:
+			cities_awarded += 1
+			new_cities += 1
+			emit_signal("award_bonus_city")
+	
+	if new_cities > 0:
+		show_bonus_city_message()
+		
+	if cities + new_cities <= 0:
 		show_start_message(0)
 
+func show_bonus_city_message():
+	$Bonus/BonusCity.visible = true
+	yield(get_tree().create_timer(1.4), "timeout")
+	# TODO: play tune here
+	$Bonus/BonusCity.visible = false
+	
+	
 func init_sprites():
 	ammo_sprites.resize(30)
 	for i in range(0, 30):

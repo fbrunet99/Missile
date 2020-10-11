@@ -68,7 +68,6 @@ func init(id, location):
 	
 
 func set_ammo(ammo, show_status):
-	print("Base: set_ammo ", ammo)
 	ammo_count = ammo
 	update_ammo_display(show_status)
 	

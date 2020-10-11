@@ -26,7 +26,6 @@ var max_cursor_width
 
 var rng = RandomNumberGenerator.new()
 
-
 var ground_color = Color(150, 150, 0)
 var alpha_loc = Vector2(100, 550)
 var delta_loc = Vector2(500, 550)
@@ -77,6 +76,7 @@ func _ready():
 	var _err
 	_err = $ScoreOverlay.connect("bonus_points_city", self, "bonus_points_city")
 	_err = $ScoreOverlay.connect("bonus_points_ammo", self, "bonus_points_ammo")
+	_err = $ScoreOverlay.connect("award_bonus_city", self, "award_bonus_city")
 	initialize_screen()
 	
 	max_cursor_width = get_viewport_rect().size.x # Sets horizontal boundary for joypad cursor
@@ -357,15 +357,8 @@ func restore_cities(var restart):
 		$City6.visible = true
 
 	if restart:
-		for i in range(0, 6):
-			city_hit[i] = false
-			
-		$City1.visible = true
-		$City2.visible = true
-		$City3.visible = true
-		$City4.visible = true
-		$City5.visible = true
-		$City6.visible = true
+		for i in range(1, 7):
+			restore_city(i)
 
 	
 func initialize_bases():
@@ -461,7 +454,7 @@ func set_stockpiles():
 func count_cities():
 	city_count = cities_remain()
 	ammo_remain = get_ammo()
-	$ScoreOverlay.show_bonus(wave_number, ammo_remain, city_count)
+	$ScoreOverlay.show_bonus(wave_number, ammo_remain, city_count, score)
 		
 	restore_cities(false)
 
@@ -518,6 +511,45 @@ func bonus_points_city(points):
 	if city:
 		city.visible = false
 
+func award_bonus_city():
+	restore_cities(false)
+	var candidates = []
+	
+	if !$City1.visible:
+		candidates.append(1)
+	if !$City2.visible:
+		candidates.append(2)
+	if !$City3.visible:
+		candidates.append(3)
+	if !$City4.visible:
+		candidates.append(4)
+	if !$City5.visible:
+		candidates.append(5)
+	if !$City6.visible:
+		candidates.append(6)
+	
+	var pick = candidates[randi() % candidates.size()]
+	
+	restore_city(pick)
+	
+
+	
+func restore_city(city_num):
+	city_hit[city_num -1] = false
+	
+	if city_num == 1:
+		$City1.visible = true
+	if city_num == 2:
+		$City2.visible = true
+	if city_num == 3:
+		$City3.visible = true
+	if city_num == 4:
+		$City4.visible = true
+	if city_num == 5:
+		$City5.visible = true
+	if city_num == 6:
+		$City6.visible = true
+	
 
 func bonus_points_ammo(points):
 	update_score(points)
@@ -534,7 +566,6 @@ func bonus_points_ammo(points):
 		$Omega.set_ammo(omega_ammo - 1, false)
 		
 	
-
 
 func update_joystick(delta):
 	if Input.get_connected_joypads().size() > 0:
