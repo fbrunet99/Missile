@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/smart-bomb.png" type="Texture" id=1]
-[ext_resource path="res://assets/sounds/SmartBomb.wav" type="AudioStream" id=2]
 
 [sub_resource type="GDScript" id=1]
 script/source = "# Smart Bomb
@@ -169,7 +168,6 @@ script = SubResource( 1 )
 collision_mask = 4
 
 [node name="FlightSound" type="AudioStreamPlayer2D" parent="BombArea"]
-stream = ExtResource( 2 )
 volume_db = -23.223
 autoplay = true
 

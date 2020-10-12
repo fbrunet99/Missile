@@ -29,7 +29,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # Use this to size the explosion... 
-func _process(delta):
+func _process(_delta):
 	
 	if phase == 0:
 		on_explode()
@@ -74,12 +74,6 @@ func flicker_boom():
 	var new_color = Color(red, green, blue)
 	$Area2D/BoomCollision/Boom.self_modulate = new_color
 	
-	
-func flicker_marker():
-	var red = rng.randf_range(.2, 1)
-	var green = rng.randf_range(.2, 1)
-	var blue = rng.randf_range(.8, 1)
-	var new_color = Color(red, green, blue)
 	
 	
 func on_end():
