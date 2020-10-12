@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/wave_start.wav-f74d10b060442b9aea8544461f6e168a.sample"
+
+[deps]
+
+source_file="res://assets/sounds/wave_start.wav"
+dest_files=[ "res://.import/wave_start.wav-f74d10b060442b9aea8544461f6e168a.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

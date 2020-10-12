@@ -5,7 +5,7 @@
 [ext_resource path="res://assets/city.png" type="Texture" id=3]
 [ext_resource path="res://Base.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ScoreOverlay.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/sounds/Missile Command 04 - Round Begin.wav" type="AudioStream" id=6]
+[ext_resource path="res://assets/sounds/wave_start.wav" type="AudioStream" id=6]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Sprite
@@ -124,5 +124,5 @@ texture = ExtResource( 3 )
 
 [node name="StartWave" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
-volume_db = -14.136
+volume_db = -14.221
 pitch_scale = 1.03
