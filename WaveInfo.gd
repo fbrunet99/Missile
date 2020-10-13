@@ -12,7 +12,7 @@ func get_basecolor(wave_number):
 func get_backgroundcolor(wave_number):	
 	return wave_data[adjust_wavenum(wave_number)].backgroundColor
 
-func get_attachspeed(wave_number):
+func get_attackspeed(wave_number):
 	return get_waveData(wave_number).attackSpeed
 	
 func get_icbmcount(wave_number):

@@ -147,7 +147,7 @@ func start_wave():
 	ground_color = wave_info.get_basecolor(wave_number)
 	defend_color = wave_info.get_defendcolor(wave_number)
 	attack_color = wave_info.get_attackcolor(wave_number)
-	icbm_speed = wave_info.get_attachspeed(wave_number)
+	icbm_speed = wave_info.get_attackspeed(wave_number)
 	restore_cities(false)
 	restore_bases()
 	yield(get_tree().create_timer(5.0), "timeout")
@@ -498,7 +498,6 @@ func bonus_points_city(points):
 	elif $City6.visible:
 		city = $City6
 	
-	# This just moves the city off screen so we can continue to use visible to decide if
 	if city:
 		city.visible = false
 
