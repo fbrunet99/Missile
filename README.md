@@ -46,6 +46,8 @@ score.
 ### End of Game
 When all cities are gone the game is over. 
 
+TODO: Make a game over screen. Currently it just asks player to start a new game.
+
 ### Enemies
 #### Missiles
 ICBM Missiles come down from the top of the screen. They leave a smoke trail behind them. You have to target the missile 
@@ -74,6 +76,8 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 
 
 ## TODO
+- Add sounds for bonus city, low ammo, out of ammo, smart missile
+- Add game over screen
 - Add UFO
 - Improve wave structure so each has 3 distinct phases. This is primarily to make sure that many missiles appear at once so that you can have more attackers than defensive ammo
 - Consider adding particle effects to the missiles or explosions
