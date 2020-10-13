@@ -3,7 +3,7 @@ Missile Clone in Godot 3.2
 
 This is a classic style arcade game where you defend cities from a missile attack.
 
-![Screen Capture](/docs/screen.png)
+![Screen Capture](/docs/gameplay.gif)
 
 ## Running the game
 The game needs Godot Desktop 3.2. 
