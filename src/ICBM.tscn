@@ -57,12 +57,12 @@ func _ready():
 	var velocity = start_loc.direction_to(end_loc)
 	var angle = rad2deg(velocity.angle()) + 90
 	$ICBMArea.set_rotation_degrees(angle)
-	$ICBMArea.connect(\"area_entered\", self, \"icbm_hit\")
+	var _err = $ICBMArea.connect(\"area_entered\", self, \"icbm_hit\")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # Use this to size the explosion... 
-func _process(delta):
+func _process(_delta):
 	
 	if phase == 0:
 		move_missile()
@@ -100,7 +100,7 @@ func move_missile():
 		var target
 		var mirv_targets = targets.duplicate(true) # Create clone to not mess with original array
 		var viewport = get_viewport_rect().size
-		for i in range(mirv_splits):
+		for _i in range(mirv_splits):
 			target = randi() % mirv_targets.size()
 			emit_signal(\"mirv_splitting\", cur_loc, mirv_targets[target], cur_loc.y < (3 * viewport.y / 4))
 			mirv_targets.remove(target)
@@ -109,7 +109,7 @@ func move_missile():
 		phase = 1
 
 
-func icbm_hit(object):
+func icbm_hit(_object):
 	if phase == 0:
 		phase = 1
 

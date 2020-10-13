@@ -36,12 +36,12 @@ func _ready():
 	var offset = randi() % targets.size()
 	end_loc = targets[offset] # Random base or city location
 	
+	var _err
 	$BombArea.position = start_loc
-	var velocity = start_loc.direction_to(end_loc)
-	$BombArea.connect(\"area_entered\", self, \"smart_hit\")
-	$DodgeAreaBelow.connect(\"area_entered\", self, \"dodge_up\")
-	$DodgeAreaRight.connect(\"area_entered\", self, \"dodge_left\")
-	$DodgeAreaLeft.connect(\"area_entered\", self, \"dodge_right\")
+	_err = $BombArea.connect(\"area_entered\", self, \"smart_hit\")
+	_err = $DodgeAreaBelow.connect(\"area_entered\", self, \"dodge_up\")
+	_err = $DodgeAreaRight.connect(\"area_entered\", self, \"dodge_left\")
+	_err = $DodgeAreaLeft.connect(\"area_entered\", self, \"dodge_right\")
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -65,7 +65,7 @@ func on_explode():
 	explode_instance.connect(\"explode_end\", self, \"_on_icbm_explode\")
 
 	
-func move_missile(delta):
+func move_missile(_delta):
 	var old_position = $BombArea.position
 	var velocity
 	
@@ -93,11 +93,11 @@ func move_missile(delta):
 		phase = 1
 
 
-func smart_hit(object):
+func smart_hit(_object):
 	if phase == 0:
 		phase = 1
 	
-func dodge_up(object):
+func dodge_up(_object):
 	dodging = true
 	start_loc = cur_loc
 	dodge_end = start_loc + Vector2(0, -80)
@@ -105,7 +105,7 @@ func dodge_up(object):
 	
 	print(\"Smart missile dodge up\")
 
-func dodge_left(object):
+func dodge_left(_object):
 	dodging = true
 	start_loc = cur_loc
 	dodge_end = start_loc + Vector2(-80, 0)
@@ -113,7 +113,7 @@ func dodge_left(object):
 	
 	print(\"Smart missile dodge left\")
 
-func dodge_right(object):
+func dodge_right(_object):
 	dodging = true
 	start_loc = cur_loc
 	dodge_end = start_loc + Vector2(80, 0)

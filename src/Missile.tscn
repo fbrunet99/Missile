@@ -88,8 +88,6 @@ func move_missile():
 func flicker_marker():
 	var red = rng.randf_range(.2, 1)
 	var green = rng.randf_range(.2, 1)
-	var blue = rng.randf_range(.8, 1)
-	var new_color = Color(red, green, blue)
 	
 	$Marker.self_modulate = Color(red, green, 200)
 	

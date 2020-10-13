@@ -6,12 +6,21 @@ This is a classic style arcade game where you defend cities from a missile attac
 ![Screen Capture](/docs/gameplay.gif)
 
 ## Running the game
-The game needs Godot Desktop 3.2. 
 
-TODO: Create an executable for Windows
+This game requires Godot 3.2.
+You can download it here:
+https://godotengine.org/download/windows
+
+Once you have Godot installed you will be able to open the project in the src directory and 
+run the game. The game has only been tested under Windows 10 but I expect it will work on 
+macOS or Linux too.
+
+TODO: Create an executable for Windows and put it in the dest folder.
 
 ### Controls
-The plus-shaped cursor indicates the target location of a defensive missile. When you press the fire button, a missile will fly to that location and explode.
+The plus-shaped cursor indicates the target location of a defensive missile. When you press the fire 
+button, a missile will fly to that location and explode.
+
 The cursor can be moved with the mouse or with the left stick on a controller.
 You have three different bases. There is a separate fire button for each:
 
@@ -50,6 +59,8 @@ TODO: Make a game over screen. Currently it just asks player to start a new game
 
 ### Enemies
 #### Missiles
+
+![Missile](src/assets/icbm.png)
 ICBM Missiles come down from the top of the screen. They leave a smoke trail behind them. You have to target the missile 
 at the bottom of the smoke trail.
 
@@ -63,11 +74,15 @@ In this version, the wave is mostly random the whole time but a specific number 
 up to 3 cities. It isn't correct to just attach 3 cities for the entire wave, players would notice that and tend to
 only defend 3 cities.
 
-#### Bombers
+#### Bombers and Satellites
+![Bomber](src/assets/bomber.png)
+![Satellite](src/assets/satellite.png)
+
 Bombers and satellites cross the screen and make fairly easy targets. They need to be taken out quickly or they may
 drop additional missiles. 
 
 #### Smart Missiles
+![Smart Missile](src/assets/smart-bomb.png)
 Smart missiles appear in later rounds. These do not have a smoke trail. They have the ability to dodge defensive fire.
 To defeat them you have to fire more accurately (nearer to them) or wedge them between two explosions.
 
@@ -93,7 +108,7 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 ## Technical Notes
 ### How are the explosions drawn?
 The explosions are circle-shaped sprites that are scaled using the Godot engine. 
-See [The Explode Scene](Explode.tscn)
+See [The Explode Scene](src/Explode.tscn)
 
 ### How are the missiles and smoke trails drawn?
 One of the key features of the arcade game is that the "smoke trails" are lines which are slowly drawn from the source
@@ -123,7 +138,7 @@ func _draw():
 Note that draw() is normally only called once unless you call update() to trigger it, so update() is called in the 
 function move_missile().
 
-See [The ICBM Scene](ICBM.tscn) and [The Missile Scene](Missile.tscn). They have similar functionality.
+See [The ICBM Scene](src/ICBM.tscn) and [The Missile Scene](src/Missile.tscn). They have similar functionality.
 
 ### How does the smart missile dodge the explosions?
 The smart missiles use multiple CollisionShape2D objects. One is the same size as the sprite and is used to detect that
@@ -144,7 +159,16 @@ When the dodge timer expires, the missile recalculates the vector back to the or
 This result is a weak attempt at dodging but it works pretty well in the game because the player has a lot of things
 going on at once.
 
-See [The Smart Bomb Scene](smart_bomb.tscn)
+See [The Smart Bomb Scene](src/smart_bomb.tscn)
+
+## Source Files
+
+* Base.gd - Missile base script (external script for Base.tscn)
+* Base.tscn - Missile base scene
+* Bomber.gd - Bomber / Satellite script
+* Bomber.tscn - Bomber scene
+* Explode.tscn - Explosion scene
+* 
 
 ## Attributions
 Some of the sound files were found on soundbible.com which has various public licenses as noted.

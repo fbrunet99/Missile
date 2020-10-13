@@ -5,7 +5,6 @@ var Explode = preload("res://Explode.tscn")
 var rng = RandomNumberGenerator.new()
 
 var is_hit = false
-var explode_instance = null
 var velocity = Vector2(-1, 0)
 var max_x = 1100
 var max_y = 800
@@ -52,10 +51,10 @@ func _ready():
 		position = Vector2(max_x - 50, height)
 		
 	print("Starting a bomber at position:", position, "  direction:", direction)
-	$BomberArea.connect("area_entered", self, "bomber_hit")
+	var _err = $BomberArea.connect("area_entered", self, "bomber_hit")
 
 
-func _process(delta):
+func _process(_delta):
 	if is_hit:
 		return
 
@@ -76,7 +75,7 @@ func _process(delta):
 		var bomb_targets = targets.duplicate(true) # Create clone to not mess with original array
 		var bombs = (randi() % 4) + 1
 		print("Bomber trying to drop ", bombs, " bombs")
-		for i in range(bombs):
+		for _i in range(bombs):
 			print("Bomber sent signal to drop a bomb")
 			target = randi() % bomb_targets.size()
 			emit_signal("bomber_dropping", position, targets[target])

@@ -16,7 +16,7 @@ func _ready():
 	fore_color = Color(100, 0, 0)
 	set_foreground(fore_color)
 
-func _process(delta):
+func _process(_delta):
 	pass
 	
 func fire(location, speed):
