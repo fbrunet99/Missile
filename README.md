@@ -41,7 +41,9 @@ At the end of a wave you get bonus points.
 Waves have a bonus multiplier that increases every other wave. The maximum multiplier is 6 X points.
 
 ### Bases
-Each base has a limited number of missiles. If a base it hit, it wipes out all missiles in that base until the next round.
+![Patriot](src/assets/patriot.png)
+
+Each base has a limited number of defensive missiles. If a base it hit, it wipes out all missiles in that base until the next round.
 The middle base has much faster missiles so it it best to save those for last if possible.
 
 ### Scoring
@@ -49,6 +51,8 @@ Score is kept for each enemy type and for bonus ammo and cities.
 TODO: High Score that is kept between play sessions
 
 ### Cities
+![City](src/assets/city.png)
+
 There are 6 cities that need to be defended. You get a bonus replacement city for each 10,000 points that you
 score. 
 
@@ -60,7 +64,7 @@ TODO: Make a game over screen. Currently it just asks player to start a new game
 ### Enemies
 #### Missiles
 
-![Missile](src/assets/icbm.png)
+![ICBM](src/assets/icbm.png)
 ICBM Missiles come down from the top of the screen. They leave a smoke trail behind them. You have to target the missile 
 at the bottom of the smoke trail.
 
@@ -83,6 +87,7 @@ drop additional missiles.
 
 #### Smart Missiles
 ![Smart Missile](src/assets/smart-bomb.png)
+
 Smart missiles appear in later rounds. These do not have a smoke trail. They have the ability to dodge defensive fire.
 To defeat them you have to fire more accurately (nearer to them) or wedge them between two explosions.
 
@@ -168,7 +173,13 @@ See [The Smart Bomb Scene](src/smart_bomb.tscn)
 * Bomber.gd - Bomber / Satellite script
 * Bomber.tscn - Bomber scene
 * Explode.tscn - Explosion scene
-* 
+* ICBM.tscn
+* Playfield.gd
+* Playfield.tscn - Main scene
+* ScoreOverlay.gd
+* ScoreOverlay.tscn 
+* smart_bomb.tscn
+* WaveInfo.gs - Information for wave colors and difficulty
 
 ## Attributions
 Some of the sound files were found on soundbible.com which has various public licenses as noted.
