@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/bomber.png" type="Texture" id=1]
 [ext_resource path="res://Bomber.gd" type="Script" id=2]
 [ext_resource path="res://assets/satellite.png" type="Texture" id=3]
+[ext_resource path="res://assets/sounds/bomber.wav" type="AudioStream" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 60.6068, 17.5211 )
@@ -15,6 +16,9 @@ script = ExtResource( 2 )
 
 [node name="BomberArea" type="Area2D" parent="."]
 collision_mask = 4
+
+[node name="FlightSound2D" type="AudioStreamPlayer2D" parent="BomberArea"]
+stream = ExtResource( 4 )
 
 [node name="BomberCollision" type="CollisionShape2D" parent="BomberArea"]
 position = Vector2( 0.374573, -7.62939e-06 )

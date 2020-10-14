@@ -28,6 +28,8 @@ func _ready():
 		$BomberArea/SatelliteCollision.disabled = true
 		$BomberArea.scale = Vector2(.7, 1)
 	
+	$BomberArea/FlightSound2D.play()
+	
 	var viewport = get_viewport_rect().size
 	max_x = viewport.x + 100
 	max_y = viewport.y / 2
@@ -39,7 +41,7 @@ func _ready():
 	
 	rng.randomize()
 	var height = rand_range(100, max_y)
-	var direction = rand_range(-1, 1) * 3
+	var direction = rand_range(-1, 1) * 2.2
 	direction = ceil(direction) if direction > 0 else floor(direction) 
 	velocity = Vector2(direction, 0)
 
@@ -88,6 +90,7 @@ func bomber_hit(object):
 		
 	print("Bomber: I hit something")
 	is_hit = true
+	$BomberArea/FlightSound2D.stop()
 	
 	var explode_instance = Explode.instance()
 	explode_instance.position = $BomberArea.position
@@ -103,6 +106,7 @@ func _on_bomber_explode():
 	end_bomber()
 	
 func end_bomber():
+	$BomberArea/FlightSound2D.stop()
 	get_parent().remove_child(self)
 	
 func set_targets(new_targets):

@@ -29,7 +29,6 @@ var time = 0
 var missile_dir = Vector2(0,0)
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	if missile_speed == 0:
 		missile_speed = 15
@@ -41,8 +40,6 @@ func _ready():
 	$LaunchSound.play()
 	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-# Use this to size the explosion... 
 func _process(delta):
 	
 	time += delta
@@ -54,7 +51,7 @@ func _process(delta):
 	if time > explode_end:
 		on_end()
 		
-	flicker_marker()		
+	flicker_marker()
 
 func _draw():
 	if cur_loc != null && phase == 0:

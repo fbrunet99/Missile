@@ -22,8 +22,10 @@ func _process(_delta):
 func fire(location, speed):
 	if ammo_count > 0:
 		launch_new_missile(location, speed)
+		if ammo_count == 3:
+			$Area2D/AmmoLow.play()
 	else:
-		$AmmoOut.play()
+		$Area2D/AmmoOut.play()
 
 
 func launch_new_missile(target_position, speed):

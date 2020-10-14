@@ -28,6 +28,7 @@ var parent_start_loc
 var parent_split_loc
 var bomber_child = false
 var mirv_can_split = true
+var mirv_too_low = false
 
 signal mirv_splitting(start_loc, end_loc, can_sub_split)
 
@@ -47,10 +48,11 @@ func _ready():
 		start_loc = Vector2(x, 0)
 		var offset = randi() % targets.size()
 		end_loc = targets[offset] # Random base or city location
-	
-	if mirv:
-		var viewport = get_viewport_rect().size
-		mirv_target_y = rng.randf_range(max(start_loc.y + 10, viewport.y / 4), 3 * viewport.y / 4)
+	var viewport = get_viewport_rect().size
+	if mirv and start_loc.y + 10 < 5 * viewport.y / 8:
+		mirv_target_y = rng.randf_range(max(start_loc.y + 10, viewport.y / 4), 5 * viewport.y / 8)
+	elif mirv:
+		mirv_too_low = true
 			
 
 	$ICBMArea.position = start_loc
@@ -95,7 +97,7 @@ func move_missile():
 	
 	$ICBMArea.position = cur_loc
 	update()
-	if mirv and mirv_can_split and cur_loc.y > mirv_target_y:
+	if mirv and mirv_can_split and not mirv_too_low and cur_loc.y > mirv_target_y:
 		mirv_can_split = false
 		var target
 		var mirv_targets = targets.duplicate(true) # Create clone to not mess with original array

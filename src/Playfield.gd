@@ -64,13 +64,13 @@ func _ready():
 	
 	ground_targets = [ 
 		Vector2(alpha_loc.x, alpha_loc.y - 30), 
-		Vector2($City1.position.x + 30, $City1.position.y), 
-		Vector2($City2.position.x + 30, $City2.position.y), 
-		Vector2($City3.position.x + 0, $City3.position.y), 
+		Vector2($City1.position.x - 30, $City1.position.y), 
+		Vector2($City2.position.x - 10, $City2.position.y), 
+		Vector2($City3.position.x + 10, $City3.position.y), 
 		Vector2(delta_loc.x, alpha_loc.y - 30),
-		Vector2($City4.position.x + 30, $City4.position.y), 
+		Vector2($City4.position.x + 40, $City4.position.y), 
 		Vector2($City5.position.x + 30, $City5.position.y), 
-		Vector2($City6.position.x + 30, $City6.position.y),
+		Vector2($City6.position.x + 40, $City6.position.y),
 		Vector2(omega_loc.x, alpha_loc.y - 30),
 	]
 	
