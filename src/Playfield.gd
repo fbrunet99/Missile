@@ -59,7 +59,7 @@ var game_over = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
 	ground_targets = [ 
 		Vector2(alpha_loc.x, alpha_loc.y - 30), 
@@ -78,6 +78,7 @@ func _ready():
 	_err = $ScoreOverlay.connect("bonus_points_ammo", self, "bonus_points_ammo")
 	_err = $ScoreOverlay.connect("award_bonus_city", self, "award_bonus_city")
 	_err = $ScoreOverlay.connect("game_over", self, "end_game")
+	_err = $ScoreOverlay.connect("start_game", self, "start_game")
 	initialize_screen()
 	
 	max_cursor_width = get_viewport_rect().size.x # Sets horizontal boundary for joypad cursor
@@ -112,7 +113,7 @@ func _process(delta):
 	
 
 func _input(event):
-	if event is InputEventMouseMotion:
+	if !game_over and event is InputEventMouseMotion:
 		var cur_position = event.position
 		var min_height = GROUND_LEFT.y - 80
 		if cur_position.y > min_height:
@@ -123,6 +124,8 @@ func _input(event):
 
 
 func start_game():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	
 	rng.randomize()
 	score = 0
 	wave_number = 0
@@ -134,6 +137,8 @@ func start_game():
 	start_wave();
 
 func end_game():
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
 	game_over = true
 
 func start_wave():

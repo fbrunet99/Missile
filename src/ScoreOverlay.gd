@@ -4,6 +4,7 @@ signal bonus_points_city
 signal bonus_points_ammo
 signal award_bonus_city
 signal game_over
+signal start_game
 
 const AMMO_POS = Vector2(420, 230)
 const CITY_POS = Vector2(430, 290)
@@ -93,12 +94,15 @@ func show_start_message(new_wave):
 	var text_color = wave_info.get_defendcolor(new_wave)
 
 	$Score/Player1.add_color_override("font_color", text_color)
-	$StartGame/PressStart.visible = true
+#	$StartGame/PressStart.visible = true
+	$StartGame/StartButton.visible = true
 	$StartGame/PressStart.add_color_override("font_color", text_color)
 	
 
 func hide_start_message():
 	$StartGame/PressStart.visible = false
+	$StartGame/StartButton.visible = false
+	
 
 func show_bonus(new_wave, ammo, cities, score):
 	hide_start_message()
@@ -197,3 +201,7 @@ func _on_pause_button_pressed():
 	is_paused = !is_paused
 	get_tree().paused = is_paused
 	$Pause/PauseLabel.visible = is_paused
+
+
+func _on_StartButton_pressed():
+	emit_signal("start_game")

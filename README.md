@@ -28,9 +28,8 @@ You have three different bases. There is a separate fire button for each:
 - Middle base: middle mouse button, 'S' key on keyboard, or bottom or top button on controller
 - Right base: Right mouse button, 'D' key on keyboard, or right button on controller
 
-Start the game by pressing the '1' key on keyboard, or the start/options/plus button on controller
-
-TODO: Add a start button to the screen so the player can start by clicking the mouse
+Start the game by clicking the Start Button, pressing the '1' key on keyboard, 
+or the start/options/plus button on controller
 
 Reset the game by pressing the '9' key on keyboard, or the select/share/minus button on controller
 
