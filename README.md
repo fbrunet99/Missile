@@ -164,21 +164,28 @@ See [The Smart Bomb Scene](src/smart_bomb.tscn)
 
 ## Source Files
 
-* Base.gd - Missile base script (external script for Base.tscn)
-* Base.tscn - Missile base scene
-* Bomber.gd - Bomber / Satellite script
-* Bomber.tscn - Bomber scene
-* Explode.tscn - Explosion scene
-* ICBM.tscn
-* Playfield.gd
-* Playfield.tscn - Main scene
-* ScoreOverlay.gd
-* ScoreOverlay.tscn 
-* smart_bomb.tscn
-* WaveInfo.gs - Information for wave colors and difficulty
+| File              | Description                                         |
+| ----------------- | --------------------------------------------------- |
+| Base.gd           | Missile base script (external script for Base.tscn) |
+| Base.tscn         | Missile base scene                                  |
+| Bomber.gd         | Bomber / Satellite script                           |
+| Bomber.tscn       | Bomber scene                                        |
+| Explode.tscn      | Explosion scene                                     |
+| ICBM.tscn         | Enemy missiles                                      |
+| Playfield.gd      | Script for the main game loop                       |
+| Playfield.tscn    | Main scene                                          |
+| ScoreOverlay.gd   | Script for the score and bonus text                 |
+| ScoreOverlay.tscn | Scene to control scrore and other text              |
+| smart_bomb.tscn   | Scene to control smart missiles                     |
+| WaveInfo.gs       | Information for wave colors and difficulty          |
 
 ## Attributions
-Some of the sound files were found on soundbible.com which has various public licenses as noted.
+The game images were created using [Aseprite](https://www.aseprite.org/)
+
+Most of the sounds were created using [Audacity](https://www.audacityteam.org/). 
+
+The remaining sound files were found on soundbible.com which has various public licenses as noted.
+
 #### Bomb Exploding
 License: Attribution 3.0
 Recorded by: Sound Explorer
