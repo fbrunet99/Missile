@@ -1,7 +1,6 @@
 # Playfield Scene
 extends Node2D
 
-
 const Missile = preload("res://Missile.tscn")
 const Bomber = preload("res://Bomber.tscn")
 const ICBM = preload("res://ICBM.tscn")
@@ -103,7 +102,6 @@ func _process(delta):
 	if Input.is_action_just_pressed("ui_omega"):
 		launch_missile(OMEGA_ID, $Cursor.position, 10)
 	
-	update_icbms()
 	update_smart()
 	update_bomber()
 	update_wave()
@@ -142,6 +140,7 @@ func start_wave():
 	if game_over:
 		return
 
+	$WaveTimer.start()
 	$ScoreOverlay.show_wave_info(wave_number, wave_info.get_multiplier(wave_number))
 	$StartWave.play()
 	ground_color = wave_info.get_basecolor(wave_number)
@@ -174,6 +173,7 @@ func update_wave():
 		end_wave()
 
 func end_wave():
+	$WaveTimer.stop()
 	if cities_remain() <= 0:
 		print("Playfield: I think the game should be over but maybe there are bonus cities")
 		
@@ -220,9 +220,9 @@ func update_smart():
 		
 	
 func update_icbms():
-	var chance = rng.randf_range(0, 900)
-	if wave_on and icbm_remain > 0 and chance > 890:
-		var mult = 1 + rng.randf_range(0, 4)
+	var chance = rng.randf_range(0, 10)
+	if wave_on and icbm_remain > 0 and chance > 2:
+		var mult = 1 + rng.randf_range(0, 6)
 		
 		for _i in range(mult):
 			if icbm_remain > 0:
@@ -583,3 +583,8 @@ func update_joystick(delta):
 		$Cursor.position = cur_position
 	
 	
+
+
+func _on_WaveTimer_timeout():
+	print("**************** WaveTimer Timeout ****************************")
+	update_icbms()

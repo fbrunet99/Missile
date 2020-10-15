@@ -71,9 +71,6 @@ at the bottom of the smoke trail.
 ICBMs may "MIRV" and split into multiple missiles. This is dangerous it it happens at a low altitude.
 
 TODO: 
-- Better waves: In the arcade, each wave has 3 distinct phases. Usually there is a lot of missiles at once, then a pause, 
-then another large attack, then a smaller random attack.
-In this version, the wave is mostly random the whole time but a specific number of missiles occur in each wave.
 - Don't destroy more than 3 cities per wave. This is related to the previous point, because each sub-wave only should attack
 up to 3 cities. It isn't correct to just attach 3 cities for the entire wave, players would notice that and tend to
 only defend 3 cities.
@@ -99,7 +96,7 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 - Add sounds for bonus city, low ammo, out of ammo, smart missile
 - Add game over screen
 - Add UFO
-- Improve wave structure so each has 3 distinct phases. This is primarily to make sure that many missiles appear at once so that you can have more attackers than defensive ammo
+- Continue playtesting wave timer
 - Consider adding particle effects to the missiles or explosions
 - Consider adding external json file that keeps high scores and allows user to customize difficulty etc
 - Add option to let the user choose between classic mode and "super missile attack" which is more difficult

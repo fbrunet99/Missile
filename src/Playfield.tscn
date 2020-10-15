@@ -105,3 +105,7 @@ texture = ExtResource( 3 )
 stream = ExtResource( 6 )
 volume_db = -14.221
 pitch_scale = 1.03
+
+[node name="WaveTimer" type="Timer" parent="."]
+wait_time = 3.0
+[connection signal="timeout" from="WaveTimer" to="." method="_on_WaveTimer_timeout"]
