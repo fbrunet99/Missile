@@ -11,14 +11,16 @@ var rng = RandomNumberGenerator.new()
 
 signal explode_end
 
+
 const EXPLODE_DECAY = 1.8
-const MAX_SIZE = 0.8
+const DEFAULT_MAX_SIZE = 0.8
 
 var phase = 0
 var boom_size = Vector2(0, 0)
 var start_loc setget set_start
 var end_loc = Vector2(0, 0)
 var cur_loc = null
+var max_size = DEFAULT_MAX_SIZE
 
 
 # Called when the node enters the scene tree for the first time.
@@ -48,7 +50,7 @@ func on_explode():
 	phase = 1
 
 func grow():
-	if boom_size.x < MAX_SIZE:
+	if boom_size.x < max_size:
 		boom_size.x += .01
 		boom_size.y += .01
 	else:
@@ -83,6 +85,9 @@ func on_end():
 	
 func set_start(new_value):
 	start_loc = new_value - position
+
+func set_max_size(new_value):
+	max_size = new_value
 "
 
 [sub_resource type="CircleShape2D" id=2]

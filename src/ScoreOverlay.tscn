@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ScoreOverlay.gd" type="Script" id=2]
 [ext_resource path="res://assets/sounds/Woosh-Mark_DiAngelo-4778593.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Bold.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 26
@@ -11,6 +12,10 @@ font_data = ExtResource( 1 )
 [sub_resource type="DynamicFont" id=2]
 size = 31
 font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 100
+font_data = ExtResource( 4 )
 
 [node name="ScoreOverlay" type="Node2D"]
 pause_mode = 2
@@ -110,6 +115,7 @@ __meta__ = {
 [node name="StartGame" type="CanvasLayer" parent="."]
 
 [node name="StartButton" type="Button" parent="StartGame"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -124,14 +130,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PressStart" type="Label" parent="StartGame"]
-visible = false
-margin_left = 382.75
-margin_top = 344.0
-margin_right = 680.75
-margin_bottom = 377.0
-custom_fonts/font = SubResource( 1 )
-text = "PRESS '1' TO START"
+[node name="TheEnd" type="Label" parent="StartGame"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -139.0
+margin_top = -121.5
+margin_right = 139.0
+margin_bottom = 121.5
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0.694118, 0.141176, 0.141176, 1 )
+text = "THE END"
+autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -139,7 +150,6 @@ __meta__ = {
 [node name="Bonus" type="CanvasLayer" parent="."]
 
 [node name="BonusPoints" type="Label" parent="Bonus"]
-visible = false
 margin_left = 410.316
 margin_top = 160.397
 margin_right = 636.316

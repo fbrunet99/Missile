@@ -103,7 +103,7 @@ texture = ExtResource( 3 )
 
 [node name="StartWave" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
-volume_db = -14.221
+volume_db = -24.318
 pitch_scale = 1.03
 
 [node name="WaveTimer" type="Timer" parent="."]

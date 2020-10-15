@@ -110,6 +110,9 @@ func _process(delta):
 	if Input.is_action_just_pressed("ui_down"):
 		wave_number += 1
 		start_wave()
+	if Input.is_action_just_pressed("ui_end"):
+		$ScoreOverlay.show_bonus(wave_number, 0, 0, score)
+		end_game()
 	
 
 func _input(event):

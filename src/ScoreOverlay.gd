@@ -10,11 +10,13 @@ const AMMO_POS = Vector2(420, 230)
 const CITY_POS = Vector2(430, 290)
 const BONUS_CITY_LEVEL = 10000
 
+const ammo_texture = preload("res://assets/ammo.png")
+const city_texture = preload("res://assets/city.png")
+const Explode = preload("res://Explode.tscn")
+
 var is_paused = false
 
 var wave_info = preload("res://WaveInfo.gd").new()
-var ammo_texture = preload("res://assets/ammo.png")
-var city_texture = preload("res://assets/city.png")
 
 var ammo_sprites = []
 var city_sprites = []
@@ -73,8 +75,6 @@ func show_wave_info(new_wave, multiplier):
 
 	$Score/Player1.add_color_override("font_color", text_color)
 	
-	$StartGame/PressStart.add_color_override("font_color", text_color)
-	
 	yield(get_tree().create_timer(3.0), "timeout")
 	hide_wave_info()
 
@@ -93,16 +93,16 @@ func show_start_message(new_wave):
 	hide_bonus()
 	var text_color = wave_info.get_defendcolor(new_wave)
 
+	$StartGame/TheEnd.visible = false
+
 	$Score/Player1.add_color_override("font_color", text_color)
-#	$StartGame/PressStart.visible = true
 	$StartGame/StartButton.visible = true
-	$StartGame/PressStart.add_color_override("font_color", text_color)
 	
 
 func hide_start_message():
-	$StartGame/PressStart.visible = false
+	$StartGame/TheEnd.visible = false
 	$StartGame/StartButton.visible = false
-	
+
 
 func show_bonus(new_wave, ammo, cities, score):
 	hide_start_message()
@@ -160,8 +160,23 @@ func show_bonus(new_wave, ammo, cities, score):
 		
 	if cities + new_cities <= 0:
 		emit_signal("game_over")
+		show_end_message()
+		yield(get_tree().create_timer(20), "timeout")
 		show_start_message(0)
 
+func show_end_message():
+	hide_bonus()
+	var end_explosion = Explode.instance()
+	var viewport = get_viewport_rect().size
+	end_explosion.position = Vector2(viewport.x / 2, viewport.y / 2)
+	end_explosion.set_max_size(6)
+	add_child(end_explosion)
+	yield(get_tree().create_timer(4), "timeout")
+	$StartGame/TheEnd.visible = true
+	yield(get_tree().create_timer(4), "timeout")
+	$StartGame/TheEnd.visible = false
+	
+	
 func show_bonus_city_message():
 	$Bonus/BonusCity.visible = true
 	yield(get_tree().create_timer(1.4), "timeout")
