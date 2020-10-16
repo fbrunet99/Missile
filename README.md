@@ -58,7 +58,6 @@ score.
 ### End of Game
 When all cities are gone the game is over. 
 
-TODO: Make a game over screen. Currently it just asks player to start a new game.
 
 ### Enemies
 #### Missiles
@@ -93,7 +92,6 @@ TODO: Add a UFO that works like the one from Super Missile Attack which randomly
 
 ## TODO
 - Add sounds for bonus city, low ammo, out of ammo, smart missile
-- Add game over screen
 - Add UFO
 - Continue playtesting wave timer
 - Consider adding particle effects to the missiles or explosions
