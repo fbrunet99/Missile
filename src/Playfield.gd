@@ -594,5 +594,5 @@ func update_joystick(delta):
 
 
 func _on_WaveTimer_timeout():
-	print("**************** WaveTimer Timeout ****************************")
+	print(" WaveTimer Timeout ")
 	update_icbms()
